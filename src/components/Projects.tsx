@@ -75,7 +75,7 @@ const Projects = () => {
                     imageUrl={YTDLPGUIPreview}
                     technologyIcons={ProjectTechnologies['yt_dlp_gui']}
                     creationAt='Agosto de 2024'
-                    repoUrl='Private'
+                    repoUrl='https://github.com/PedroHenriqueNS/yt-dlp-gui'
                     description={(
                         <div className='project-description-text'>
                             <p>Um aplicativo desktop para baixar vídeos de qualquer website que o <strong>yt_dlp</strong> suporte.</p>
@@ -90,7 +90,7 @@ const Projects = () => {
                     imageUrl={AutoCropPdfPreview}
                     technologyIcons={ProjectTechnologies['auto_crop_pdf']}
                     creationAt='Dezembro de 2023'
-                    repoUrl='Private'
+                    repoUrl='https://github.com/PedroHenriqueNS/auto_crop_pdf'
                     description={(
                         <div className='project-description-text'>
                             <p>Uma aplicação desktop para recortar automáticamente PDFs.</p>
@@ -130,7 +130,7 @@ const Projects = () => {
                     imageUrl={SnowHunterPreview}
                     technologyIcons={ProjectTechnologies['snowhunter']}
                     creationAt='Maio de 2023'
-                    projectUrl='Private'
+                    projectUrl='https://snowhunter.netlify.app/'
                     repoUrl='Private'
                     description={(
                         <div className='project-description-text'>
@@ -144,8 +144,7 @@ const Projects = () => {
                     imageUrl={YTMusicClone}
                     technologyIcons={ProjectTechnologies['yt_music_clone']}
                     creationAt='Maio de 2023'
-                    projectUrl='Private'
-                    repoUrl='Private'
+                    repoUrl='https://github.com/PedroHenriqueNS/yt-music-clone'
                     description={(
                         <div className='project-description-text'>
                             <p>Um aplicativo mobile clone do antigo <strong>YouTube Music</strong> com acesso às músicas salvas localmente no dispositivo.</p>
@@ -159,7 +158,6 @@ const Projects = () => {
                     imageUrl={SodiEasyPreview}
                     technologyIcons={ProjectTechnologies['sodieasy']}
                     creationAt='Abril de 2023'
-                    projectUrl='Private'
                     repoUrl='Private'
                     description={(
                         <div className='project-description-text'>
@@ -175,8 +173,7 @@ const Projects = () => {
                     imageUrl={TwoNotePreview}
                     technologyIcons={ProjectTechnologies['twonote']}
                     creationAt='Novembro de 2022'
-                    projectUrl='Private'
-                    repoUrl='Private'
+                    repoUrl='https://github.com/PedroHenriqueNS/Notes'
                     description={(
                         <div className='project-description-text'>
                             <p>O primeiro projeto mobile, feito para finalizar o semestre na universidade.</p>

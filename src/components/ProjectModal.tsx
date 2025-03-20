@@ -161,7 +161,7 @@ const ProjectModal = ({
                             ))}
                         </div>
 
-                        {technologyIcons && <div className="h-0.5 w-4 bg-blue-600" />}
+                        {technologyIcons && creationAt && <div className="h-0.5 w-4 bg-blue-600" />}
 
                         <p className="font-medium text-sm text-blue-700 dark:text-blue-500">{creationAt}</p>
                     </div>

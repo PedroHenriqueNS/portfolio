@@ -89,7 +89,6 @@ const Projects = () => {
                     title="Auto Crop PDF"
                     imageUrl={AutoCropPdfPreview}
                     technologyIcons={ProjectTechnologies['auto_crop_pdf']}
-                    creationAt='Dezembro de 2023'
                     repoUrl='https://github.com/PedroHenriqueNS/auto_crop_pdf'
                     description={(
                         <div className='project-description-text'>
@@ -104,7 +103,6 @@ const Projects = () => {
                     title="Cloud Barueri"
                     imageUrl={CloudBarueriPreview}
                     technologyIcons={ProjectTechnologies['cloud_barueri']}
-                    creationAt='Julho de 2023'
                     projectUrl='Private'
                     repoUrl='Private'
                     description={(
@@ -129,7 +127,6 @@ const Projects = () => {
                     title="SnowHunter"
                     imageUrl={SnowHunterPreview}
                     technologyIcons={ProjectTechnologies['snowhunter']}
-                    creationAt='Maio de 2023'
                     projectUrl='https://snowhunter.netlify.app/'
                     repoUrl='Private'
                     description={(
@@ -143,7 +140,6 @@ const Projects = () => {
                     title="Youtube Music Clone"
                     imageUrl={YTMusicClone}
                     technologyIcons={ProjectTechnologies['yt_music_clone']}
-                    creationAt='Maio de 2023'
                     repoUrl='https://github.com/PedroHenriqueNS/yt-music-clone'
                     description={(
                         <div className='project-description-text'>
@@ -157,7 +153,6 @@ const Projects = () => {
                     title="SodiEasy"
                     imageUrl={SodiEasyPreview}
                     technologyIcons={ProjectTechnologies['sodieasy']}
-                    creationAt='Abril de 2023'
                     repoUrl='Private'
                     description={(
                         <div className='project-description-text'>
@@ -172,7 +167,6 @@ const Projects = () => {
                     title="TwoNote"
                     imageUrl={TwoNotePreview}
                     technologyIcons={ProjectTechnologies['twonote']}
-                    creationAt='Novembro de 2022'
                     repoUrl='https://github.com/PedroHenriqueNS/Notes'
                     description={(
                         <div className='project-description-text'>

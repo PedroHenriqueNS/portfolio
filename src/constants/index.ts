@@ -75,6 +75,60 @@ export const ProjectTechnologies = {
             image: ReactQueryIcon,
         },
     ],
+    'sandro_mastellari': [
+        {
+            title: 'React.js',
+            image: ReactIcon,
+        },
+        {
+            title: 'Vite',
+            image: ViteJSIcon,
+        },
+        {
+            title: 'Tailwind CSS',
+            image: TailwindIcon,
+        },
+        {
+            title: 'ShadCN/ui',
+            image: ShadCNIcon,
+        },
+    ],
+    'eduardo_boigues': [
+        {
+            title: 'React.js',
+            image: ReactIcon,
+        },
+        {
+            title: 'Vite',
+            image: ViteJSIcon,
+        },
+        {
+            title: 'Tailwind CSS',
+            image: TailwindIcon,
+        },
+        {
+            title: 'ShadCN/ui',
+            image: ShadCNIcon,
+        },
+    ],
+    'flavia_morando_sbc': [
+        {
+            title: 'React.js',
+            image: ReactIcon,
+        },
+        {
+            title: 'Vite',
+            image: ViteJSIcon,
+        },
+        {
+            title: 'Tailwind CSS',
+            image: TailwindIcon,
+        },
+        {
+            title: 'ShadCN/ui',
+            image: ShadCNIcon,
+        },
+    ],
     'yt_dlp_gui': [
         {
             title: 'Python',

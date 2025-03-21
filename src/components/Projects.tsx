@@ -1,7 +1,7 @@
 import useObserver from '@/hooks/useObserver'
 import { cn } from '@/lib/utils'
 import ProjectCard from './ProjectCard'
-import { AutoCropPdfPreview, CloudBarueriPreview, GobuzzAdsManagerPreview, PautasGobuzzPreview, SeedingControlePreview, SnowHunterPreview, SodiEasyPreview, TwoNotePreview, YTDLPGUIPreview, YTMusicClone } from '@/assets/images'
+import { AutoCropPdfPreview, CloudBarueriPreview, EduardoBoiguesPreview, FlaviaMorandoPreview, GobuzzAdsManagerPreview, PautasGobuzzPreview, SandroMastellariPreview, SeedingControlePreview, SnowHunterPreview, SodiEasyPreview, TwoNotePreview, YTDLPGUIPreview, YTMusicClone } from '@/assets/images'
 import { ProjectTechnologies } from '@/constants'
 
 const Projects = () => {
@@ -67,6 +67,52 @@ const Projects = () => {
                             <p>A aplicação desktop é montada através do framework <strong>Electron</strong> onde tudo é programado em <strong>React.js</strong> com <strong>Vite</strong> e compilado de forma que a máquina compreenda.</p>
                             <p>Todo o controle é salvo em nuvem através do <strong>Supabase</strong> que também é responsável pela autenticação dos usuários.</p>
                             <p>A aplicação construída baseado em <i>"UI otimistas"</i> onde uma resposta já é prevista e modificada instantaneamente, enquanto no plano de fundo requisições com <strong>React Query</strong> salvam as modificações.</p>
+                        </div>
+                    )}
+                />
+                <ProjectCard
+                    title="Sandro Mastellari"
+                    imageUrl={SandroMastellariPreview}
+                    technologyIcons={ProjectTechnologies['sandro_mastellari']}
+                    creationAt='Setembro de 2024'
+                    projectUrl='https://sandromastellari.com.br/'
+                    repoUrl='Private'
+                    description={(
+                        <div className='project-description-text'>
+                            <p>Uma página web para apresentar o candidato à vereador em Santos, SP em 2024.</p>
+                            <p>A página foi feita em <strong>React.js</strong> com <strong>Vite</strong> e estilizada em <strong>Tailwind CSS</strong>.</p>
+                            <p>Design simples, feito para ressaltar o candidato.</p>
+                        </div>
+                    )}
+                />
+                <ProjectCard
+                    title="Eduardo Boigues"
+                    imageUrl={EduardoBoiguesPreview}
+                    technologyIcons={ProjectTechnologies['eduardo_boigues']}
+                    creationAt='Agosto de 2024'
+                    projectUrl='https://eduardoboigues.com.br/'
+                    repoUrl='Private'
+                    description={(
+                        <div className='project-description-text'>
+                            <p>Uma página web para apresentar o candidato à reeleição para prefeito de Itaquaquecetuba, SP em 2024 e fomentar a interação dos eleitores com contribuições de ideias de ações para executar em seu próximo governo caso reeleito.</p>
+                            <p>A página foi feita em <strong>React.js</strong> com <strong>Vite</strong> e estilizada em <strong>Tailwind CSS</strong>.</p>
+                            <p>Formulário harmônico, feito para ser fácil de preencher pelos usuários em qualquer dispositivo, e com respeito às informações mais privadas que o usuário pode escolher enviar ou não.</p>
+                            <p>As ideias são enviadas à uma <strong>API</strong> que salva as informações para futuras análises.</p>
+                        </div>
+                    )}
+                />
+                <ProjectCard
+                    title="Flavia Morando SBC"
+                    imageUrl={FlaviaMorandoPreview}
+                    technologyIcons={ProjectTechnologies['flavia_morando_sbc']}
+                    creationAt='Agosto de 2024'
+                    projectUrl='https://flaviamorandosbc.com.br/'
+                    repoUrl='Private'
+                    description={(
+                        <div className='project-description-text'>
+                            <p>Uma página web para apresentar a candidata à prefeita de São Bernardo do Campo, SP em 2024.</p>
+                            <p>Feito em <strong>React.js</strong> com <strong>Vite</strong> e estilizado em <strong>Tailwind CSS</strong></p>
+                            <p>Design simples e baseado em artes feitas por <i>Designers</i> para ressaltar a candidata e seus apoiadores.</p>
                         </div>
                     )}
                 />

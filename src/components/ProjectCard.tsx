@@ -83,7 +83,7 @@ const ProjectCard = ({
 
                         <img
                             className={cn(
-                                "object-cover w-[30rem] brightness-[50%] transition-[filter] max-sm:w-[20rem]",
+                                "h-full object-cover w-[30rem] brightness-[50%] transition-[filter] max-sm:w-[20rem]",
                                 isHover && 'brightness-[60%]'
                             )}
                             src={imageUrl}

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Button } from './ui/button';
 import { Moon, Sun } from 'lucide-react';
 
-import MyImage from '@/assets/images/my_img_1.jpg'
+import MyImage from '@/assets/images/my_img_2.jpg'
 
 interface IHeader {
     isViewingPresentation: boolean
@@ -58,7 +58,7 @@ const Header = ({ isViewingPresentation }: IHeader) => {
             )}>
                 <div className='flex-center flex-row gap-5'>
                     <img
-                        className='size-12 object-cover rounded-full outline-1 outline-blue-600 p-0.5'
+                        className='size-12 min-w-12 object-cover rounded-full outline-1 outline-blue-600 p-0.5'
                         src={MyImage}
                     />
                     <h1 className={cn(

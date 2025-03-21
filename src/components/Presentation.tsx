@@ -1,4 +1,4 @@
-import MyImage from '@/assets/images/my_img_1.jpg'
+import MyImage from '@/assets/images/my_img_2.jpg'
 import { buttonVariants } from './ui/button'
 import { ArrowDownToLine } from 'lucide-react'
 import useObserver from '@/hooks/useObserver'

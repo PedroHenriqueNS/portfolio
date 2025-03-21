@@ -132,10 +132,9 @@ const ProjectModal = ({
         <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
 
-            <DialogContent className="flex gap-10 !max-w-[80dvw] !w-max">
-                <div className="w-[70rem] max-w-[70rem]">
+            <DialogContent className="flex gap-10 !max-w-[80dvw] !w-max max-lg:flex-col">
+                <div className="w-[70rem] max-w-[70rem] border-1 rounded-md overflow-hidden border-neutral-400 dark:border-neutral-700 xl:min-w-[30rem] max-lg:min-w-0 max-lg:w-auto">
                     <img
-                        className=""
                         src={imageUrl}
                         alt={`${title} preview`}
                     />
@@ -174,7 +173,7 @@ const ProjectModal = ({
                                 className={buttonVariants({
                                     variant: 'default',
                                     size: 'default',
-                                    className: `${projectUrl == 'Private' ? 'opacity-50' : 'cursor-pointer'} bg-gradient-to-r from-blue-600 to-cyan-700 text-white transition-colors hover:from-cyan-600 hover:to-blue-700 hover:shadow-[0_0_20px_0_rgba(34,211,238,0.7)] dark:hover:shadow-[0_0_20px_0_rgba(34,211,238,0.3)]`
+                                    className: `${projectUrl == 'Private' ? 'opacity-50 cursor-default' : 'cursor-pointer'} bg-gradient-to-r from-blue-600 to-cyan-700 text-white transition-colors hover:from-cyan-600 hover:to-blue-700 hover:shadow-[0_0_20px_0_rgba(34,211,238,0.7)] dark:hover:shadow-[0_0_20px_0_rgba(34,211,238,0.3)]`
                                 })}
                                 href={projectUrl == 'Private' ? undefined : projectUrl}
                                 target="_blank"
@@ -189,7 +188,7 @@ const ProjectModal = ({
                                 className={buttonVariants({
                                     variant: 'default',
                                     size: 'default',
-                                    className: `${repoUrl == 'Private' ? 'opacity-50' : 'cursor-pointer'} bg-gradient-to-r from-blue-600 to-cyan-700 text-white transition-colors hover:from-cyan-600 hover:to-blue-700 hover:shadow-[0_0_20px_0_rgba(34,211,238,0.7)] dark:hover:shadow-[0_0_20px_0_rgba(34,211,238,0.3)]`
+                                    className: `${repoUrl == 'Private' ? 'opacity-50 cursor-default' : 'cursor-pointer'} bg-gradient-to-r from-blue-600 to-cyan-700 text-white transition-colors hover:from-cyan-600 hover:to-blue-700 hover:shadow-[0_0_20px_0_rgba(34,211,238,0.7)] dark:hover:shadow-[0_0_20px_0_rgba(34,211,238,0.3)]`
                                 })}
                                 href={repoUrl == 'Private' ? undefined : repoUrl}
                                 target="_blank"

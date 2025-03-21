@@ -51,7 +51,8 @@ const Presentation = ({ setIsViewingPresentation }: IPresentation) => {
                             size: 'default',
                             className: 'bg-gradient-to-r from-blue-600 to-cyan-500 w-max mt-1 px-8 py-5 !rounded-full text-white text-md cursor-pointer font-semibold hover:drop-shadow-2xl hover:text-cyan-100 hover:from-cyan-600 hover:to-blue-700 transition-colors hover:shadow-[0_0_20px_0_rgba(34,211,238,1)] dark:hover:shadow-[0_0_20px_0_rgba(34,211,238,0.4)]'
                         })}
-                        href='https://drive.google.com/uc?export=download&id=1RMEkQvyQTl0_TB0AjifVhd9OAxvfjIH4'
+                        href='/curriculo_PedroHenrique.pdf'
+                        download="Currículo - Pedro Henrique do Nascimento Silva"
                     >
                         Baixar currículo
                         <div>

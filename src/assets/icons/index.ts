@@ -28,6 +28,8 @@ import SanityIcon from './sanity.svg'
 import AngularIcon from './angular.svg'
 import IonicIcon from './ionic.svg'
 import VercelIcon from './vercel.svg'
+import CSharpIcon from './csharp.svg'
+import DotNetIcon from './dotnet.svg'
 
 export {
     ReactIcon,
@@ -59,6 +61,8 @@ export {
     AngularIcon,
     IonicIcon,
     VercelIcon,
+    CSharpIcon,
+    DotNetIcon,
 
     GithubIcon,
 }

@@ -1,4 +1,4 @@
-import { CSSIcon, DockerIcon, ExpoIcon, ExpressIcon, GitIcon, HTMLIcon, JavaScriptIcon, MongoDBIcon, MySQLIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, ReactIcon, TailwindIcon, TypeScriptIcon, ViteJSIcon } from "@/assets/icons"
+import { CSharpIcon, CSSIcon, DockerIcon, DotNetIcon, ExpoIcon, ExpressIcon, GitIcon, HTMLIcon, JavaScriptIcon, MongoDBIcon, MySQLIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, ReactIcon, TailwindIcon, TypeScriptIcon, ViteJSIcon } from "@/assets/icons"
 import SkillCard from "./SkillCard"
 import { cn } from "@/lib/utils"
 import useObserver from "@/hooks/useObserver"
@@ -122,6 +122,18 @@ const Skills = () => {
                     description="Container"
                     level={2}
                     icon={DockerIcon}
+                />
+                <SkillCard
+                    title="C#"
+                    description="Linguagem"
+                    level={2}
+                    icon={CSharpIcon}
+                />
+                <SkillCard
+                    title=".NET"
+                    description="Framework"
+                    level={2}
+                    icon={DotNetIcon}
                 />
             </div>
         </section>

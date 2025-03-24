@@ -30,6 +30,7 @@ import IonicIcon from './ionic.svg'
 import VercelIcon from './vercel.svg'
 import CSharpIcon from './csharp.svg'
 import DotNetIcon from './dotnet.svg'
+import JavaIcon from './java.svg'
 
 export {
     ReactIcon,
@@ -63,6 +64,7 @@ export {
     VercelIcon,
     CSharpIcon,
     DotNetIcon,
+    JavaIcon,
 
     GithubIcon,
 }

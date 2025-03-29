@@ -40,13 +40,13 @@ const SkillCard = ({
             onClick={() => setIsOpen(!isOpen)}
         >
             <div className={cn(
-                "absolute flex transition-[scale] delay-300 bg-background",
-                isOpen && 'sm:delay-500 sm:scale-125 z-20',
+                "absolute flex transition-[scale] delay-300 bg-background ease-out",
+                isOpen && 'sm:delay-400 sm:scale-125 z-20',
                 overPos && 'z-10'
             )}>
                 <div className={cn(
-                    "border-1 border-b-4 rounded-t-xl size-[120px] flex-center flex-col gap-1 border-blue-800 transition-(--skill-card-transition) transform delay-300 dark:border-blue-900",
-                    isOpen && 'delay-500 rounded-tr-none'
+                    "border-1 border-b-4 rounded-t-xl size-[120px] flex-center flex-col gap-1 border-blue-800 transition-(--skill-card-transition) transform delay-300 dark:border-blue-900 ease-in",
+                    isOpen && 'delay-400 rounded-tr-none'
                 )}>
                     <img
                         className="size-[60px]"

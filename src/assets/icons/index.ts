@@ -31,6 +31,7 @@ import VercelIcon from './vercel.svg'
 import CSharpIcon from './csharp.svg'
 import DotNetIcon from './dotnet.svg'
 import JavaIcon from './java.svg'
+import NestJSIcon from './nestjs.svg'
 
 export {
     ReactIcon,
@@ -65,6 +66,7 @@ export {
     CSharpIcon,
     DotNetIcon,
     JavaIcon,
+    NestJSIcon,
 
     GithubIcon,
 }

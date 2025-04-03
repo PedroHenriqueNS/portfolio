@@ -1,4 +1,4 @@
-import { CSharpIcon, CSSIcon, DockerIcon, DotNetIcon, ExpoIcon, ExpressIcon, GitIcon, HTMLIcon, JavaIcon, JavaScriptIcon, MongoDBIcon, MySQLIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, ReactIcon, TailwindIcon, TypeScriptIcon, ViteJSIcon } from "@/assets/icons"
+import { CSharpIcon, CSSIcon, DockerIcon, DotNetIcon, ExpoIcon, ExpressIcon, GitIcon, HTMLIcon, JavaIcon, JavaScriptIcon, MongoDBIcon, MySQLIcon, NestJSIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, ReactIcon, TailwindIcon, TypeScriptIcon, ViteJSIcon } from "@/assets/icons"
 import SkillCard from "./SkillCard"
 import { cn } from "@/lib/utils"
 import useObserver from "@/hooks/useObserver"
@@ -116,6 +116,12 @@ const Skills = () => {
                     description="Node.js Framework"
                     level={3}
                     icon={ExpressIcon}
+                />
+                <SkillCard
+                    title="Nest.js"
+                    description="Node.js Framework"
+                    level={2}
+                    icon={NestJSIcon}
                 />
                 <SkillCard
                     title="Docker"

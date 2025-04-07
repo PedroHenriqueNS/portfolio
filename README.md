@@ -76,10 +76,6 @@ npm run build
 
 The optimized build will be available in the `dist` directory.
 
-```bash
-npm run lint
-```
-
 ## Contact
 
 - **Email**: pedrohe.contato@gmail.com

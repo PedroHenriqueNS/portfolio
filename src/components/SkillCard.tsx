@@ -7,13 +7,17 @@ interface SkillCardProps {
     description: string;
     level: 1 | 2 | 3 | 4 | 5;
     icon: string;
+    featured?: boolean;
+    isNew?: boolean;
 }
 
 const SkillCard = ({
     title,
     description,
     level,
-    icon
+    icon,
+    featured = false,
+    isNew = false,
 }: SkillCardProps) => {
 
     const [isOpen, setIsOpen] = useState(false);
@@ -23,11 +27,17 @@ const SkillCard = ({
 
     useEffect(() => {
         setOverPos(true)
-        
+
         const interval = setInterval(() => setOverPos(false), 650) // delay + transition_duration <= 650ms
 
         return () => clearInterval(interval)
     }, [isOpen])
+
+    const cardSize = featured ? 'size-[140px]' : 'size-[120px]'
+    const iconSize = featured ? 'size-[66px]' : 'size-[60px]'
+    const borderColor = featured
+        ? 'border-cyan-500/60 dark:border-cyan-500/50 shadow-[0_0_18px_0_rgba(34,211,238,0.22)]'
+        : 'border-blue-800 dark:border-blue-900'
 
     return (
         <div
@@ -39,17 +49,26 @@ const SkillCard = ({
             onMouseLeave={isMobile ? undefined : () => setIsOpen(false)}
             onClick={() => setIsOpen(!isOpen)}
         >
+            {featured && (
+                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-30 font-jakarta font-bold text-[10px] tracking-wide whitespace-nowrap text-[#04111a] bg-gradient-to-r from-cyan-200 to-cyan-500 rounded-full px-2.5 py-0.5">★ destaque</span>
+            )}
+            {isNew && (
+                <span className="absolute -top-2.5 -right-2.5 z-30 font-jakarta font-bold text-[10px] tracking-wide text-[#04111a] bg-gradient-to-r from-cyan-200 to-cyan-500 rounded-full px-2 py-0.5">NOVO</span>
+            )}
+
             <div className={cn(
                 "absolute flex transition-[scale] delay-300 bg-background ease-out",
                 isOpen && 'sm:delay-400 sm:scale-125 z-20',
                 overPos && 'z-10'
             )}>
                 <div className={cn(
-                    "border-1 border-b-4 rounded-t-xl size-[120px] flex-center flex-col gap-1 border-blue-800 transition-(--skill-card-transition) transform delay-300 dark:border-blue-900 ease-in",
+                    "border-1 border-b-4 rounded-t-xl flex-center flex-col gap-1 transition-(--skill-card-transition) transform delay-300 ease-in",
+                    cardSize,
+                    borderColor,
                     isOpen && 'delay-400 rounded-tr-none'
                 )}>
                     <img
-                        className="size-[60px]"
+                        className={iconSize}
                         src={icon}
                         alt={`${title} icon`}
                     />
@@ -91,10 +110,11 @@ const SkillCard = ({
 
 
             <div className={cn(
-                "border-1 border-b-4 rounded-t-xl size-[120px] flex-center flex-col gap-1 border-blue-900 opacity-0"
+                "border-1 border-b-4 rounded-t-xl flex-center flex-col gap-1 border-blue-900 opacity-0",
+                cardSize
             )}>
                 <img
-                    className="size-[60px]"
+                    className={iconSize}
                     src={icon}
                     alt={`${title} icon`}
                 />

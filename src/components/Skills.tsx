@@ -1,7 +1,81 @@
-import { CSharpIcon, CSSIcon, DockerIcon, DotNetIcon, ExpoIcon, ExpressIcon, GitIcon, HTMLIcon, JavaIcon, JavaScriptIcon, MongoDBIcon, MySQLIcon, NestJSIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, ReactIcon, TailwindIcon, TypeScriptIcon, ViteJSIcon } from "@/assets/icons"
+import {
+    AWSIcon, CSharpIcon, CSSIcon, DockerIcon, DotNetIcon, DynamoDBIcon, ExpoIcon, ExpressIcon,
+    GitIcon, HTMLIcon, JavaIcon, JavaScriptIcon, KubernetesIcon, MongoDBIcon, MySQLIcon,
+    NestJSIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, PythonIcon, ReactIcon, TailwindIcon,
+    TypeScriptIcon, ViteJSIcon,
+} from "@/assets/icons"
 import SkillCard from "./SkillCard"
 import { cn } from "@/lib/utils"
 import useObserver from "@/hooks/useObserver"
+
+type Skill = {
+    title: string
+    description: string
+    level: 1 | 2 | 3 | 4 | 5
+    icon: string
+    isNew?: boolean
+}
+
+const featuredSkills: Skill[] = [
+    { title: 'Next.js', description: 'Framework', level: 5, icon: NextJSIcon },
+    { title: 'React Native', description: 'Framework', level: 4, icon: ReactIcon },
+    { title: 'NestJS', description: 'Node.js Framework', level: 5, icon: NestJSIcon },
+]
+
+const frontendSkills: Skill[] = [
+    { title: 'React.js', description: 'Lib', level: 5, icon: ReactIcon },
+    { title: 'Vite', description: 'Framework', level: 5, icon: ViteJSIcon },
+    { title: 'Expo', description: 'Framework', level: 4, icon: ExpoIcon },
+    { title: 'TypeScript', description: 'Linguagem', level: 4, icon: TypeScriptIcon },
+    { title: 'JavaScript', description: 'Linguagem', level: 4, icon: JavaScriptIcon },
+    { title: 'Tailwind CSS', description: 'Lib', level: 5, icon: TailwindIcon },
+    { title: 'CSS', description: 'Linguagem', level: 3, icon: CSSIcon },
+    { title: 'HTML', description: 'Linguagem de tags', level: 5, icon: HTMLIcon },
+]
+
+const backendSkills: Skill[] = [
+    { title: 'Node.js', description: 'Software', level: 4, icon: NodeJSIcon },
+    { title: 'Express', description: 'Node.js Framework', level: 3, icon: ExpressIcon },
+    { title: 'Python', description: 'Linguagem', level: 4, icon: PythonIcon, isNew: true },
+    { title: 'AWS', description: 'Cloud', level: 4, icon: AWSIcon, isNew: true },
+    { title: 'Kubernetes', description: 'Orquestração', level: 4, icon: KubernetesIcon, isNew: true },
+    { title: 'Docker', description: 'Container', level: 4, icon: DockerIcon },
+    { title: 'Git / GitHub', description: 'Controle de versão', level: 4, icon: GitIcon },
+    { title: 'PostgreSQL', description: 'Banco de dados', level: 4, icon: PostgreSQLIcon },
+    { title: 'MySQL', description: 'Banco de dados', level: 3, icon: MySQLIcon },
+    { title: 'MongoDB', description: 'Banco de dados', level: 3, icon: MongoDBIcon },
+    { title: 'DynamoDB', description: 'Banco de dados', level: 3, icon: DynamoDBIcon, isNew: true },
+    { title: 'C#', description: 'Linguagem', level: 2, icon: CSharpIcon },
+    { title: '.NET', description: 'Framework', level: 2, icon: DotNetIcon },
+    { title: 'Java', description: 'Linguagem', level: 2, icon: JavaIcon },
+]
+
+const SkillGroup = ({ title, skills, featured = false }: { title: string; skills: Skill[]; featured?: boolean }) => (
+    <div className="flex flex-col items-center gap-6 w-full mb-12">
+        <h3 className={cn(
+            'font-jakarta font-bold text-lg flex items-center gap-3 text-slate-300',
+            featured && 'bg-clip-text text-transparent bg-gradient-to-r from-cyan-200 to-cyan-500'
+        )}>
+            <span className="h-px w-12 bg-gradient-to-r from-transparent to-blue-600/60" />
+            {featured ? '★ Destaques' : title}
+            <span className="h-px w-12 bg-gradient-to-l from-transparent to-blue-600/60" />
+        </h3>
+
+        <div className="flex-center flex-wrap gap-5">
+            {skills.map((skill) => (
+                <SkillCard
+                    key={skill.title}
+                    title={skill.title}
+                    description={skill.description}
+                    level={skill.level}
+                    icon={skill.icon}
+                    featured={featured}
+                    isNew={skill.isNew}
+                />
+            ))}
+        </div>
+    </div>
+)
 
 const Skills = () => {
 
@@ -18,136 +92,11 @@ const Skills = () => {
                 hasAlreadyViewed && 'translate-y-0 opacity-100'
             )}
         >
-            <h2 className='h2-bold font-jakarta'>Skills</h2>
+            <h2 className='h2-bold font-jakarta mb-4'>Skills</h2>
 
-            <div className="flex-center flex-wrap gap-5">
-                <SkillCard
-                    title="React.js"
-                    description="Lib"
-                    level={4}
-                    icon={ReactIcon}
-                />
-                <SkillCard
-                    title="Next.js"
-                    description="Framework"
-                    level={4}
-                    icon={NextJSIcon}
-                />
-                <SkillCard
-                    title="Vite"
-                    description="Framework"
-                    level={4}
-                    icon={ViteJSIcon}
-                />
-                <SkillCard
-                    title="React Native"
-                    description="Framework"
-                    level={3}
-                    icon={ReactIcon}
-                />
-                <SkillCard
-                    title="Expo"
-                    description="Framework"
-                    level={3}
-                    icon={ExpoIcon}
-                />
-                <SkillCard
-                    title="TypeScript"
-                    description="Linguagem"
-                    level={4}
-                    icon={TypeScriptIcon}
-                />
-                <SkillCard
-                    title="Tailwind CSS"
-                    description="Lib"
-                    level={5}
-                    icon={TailwindIcon}
-                />
-                <SkillCard
-                    title="Git / GitHub"
-                    description="Controle de versão"
-                    level={3}
-                    icon={GitIcon}
-                />
-                <SkillCard
-                    title="JavaScript"
-                    description="Linguagem"
-                    level={4}
-                    icon={JavaScriptIcon}
-                />
-                <SkillCard
-                    title="CSS"
-                    description="Linguagem"
-                    level={3}
-                    icon={CSSIcon}
-                />
-                <SkillCard
-                    title="HTML"
-                    description="Linguagem de tags"
-                    level={5}
-                    icon={HTMLIcon}
-                />
-                <SkillCard
-                    title="MySQL"
-                    description="Banco de dados"
-                    level={3}
-                    icon={MySQLIcon}
-                />
-                <SkillCard
-                    title="PostgreSQL"
-                    description="Banco de dados"
-                    level={4}
-                    icon={PostgreSQLIcon}
-                />
-                <SkillCard
-                    title="MongoDB"
-                    description="Banco de dados"
-                    level={3}
-                    icon={MongoDBIcon}
-                />
-                <SkillCard
-                    title="Node.js"
-                    description="Software"
-                    level={4}
-                    icon={NodeJSIcon}
-                />
-                <SkillCard
-                    title="Express"
-                    description="Node.js Framework"
-                    level={3}
-                    icon={ExpressIcon}
-                />
-                <SkillCard
-                    title="Nest.js"
-                    description="Node.js Framework"
-                    level={2}
-                    icon={NestJSIcon}
-                />
-                <SkillCard
-                    title="Docker"
-                    description="Container"
-                    level={2}
-                    icon={DockerIcon}
-                />
-                <SkillCard
-                    title="C#"
-                    description="Linguagem"
-                    level={2}
-                    icon={CSharpIcon}
-                />
-                <SkillCard
-                    title=".NET"
-                    description="Framework"
-                    level={2}
-                    icon={DotNetIcon}
-                />
-                <SkillCard
-                    title="Java"
-                    description="Linguagem"
-                    level={2}
-                    icon={JavaIcon}
-                />
-            </div>
+            <SkillGroup title="Destaques" skills={featuredSkills} featured />
+            <SkillGroup title="Frontend" skills={frontendSkills} />
+            <SkillGroup title="Backend" skills={backendSkills} />
         </section>
     )
 }

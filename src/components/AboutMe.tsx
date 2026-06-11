@@ -20,9 +20,12 @@ const AboutMe = () => {
 
             <div className='flex-center flex-col gap-1 text-neutral-600 base-regular text-center !leading-[180%] dark:text-neutral-400'>
                 <p>
-                    Estudante de Ciências da Computação no último semestre. Adoro desenvolvimento de software e estou pronto para iniciar minha carreira na área. Tenho experiência prática com projetos pessoais que fortaleceram minhas habilidades em ReactJS, NextJS, ViteJS, React Native com Expo e controle de versão com Git.
+                    Engenheiro de Software Pleno com mais de 4 anos de experiência em desenvolvimento full stack de aplicações web e mobile em produção. Stack centrada em TypeScript (React.js, Next.js, React Native, NestJS), com infraestrutura AWS e bancos relacionais e NoSQL.
                     <br />
-                    Entusiasta e dedicado, estou motivado para crescer como profissional, contribuir com soluções inovadoras e me aprimorar continuamente neste campo.
+                    Atualmente na Dry Telecom, defino padrões técnicos, decisões de arquitetura e fluxos de CI/CD, além de mentorar desenvolvedores via code reviews e pair programming. Foco em arquitetura escalável, qualidade de código e entrega contínua.
+                </p>
+                <p className='mt-3 small-regular text-neutral-500'>
+                    Bacharel em Ciência da Computação — Universidade Anhembi Morumbi, 2025.
                 </p>
             </div>
         </section>

@@ -42,7 +42,7 @@ const Presentation = ({ setIsViewingPresentation }: IPresentation) => {
                     </h2>
                 </div>
 
-                <h3 className='text-gray-500 font-medium'>Desenvolvedor FullStack</h3>
+                <h3 className='text-gray-500 font-medium'>Engenheiro de Software Pleno · Full Stack</h3>
 
                 <div className='flex gap-5 max-lg:gap-3 max-sm:flex-col max-sm:items-center'>
                     <a

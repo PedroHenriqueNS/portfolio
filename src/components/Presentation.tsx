@@ -30,16 +30,17 @@ const Presentation = ({ setIsViewingPresentation }: IPresentation) => {
             <img
                 className='object-cover rounded-full size-[20rem] outline-1 outline-blue-600 p-1 max-sm:size-[15rem]'
                 src={MyImage}
-                alt='My presentation image'
+                alt='Pedro Henrique, Engenheiro de Software'
+                fetchPriority='high'
             />
 
             <div className='flex flex-col gap-3 max-sm:items-center'>
-                <div className='text-4xl [&_h2]:font-jakarta font-medium flex gap-1.5 text-center'>
-                    <h2>
+                <div className='text-4xl [&_h1]:font-jakarta font-medium flex gap-1.5 text-center'>
+                    <h1>
                         Olá, sou{" "}
                         <br className='sm:hidden' />
                         <span className='font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-cyan-500'>Pedro Henrique</span>
-                    </h2>
+                    </h1>
                 </div>
 
                 <h3 className='text-gray-500 font-medium'>Engenheiro de Software Pleno · Full Stack</h3>

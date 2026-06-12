@@ -55,8 +55,9 @@ const backendSkills: Skill[] = [
 const SkillGroup = ({ title, skills, featured = false }: { title: string; skills: Skill[]; featured?: boolean }) => (
     <div className="flex flex-col items-center gap-6 w-full mb-12">
         <h3 className={cn(
-            'font-jakarta font-bold text-lg flex items-center gap-3 text-slate-300',
-            featured && 'bg-clip-text text-transparent bg-gradient-to-r from-cyan-200 to-cyan-500'
+            'font-jakarta font-bold text-lg flex items-center gap-3',
+            !featured && 'text-slate-700 dark:text-slate-300',
+            featured && 'text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-cyan-200 dark:to-cyan-500'
         )}>
             <span className="h-px w-12 bg-gradient-to-r from-transparent to-blue-600/60" />
             {featured ? '★ Destaques' : title}

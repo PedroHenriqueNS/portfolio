@@ -3,13 +3,13 @@ name: Deploy to Hostinger
 # Builda o portfólio e publica o conteúdo de dist/ no Hostinger (via SSH/rsync)
 # a cada push na branch main. Também pode ser disparado manualmente.
 #
-# SEGURANÇA: deploy REAL só em push na main (ou dispatch com dry_run=false).
-# Em qualquer outra branch o rsync roda com --dry-run (não altera produção).
+# SEGURANÇA: o job de deploy só roda na main (if: ref==main), então o environment
+# de produção e seus secrets nunca são vinculados em outra branch — nem via dispatch.
+# Push na main = deploy real; workflow_dispatch = dry-run por padrão (validação segura).
 on:
   push:
     branches:
       - main
-      - feat/seo-improvements   # TEMPORÁRIO: valida o workflow em dry-run antes do merge
   workflow_dispatch:
     inputs:
       dry_run:
@@ -27,6 +27,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Deploy SÓ na main: garante que o environment de produção (e seus secrets) nunca
+    # seja vinculado em outra ref — nem mesmo via workflow_dispatch de outra branch.
+    if: github.ref == 'refs/heads/main'
     # Os secrets de SSH estão no Environment "Hostinger PROD"; é preciso referenciá-lo
     # para que secrets.* fiquem visíveis ao job.
     environment: Hostinger PROD

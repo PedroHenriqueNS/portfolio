@@ -65,9 +65,10 @@ jobs:
           GIT_REF: ${{ github.ref }}
           DRY_RUN_INPUT: ${{ inputs.dry_run }}
         run: |
-          # Diagnóstico seguro: imprime só o TAMANHO de cada secret (0 = não chegou ao job).
-          # Não revela valores (e o GitHub mascara o conteúdo de secrets nos logs).
-          echo "Secrets no job (len, 0=ausente): IP=${#SSH_IP} PORT=${#SSH_PORT} USER=${#SSH_USERNAME} PASS=${#SSHPASS} KNOWN_HOSTS=${#SSH_KNOWN_HOSTS}"
+          # Diagnóstico: imprime só presença (set/MISSING), nunca tamanho nem valor —
+          # vazar o comprimento de uma senha em log de CI já é informação sensível.
+          present() { [ -n "$1" ] && echo set || echo MISSING; }
+          echo "Secrets no job: KNOWN_HOSTS=$(present "$SSH_KNOWN_HOSTS") IP=$(present "$SSH_IP") PORT=$(present "$SSH_PORT") USER=$(present "$SSH_USERNAME") PASS=$(present "$SSHPASS")"
           if [ -z "$SSH_KNOWN_HOSTS" ]; then
             echo "::error::SSH_KNOWN_HOSTS chegou vazio. Verifique: (1) está em Settings > Secrets and variables > Actions, aba *Secrets* (não *Variables* nem *Environments*); (2) é Repository secret; (3) nome exato 'SSH_KNOWN_HOSTS'; (4) re-execute o workflow APÓS salvar."
             exit 1

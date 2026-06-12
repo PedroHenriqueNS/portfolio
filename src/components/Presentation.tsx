@@ -31,6 +31,7 @@ const Presentation = ({ setIsViewingPresentation }: IPresentation) => {
                 className='object-cover rounded-full size-[20rem] outline-1 outline-blue-600 p-1 max-sm:size-[15rem]'
                 src={MyImage}
                 alt='Pedro Henrique, Engenheiro de Software'
+                fetchPriority='high'
             />
 
             <div className='flex flex-col gap-3 max-sm:items-center'>

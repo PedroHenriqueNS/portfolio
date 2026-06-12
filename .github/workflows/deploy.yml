@@ -17,10 +17,12 @@ on:
         type: boolean
         default: true
 
-# Garante um deploy por vez; um novo push cancela um deploy em andamento.
+# Um deploy por vez POR REF. Grupo por ref impede que um dry-run de outra branch
+# cancele um deploy real em andamento na main; cancel-in-progress=false faz novos
+# runs aguardarem na fila em vez de interromper um rsync de produção pela metade.
 concurrency:
-  group: deploy-hostinger
-  cancel-in-progress: true
+  group: deploy-hostinger-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -74,8 +76,12 @@ jobs:
           if [ "$EVENT_NAME" = "push" ] && [ "$GIT_REF" = "refs/heads/main" ]; then
             DRY=false
           fi
-          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$DRY_RUN_INPUT" = "false" ]; then
+          # Deploy real via dispatch SÓ é permitido na main (evita publicar build de
+          # outra branch); fora da main, um dry_run=false é rebaixado para dry-run com aviso.
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$DRY_RUN_INPUT" = "false" ] && [ "$GIT_REF" = "refs/heads/main" ]; then
             DRY=false
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$DRY_RUN_INPUT" = "false" ]; then
+            echo "::warning::dry_run=false só faz deploy real na main. Em '$GIT_REF' o run continua como dry-run."
           fi
 
           RSYNC_EXTRA=""

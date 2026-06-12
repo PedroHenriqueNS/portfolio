@@ -2,10 +2,20 @@ name: Deploy to Hostinger
 
 # Builda o portfólio e publica o conteúdo de dist/ no Hostinger (via SSH/rsync)
 # a cada push na branch main. Também pode ser disparado manualmente.
+#
+# SEGURANÇA: deploy REAL só em push na main (ou dispatch com dry_run=false).
+# Em qualquer outra branch o rsync roda com --dry-run (não altera produção).
 on:
   push:
-    branches: [main]
-  workflow_dispatch: {}
+    branches:
+      - main
+      - feat/seo-improvements   # TEMPORÁRIO: valida o workflow em dry-run antes do merge
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Simular o deploy (rsync --dry-run), sem alterar produção'
+        type: boolean
+        default: true
 
 # Garante um deploy por vez; um novo push cancela um deploy em andamento.
 concurrency:
@@ -48,11 +58,34 @@ jobs:
           # principal costuma ser public_html/. Ajuste via secret SSH_REMOTE_DIR se for
           # domínio adicionado (ex.: domains/pedrohenriquens.com.br/public_html/).
           REMOTE_DIR: ${{ secrets.SSH_REMOTE_DIR || 'public_html/' }}
+          # Contexto para decidir dry-run x deploy real (lido via env, sem interpolar em run:).
+          EVENT_NAME: ${{ github.event_name }}
+          GIT_REF: ${{ github.ref }}
+          DRY_RUN_INPUT: ${{ inputs.dry_run }}
         run: |
           if [ -z "$SSH_KNOWN_HOSTS" ]; then
             echo "::error::Secret SSH_KNOWN_HOSTS ausente. Gere com 'ssh-keyscan -p <porta> <ip>' em rede confiável e salve a saída como secret."
             exit 1
           fi
+
+          # Default seguro = dry-run. Deploy REAL apenas em push na main, ou em
+          # workflow_dispatch com dry_run=false explícito.
+          DRY=true
+          if [ "$EVENT_NAME" = "push" ] && [ "$GIT_REF" = "refs/heads/main" ]; then
+            DRY=false
+          fi
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$DRY_RUN_INPUT" = "false" ]; then
+            DRY=false
+          fi
+
+          RSYNC_EXTRA=""
+          if [ "$DRY" = "true" ]; then
+            RSYNC_EXTRA="--dry-run"
+            echo "::notice::DRY-RUN ativo — valida conexão/host key/auth e LISTA mudanças, SEM alterar a produção."
+          else
+            echo "::notice::Deploy REAL para $REMOTE_DIR."
+          fi
+
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           # Fixa a host key conhecida e exige verificação estrita (sem TOFU).
@@ -60,7 +93,7 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
           # Espelha dist/ na raiz do site. --delete remove assets antigos (hash do Vite);
           # .well-known é preservado para não quebrar a renovação de SSL.
-          sshpass -e rsync -rlvz --delete \
+          sshpass -e rsync -rlvz --delete $RSYNC_EXTRA \
             --exclude '.well-known' \
             -e "ssh -p $SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
             dist/ "$SSH_USERNAME@$SSH_IP:$REMOTE_DIR"

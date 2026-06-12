@@ -8,7 +8,6 @@ interface SkillCardProps {
     level: 1 | 2 | 3 | 4 | 5;
     icon: string;
     featured?: boolean;
-    isNew?: boolean;
 }
 
 const SkillCard = ({
@@ -17,7 +16,6 @@ const SkillCard = ({
     level,
     icon,
     featured = false,
-    isNew = false,
 }: SkillCardProps) => {
 
     const [isOpen, setIsOpen] = useState(false);
@@ -51,9 +49,6 @@ const SkillCard = ({
         >
             {featured && (
                 <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-30 font-jakarta font-bold text-[10px] tracking-wide whitespace-nowrap text-[#04111a] bg-gradient-to-r from-cyan-200 to-cyan-500 rounded-full px-2.5 py-0.5">★ destaque</span>
-            )}
-            {isNew && (
-                <span className="absolute -top-2.5 -right-2.5 z-30 font-jakarta font-bold text-[10px] tracking-wide text-[#04111a] bg-gradient-to-r from-cyan-200 to-cyan-500 rounded-full px-2 py-0.5">NOVO</span>
             )}
 
             <div className={cn(

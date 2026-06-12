@@ -1,8 +1,8 @@
 import {
     AWSIcon, CSharpIcon, CSSIcon, DockerIcon, DotNetIcon, DynamoDBIcon, ExpoIcon, ExpressIcon,
-    GitIcon, HTMLIcon, JavaIcon, JavaScriptIcon, KubernetesIcon, MongoDBIcon, MySQLIcon,
-    NestJSIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, PythonIcon, ReactIcon, TailwindIcon,
-    TypeScriptIcon, ViteJSIcon,
+    GitIcon, GSAPIcon, HTMLIcon, JavaIcon, JavaScriptIcon, KubernetesIcon, MongoDBIcon, MySQLIcon,
+    NestJSIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, PythonIcon, ReactIcon, ReactQueryIcon,
+    TailwindIcon, TypeScriptIcon, ViteJSIcon, ZustandIcon,
 } from "@/assets/icons"
 import SkillCard from "./SkillCard"
 import { cn } from "@/lib/utils"
@@ -13,7 +13,6 @@ type Skill = {
     description: string
     level: 1 | 2 | 3 | 4 | 5
     icon: string
-    isNew?: boolean
 }
 
 const featuredSkills: Skill[] = [
@@ -31,20 +30,23 @@ const frontendSkills: Skill[] = [
     { title: 'Tailwind CSS', description: 'Lib', level: 5, icon: TailwindIcon },
     { title: 'CSS', description: 'Linguagem', level: 3, icon: CSSIcon },
     { title: 'HTML', description: 'Linguagem de tags', level: 5, icon: HTMLIcon },
+    { title: 'React Query', description: 'Lib', level: 4, icon: ReactQueryIcon },
+    { title: 'Zustand', description: 'Estado', level: 4, icon: ZustandIcon },
+    { title: 'GSAP', description: 'Animação', level: 2, icon: GSAPIcon },
 ]
 
 const backendSkills: Skill[] = [
     { title: 'Node.js', description: 'Software', level: 4, icon: NodeJSIcon },
     { title: 'Express', description: 'Node.js Framework', level: 3, icon: ExpressIcon },
-    { title: 'Python', description: 'Linguagem', level: 4, icon: PythonIcon, isNew: true },
-    { title: 'AWS', description: 'Cloud', level: 4, icon: AWSIcon, isNew: true },
-    { title: 'Kubernetes', description: 'Orquestração', level: 4, icon: KubernetesIcon, isNew: true },
+    { title: 'Python', description: 'Linguagem', level: 4, icon: PythonIcon },
+    { title: 'AWS', description: 'Cloud', level: 4, icon: AWSIcon },
+    { title: 'Kubernetes', description: 'Orquestração', level: 4, icon: KubernetesIcon },
     { title: 'Docker', description: 'Container', level: 4, icon: DockerIcon },
     { title: 'Git / GitHub', description: 'Controle de versão', level: 4, icon: GitIcon },
     { title: 'PostgreSQL', description: 'Banco de dados', level: 4, icon: PostgreSQLIcon },
     { title: 'MySQL', description: 'Banco de dados', level: 3, icon: MySQLIcon },
     { title: 'MongoDB', description: 'Banco de dados', level: 3, icon: MongoDBIcon },
-    { title: 'DynamoDB', description: 'Banco de dados', level: 3, icon: DynamoDBIcon, isNew: true },
+    { title: 'DynamoDB', description: 'Banco de dados', level: 3, icon: DynamoDBIcon },
     { title: 'C#', description: 'Linguagem', level: 2, icon: CSharpIcon },
     { title: '.NET', description: 'Framework', level: 2, icon: DotNetIcon },
     { title: 'Java', description: 'Linguagem', level: 2, icon: JavaIcon },
@@ -70,7 +72,6 @@ const SkillGroup = ({ title, skills, featured = false }: { title: string; skills
                     level={skill.level}
                     icon={skill.icon}
                     featured={featured}
-                    isNew={skill.isNew}
                 />
             ))}
         </div>

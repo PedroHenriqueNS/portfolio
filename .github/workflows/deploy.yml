@@ -1,0 +1,50 @@
+name: Deploy to Hostinger
+
+# Builda o portfólio e publica o conteúdo de dist/ no Hostinger (via FTPS)
+# a cada push na branch main. Também pode ser disparado manualmente.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+# Garante um deploy por vez; um novo push cancela um deploy em andamento.
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable Corepack (Yarn 4)
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        run: yarn build
+
+      - name: Deploy to Hostinger via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          # Publica apenas o resultado do build (inclui .htaccess, robots.txt,
+          # sitemap.xml e imagens, pois o Vite copia public/ para dist/).
+          local-dir: ./dist/
+          # Pasta-raiz do site no Hostinger. Para o domínio principal costuma ser
+          # public_html/. Se for domínio adicionado, ajuste via secret FTP_SERVER_DIR
+          # (ex.: domains/pedrohenriquens.com.br/public_html/).
+          server-dir: ${{ secrets.FTP_SERVER_DIR || 'public_html/' }}

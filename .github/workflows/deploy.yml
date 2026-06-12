@@ -40,17 +40,27 @@ jobs:
           SSH_IP: ${{ secrets.SSH_IP }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          # Host key do servidor, fixada (pinning) para impedir MITM/captura de senha.
+          # Gere uma vez em rede confiável: ssh-keyscan -p <porta> <ip>
+          # e salve a saída completa no secret SSH_KNOWN_HOSTS.
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
           # Pasta-raiz do site no Hostinger (relativa ao home do SSH). Para o domínio
           # principal costuma ser public_html/. Ajuste via secret SSH_REMOTE_DIR se for
           # domínio adicionado (ex.: domains/pedrohenriquens.com.br/public_html/).
           REMOTE_DIR: ${{ secrets.SSH_REMOTE_DIR || 'public_html/' }}
         run: |
+          if [ -z "$SSH_KNOWN_HOSTS" ]; then
+            echo "::error::Secret SSH_KNOWN_HOSTS ausente. Gere com 'ssh-keyscan -p <porta> <ip>' em rede confiável e salve a saída como secret."
+            exit 1
+          fi
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
-          mkdir -p ~/.ssh
-          ssh-keyscan -p "$SSH_PORT" "$SSH_IP" >> ~/.ssh/known_hosts 2>/dev/null || true
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          # Fixa a host key conhecida e exige verificação estrita (sem TOFU).
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
           # Espelha dist/ na raiz do site. --delete remove assets antigos (hash do Vite);
           # .well-known é preservado para não quebrar a renovação de SSL.
           sshpass -e rsync -rlvz --delete \
             --exclude '.well-known' \
-            -e "ssh -p $SSH_PORT -o StrictHostKeyChecking=accept-new" \
+            -e "ssh -p $SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
             dist/ "$SSH_USERNAME@$SSH_IP:$REMOTE_DIR"

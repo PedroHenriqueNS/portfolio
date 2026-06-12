@@ -106,7 +106,22 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
           # Espelha dist/ na raiz do site. --delete remove assets antigos (hash do Vite);
           # .well-known é preservado para não quebrar a renovação de SSL.
-          sshpass -e rsync -rlvz --delete $RSYNC_EXTRA \
-            --exclude '.well-known' \
-            -e "ssh -p $SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
-            dist/ "$SSH_USERNAME@$SSH_IP:$REMOTE_DIR"
+          deploy_once() {
+            sshpass -e rsync -rlvz --delete $RSYNC_EXTRA \
+              --exclude '.well-known' \
+              -e "ssh -p $SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o ConnectTimeout=20" \
+              dist/ "$SSH_USERNAME@$SSH_IP:$REMOTE_DIR"
+          }
+          # Retry: 'Connection timed out' no SSH do Hostinger costuma ser intermitente
+          # (filtro de IP / anti-brute-force contra IPs de datacenter do GitHub).
+          n=0; max=4
+          until deploy_once; do
+            n=$((n+1))
+            if [ "$n" -ge "$max" ]; then
+              echo "::error::rsync falhou após $max tentativas. 'Connection timed out' = bloqueio de rede no SSH (provável filtro de IP/anti-brute-force do Hostinger contra IPs de datacenter). Cheque no hPanel restrição de IP / brute-force no SSH, ou troque o transporte para FTPS."
+              exit 1
+            fi
+            echo "::warning::Tentativa $n/$max falhou; aguardando 20s e tentando de novo…"
+            sleep 20
+          done
+          echo "::notice::rsync concluído."

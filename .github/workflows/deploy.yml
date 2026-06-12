@@ -27,6 +27,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Os secrets de SSH estão no Environment "Hostinger PROD"; é preciso referenciá-lo
+    # para que secrets.* fiquem visíveis ao job.
+    environment: Hostinger PROD
     steps:
       - name: Checkout
         uses: actions/checkout@v4

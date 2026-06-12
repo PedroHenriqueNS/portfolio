@@ -1,6 +1,6 @@
 name: Deploy to Hostinger
 
-# Builda o portfólio e publica o conteúdo de dist/ no Hostinger (via FTPS)
+# Builda o portfólio e publica o conteúdo de dist/ no Hostinger (via SSH/rsync)
 # a cada push na branch main. Também pode ser disparado manualmente.
 on:
   push:
@@ -33,18 +33,24 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Deploy to Hostinger via FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 21
-          # Publica apenas o resultado do build (inclui .htaccess, robots.txt,
-          # sitemap.xml e imagens, pois o Vite copia public/ para dist/).
-          local-dir: ./dist/
-          # Pasta-raiz do site no Hostinger. Para o domínio principal costuma ser
-          # public_html/. Se for domínio adicionado, ajuste via secret FTP_SERVER_DIR
-          # (ex.: domains/pedrohenriquens.com.br/public_html/).
-          server-dir: ${{ secrets.FTP_SERVER_DIR || 'public_html/' }}
+      - name: Deploy to Hostinger via SSH (rsync)
+        env:
+          # Senha lida pelo sshpass via variável SSHPASS (evita expor no process list).
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          SSH_IP: ${{ secrets.SSH_IP }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          # Pasta-raiz do site no Hostinger (relativa ao home do SSH). Para o domínio
+          # principal costuma ser public_html/. Ajuste via secret SSH_REMOTE_DIR se for
+          # domínio adicionado (ex.: domains/pedrohenriquens.com.br/public_html/).
+          REMOTE_DIR: ${{ secrets.SSH_REMOTE_DIR || 'public_html/' }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "$SSH_PORT" "$SSH_IP" >> ~/.ssh/known_hosts 2>/dev/null || true
+          # Espelha dist/ na raiz do site. --delete remove assets antigos (hash do Vite);
+          # .well-known é preservado para não quebrar a renovação de SSL.
+          sshpass -e rsync -rlvz --delete \
+            --exclude '.well-known' \
+            -e "ssh -p $SSH_PORT -o StrictHostKeyChecking=accept-new" \
+            dist/ "$SSH_USERNAME@$SSH_IP:$REMOTE_DIR"

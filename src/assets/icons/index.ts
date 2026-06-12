@@ -32,6 +32,11 @@ import CSharpIcon from './csharp.svg'
 import DotNetIcon from './dotnet.svg'
 import JavaIcon from './java.svg'
 import NestJSIcon from './nestjs.svg'
+import AWSIcon from './aws.svg'
+import DynamoDBIcon from './dynamodb.svg'
+import KubernetesIcon from './kubernetes.svg'
+import ZustandIcon from './zustand.svg'
+import GSAPIcon from './gsap.svg'
 
 export {
     ReactIcon,
@@ -67,6 +72,12 @@ export {
     DotNetIcon,
     JavaIcon,
     NestJSIcon,
+
+    AWSIcon,
+    DynamoDBIcon,
+    KubernetesIcon,
+    ZustandIcon,
+    GSAPIcon,
 
     GithubIcon,
 }

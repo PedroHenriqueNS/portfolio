@@ -17,6 +17,10 @@ on:
         type: boolean
         default: true
 
+# Privilégio mínimo para o GITHUB_TOKEN: o deploy é via SSH, não usa a API do GitHub.
+permissions:
+  contents: read
+
 # Um deploy por vez POR REF. Grupo por ref impede que um dry-run de outra branch
 # cancele um deploy real em andamento na main; cancel-in-progress=false faz novos
 # runs aguardarem na fila em vez de interromper um rsync de produção pela metade.
@@ -27,6 +31,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     # Deploy SÓ na main: garante que o environment de produção (e seus secrets) nunca
     # seja vinculado em outra ref — nem mesmo via workflow_dispatch de outra branch.
     if: github.ref == 'refs/heads/main'
@@ -76,7 +81,7 @@ jobs:
           present() { [ -n "$1" ] && echo set || echo MISSING; }
           echo "Secrets no job: KNOWN_HOSTS=$(present "$SSH_KNOWN_HOSTS") IP=$(present "$SSH_IP") PORT=$(present "$SSH_PORT") USER=$(present "$SSH_USERNAME") PASS=$(present "$SSHPASS")"
           if [ -z "$SSH_KNOWN_HOSTS" ]; then
-            echo "::error::SSH_KNOWN_HOSTS chegou vazio. Verifique: (1) está em Settings > Secrets and variables > Actions, aba *Secrets* (não *Variables* nem *Environments*); (2) é Repository secret; (3) nome exato 'SSH_KNOWN_HOSTS'; (4) re-execute o workflow APÓS salvar."
+            echo "::error::SSH_KNOWN_HOSTS chegou vazio. Verifique: (1) existe no environment 'Hostinger PROD' (Settings > Environments), que é o referenciado por este job; (2) nome exato 'SSH_KNOWN_HOSTS'; (3) re-execute o workflow APÓS salvar."
             exit 1
           fi
 
@@ -110,7 +115,7 @@ jobs:
           # Espelha dist/ na raiz do site. --delete remove assets antigos (hash do Vite);
           # .well-known é preservado para não quebrar a renovação de SSL.
           deploy_once() {
-            sshpass -e rsync -rlvz --delete $RSYNC_EXTRA \
+            sshpass -e rsync -rltvz --delete $RSYNC_EXTRA \
               --exclude '.well-known' \
               -e "ssh -p $SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o ConnectTimeout=20" \
               dist/ "$SSH_USERNAME@$SSH_IP:$REMOTE_DIR"

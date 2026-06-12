@@ -26,7 +26,7 @@ const ExperienceCard = ({ experience, index, show }: ExperienceCardProps) => {
                 )}
             />
 
-            <div className='border-1 border-b-4 rounded-xl border-blue-800 dark:border-blue-900 p-5 px-6 bg-background/40 max-sm:px-4'>
+            <div className='border-1 border-b-4 rounded-xl border-blue-800 dark:border-blue-900 p-5 px-6 bg-background/40 max-sm:px-4 [transform:translateZ(0)] [backface-visibility:hidden]'>
                 <div className='flex justify-between items-baseline gap-3 flex-wrap'>
                     <h3 className='font-jakarta font-bold text-lg'>
                         {role}{highlight && ' '}

@@ -65,7 +65,7 @@ const ProjectCard = ({
                                         className="drop-shadow-[0_0_10px_#000] size-5 max-sm:size-4"
                                         key={i}
                                         src={icon.image}
-                                        alt="icon"
+                                        alt={icon.title}
                                     />
                                 ))}
                             </div>
@@ -87,6 +87,7 @@ const ProjectCard = ({
                                 isHover && 'brightness-[60%]'
                             )}
                             src={imageUrl}
+                            alt={`${title} preview`}
                         />
                     </div>
                 </div>

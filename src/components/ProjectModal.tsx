@@ -75,7 +75,7 @@ const ProjectModal = ({
                                 <img
                                     className="size-5"
                                     src={icon.image}
-                                    alt="icon"
+                                    alt={icon.title}
                                 />
                             </HoverInfo>
                         ))}

@@ -46,10 +46,10 @@ const Header = ({ isViewingPresentation }: IHeader) => {
                 'absolute transition-all ease-in-out duration-500 transform -translate-x-1/2 left-1/2',
                 !isViewingPresentation && 'sm:-translate-x-0 sm:left-0'
             )}>
-                <h1 className={cn(
+                <p className={cn(
                     'text-transparent font-jakarta select-none text-3xl font-bold bg-clip-text bg-gradient-to-r from-slate-300 to-cyan-200 m-7 mx-20 z-0',
                     // isScrolled && 'from-slate-900 to-cyan-800 dark:from-slate-300 dark:to-cyan-200'
-                )}>Portfólio</h1>
+                )}>Portfólio</p>
             </div>
 
             <div className={cn(
@@ -60,13 +60,14 @@ const Header = ({ isViewingPresentation }: IHeader) => {
                     <img
                         className='size-12 min-w-12 object-cover rounded-full outline-1 outline-blue-600 p-0.5'
                         src={MyImage}
+                        alt='Pedro Henrique'
                     />
-                    <h1 className={cn(
+                    <span className={cn(
                         'transition-all ease-in-out duration-1000 w-0 truncate text-transparent font-jakarta select-none text-xl font-bold bg-clip-text bg-gradient-to-r from-slate-300 to-cyan-200',
                         !isViewingPresentation && 'w-full'
                     )}>
                         Pedro Henrique
-                    </h1>
+                    </span>
                 </div>
             </div>
 

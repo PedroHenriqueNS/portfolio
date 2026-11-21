@@ -22,7 +22,7 @@ const AboutMe = () => {
                 <p>
                     Engenheiro de Software Pleno com mais de 4 anos de experiência em desenvolvimento full stack de aplicações web e mobile em produção. Stack centrada em TypeScript (React.js, Next.js, React Native, NestJS), com infraestrutura AWS e bancos relacionais e NoSQL.
                     <br />
-                    Atualmente na Dry Telecom, defino padrões técnicos, decisões de arquitetura e fluxos de CI/CD, além de mentorar desenvolvedores via code reviews e pair programming. Foco em arquitetura escalável, qualidade de código e entrega contínua.
+                    Hoje construo o Linkeza, meu próprio SaaS de links e QR Codes dinâmicos, cuidando de produto, arquitetura e entrega de ponta a ponta. Antes, na Dry Telecom, defini padrões técnicos, decisões de arquitetura e fluxos de CI/CD, além de mentorar desenvolvedores via code reviews e pair programming. Foco em arquitetura escalável, qualidade de código e entrega contínua.
                 </p>
                 <p className='mt-3 small-regular text-neutral-500'>
                     Bacharel em Ciência da Computação — Universidade Anhembi Morumbi, 2025.

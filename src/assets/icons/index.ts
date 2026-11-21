@@ -37,6 +37,11 @@ import DynamoDBIcon from './dynamodb.svg'
 import KubernetesIcon from './kubernetes.svg'
 import ZustandIcon from './zustand.svg'
 import GSAPIcon from './gsap.svg'
+import AstroIcon from './astro.svg'
+import TypeORMIcon from './typeorm.svg'
+import RedisIcon from './redis.svg'
+import ClerkIcon from './clerk.svg'
+import CloudflareIcon from './cloudflare.svg'
 
 export {
     ReactIcon,
@@ -78,6 +83,11 @@ export {
     KubernetesIcon,
     ZustandIcon,
     GSAPIcon,
+    AstroIcon,
+    TypeORMIcon,
+    RedisIcon,
+    ClerkIcon,
+    CloudflareIcon,
 
     GithubIcon,
 }

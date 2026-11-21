@@ -227,7 +227,8 @@ Atualizado em ${buildDate}. Fonte: ${SITE}/
 - WhatsApp: +55 11 97016-8417
 - GitHub: https://github.com/PedroHenriqueNS
 - LinkedIn: https://www.linkedin.com/in/PedroHenriqueNS/
-- Currículo (PDF): ${SITE}/curriculo_PedroHenrique.pdf
+- Currículo em português (PDF): ${SITE}/curriculo_PedroHenrique.pdf
+- Resume in English (PDF): ${SITE}/resume_PedroHenrique_EN.pdf
 
 ## Experiência
 

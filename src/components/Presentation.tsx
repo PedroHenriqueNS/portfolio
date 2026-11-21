@@ -79,6 +79,16 @@ const Presentation = ({ setIsViewingPresentation }: IPresentation) => {
                         </div>
                     </a>
                 </div>
+
+                <a
+                    className='w-max text-sm font-medium text-neutral-600 dark:text-neutral-400 underline underline-offset-4 decoration-blue-600/50 hover:text-cyan-600 dark:hover:text-cyan-400 max-sm:self-center'
+                    href='/resume_PedroHenrique_EN.pdf'
+                    hrefLang='en'
+                    lang='en'
+                    download="Resume - Pedro Henrique do Nascimento Silva"
+                >
+                    Resume in English (PDF)
+                </a>
             </div>
         </section>
     )

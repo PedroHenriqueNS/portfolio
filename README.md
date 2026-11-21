@@ -76,6 +76,17 @@ npm run build
 
 The optimized build will be available in the `dist` directory.
 
+The build has three steps:
+
+1. `vite build` bundles the client.
+2. `vite build --ssr src/entry-server.tsx` bundles a server renderer (build-time only, never shipped).
+3. `scripts/prerender.mjs` renders every page to static HTML, so search engines and AI crawlers (which usually don't run JavaScript) read the whole site:
+   - `dist/index.html` (home) and `dist/projeto-<slug>.html` (one page per project, served at `/projetos/<slug>` by `public/.htaccess`);
+   - each page's own `<title>`, description, canonical, Open Graph/Twitter tags and JSON-LD;
+   - `dist/sitemap.xml` and `dist/llms.txt`.
+
+Project data (title, summary, description, stack, links) lives in `src/constants/projects.tsx`: the grid, the project pages, the JSON-LD, the sitemap and `llms.txt` all come from it. Adding a project is one entry there plus a 1200x630 image in `public/og/<slug>.jpg`.
+
 ## Contact
 
 - **Email**: pedrohe.contato@gmail.com

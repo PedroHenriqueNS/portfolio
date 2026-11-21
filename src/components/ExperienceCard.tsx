@@ -37,7 +37,7 @@ const ExperienceCard = ({ experience, index, show }: ExperienceCardProps) => {
                             <span className='ml-2 align-middle text-[11px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full text-[#04111a] bg-gradient-to-r from-cyan-200 to-cyan-500'>presente</span>
                         )}
                     </h3>
-                    <span className='font-jakarta text-xs text-neutral-500 whitespace-nowrap'>{period}</span>
+                    <span className='font-jakarta text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap'>{period}</span>
                 </div>
 
                 <p className='font-jakarta font-semibold text-sm mt-1 w-max bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-cyan-500'>

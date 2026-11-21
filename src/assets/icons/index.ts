@@ -40,6 +40,9 @@ import GSAPIcon from './gsap.svg'
 import AstroIcon from './astro.svg'
 import TypeORMIcon from './typeorm.svg'
 import RedisIcon from './redis.svg'
+import RabbitMQIcon from './rabbitmq.svg'
+import ArgoCDIcon from './argocd.svg'
+import GrafanaIcon from './grafana.svg'
 import ClerkIcon from './clerk.svg'
 import CloudflareIcon from './cloudflare.svg'
 import TanStackIcon from './tanstack.svg'
@@ -88,6 +91,9 @@ export {
     AstroIcon,
     TypeORMIcon,
     RedisIcon,
+    RabbitMQIcon,
+    ArgoCDIcon,
+    GrafanaIcon,
     ClerkIcon,
     CloudflareIcon,
     TanStackIcon,

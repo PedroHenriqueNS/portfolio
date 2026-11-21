@@ -1,9 +1,9 @@
 import useObserver from '@/hooks/useObserver'
 import { cn } from '@/lib/utils'
 import { ProjectTechnologies } from '@/constants'
-import HoverInfo from './HoverInfo'
+import { FEATURED_PROJECT, projectPath } from '@/constants/projects'
 import { buttonVariants } from './ui/button'
-import { ExternalLink, Github, QrCode, Shuffle, BarChart3 } from 'lucide-react'
+import { ExternalLink, FileText, Github, QrCode, Shuffle, BarChart3 } from 'lucide-react'
 
 const LINKEZA_URL = 'https://linkeza.com'
 // Imagem de compartilhamento (Open Graph) publicada pelo próprio site do Linkeza
@@ -99,15 +99,13 @@ const FeaturedProject = () => {
                                 ))}
                             </ul>
 
-                            <div className='flex gap-3 flex-wrap max-sm:justify-center'>
+                            <ul className='flex gap-3 flex-wrap max-sm:justify-center' aria-label='Tecnologias'>
                                 {ProjectTechnologies['linkeza'].map((icon) => (
-                                    <HoverInfo key={icon.title} info={icon.title} hasIcon={false}>
-                                        <span className='flex-center size-9 rounded-lg bg-white/5 border border-white/10'>
-                                            <img className='size-5' src={icon.image} alt={icon.title} />
-                                        </span>
-                                    </HoverInfo>
+                                    <li key={icon.title} title={icon.title} className='flex-center size-9 rounded-lg bg-white/5 border border-white/10'>
+                                        <img className='size-5' src={icon.image} alt={icon.title} width={20} height={20} />
+                                    </li>
                                 ))}
-                            </div>
+                            </ul>
 
                             <div className='flex gap-3 flex-wrap mt-1 max-sm:justify-center'>
                                 <a
@@ -133,6 +131,16 @@ const FeaturedProject = () => {
                                     rel='noopener'
                                 >
                                     GitHub <Github />
+                                </a>
+                                <a
+                                    className={buttonVariants({
+                                        variant: 'outline',
+                                        size: 'default',
+                                        className: 'cursor-pointer !bg-transparent border-violet-500/40 text-violet-100 hover:!bg-violet-500/10 hover:text-white'
+                                    })}
+                                    href={projectPath(FEATURED_PROJECT.slug)}
+                                >
+                                    Detalhes <FileText />
                                 </a>
                             </div>
                         </div>

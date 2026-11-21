@@ -12,6 +12,7 @@ import {
 
 import { Info } from "lucide-react"
 import { cn } from "@/lib/utils"
+import useIsBelow from "@/hooks/useIsBelow"
 
 interface HoverInfoProps {
     info?: string | null
@@ -24,7 +25,7 @@ interface HoverInfoProps {
 
 const HoverInfo = ({ info, children, size = 13, hasIcon = true, className = "", side="bottom" }: HoverInfoProps) => {
 
-    const isMobile = window.innerWidth < 768 ? true : false
+    const isMobile = useIsBelow(767)
 
     if (isMobile) return (
         <Popover>

@@ -20,12 +20,12 @@ const AboutMe = () => {
 
             <div className='flex-center flex-col gap-1 text-neutral-600 base-regular text-center !leading-[180%] dark:text-neutral-400'>
                 <p>
-                    Engenheiro de Software Pleno com mais de 4 anos de experiência em desenvolvimento full stack de aplicações web e mobile em produção. Stack centrada em TypeScript (React.js, Next.js, React Native, NestJS), com infraestrutura AWS e bancos relacionais e NoSQL.
+                    Engenheiro de Software Full Stack com mais de 5 anos de experiência em aplicações web e mobile em produção. Stack centrada em TypeScript (React.js, Next.js, React Native, Node.js, NestJS) na AWS, com sistemas orientados a eventos (RabbitMQ, SQS), Kubernetes com ArgoCD e Grafana, e bancos relacionais e NoSQL.
                     <br />
-                    Hoje construo o Linkeza, meu próprio SaaS de links e QR Codes dinâmicos, cuidando de produto, arquitetura e entrega de ponta a ponta. Antes, na Dry Telecom, defini padrões técnicos, decisões de arquitetura e fluxos de CI/CD, além de mentorar desenvolvedores via code reviews e pair programming. Foco em arquitetura escalável, qualidade de código e entrega contínua.
+                    Hoje construo o Linkeza, meu próprio SaaS de links e QR Codes dinâmicos, cuidando de produto, arquitetura e entrega de ponta a ponta. Antes, na Dry Telecom, implementei do zero um sistema de mensageria com RabbitMQ e NestJS, defini padrões técnicos e fluxos de CI/CD e mentorei desenvolvedores via code reviews e pair programming. No dia a dia uso Claude Code com subagentes num fluxo de Spec-Driven Development.
                 </p>
-                <p className='mt-3 small-regular text-neutral-500'>
-                    Bacharel em Ciência da Computação — Universidade Anhembi Morumbi, 2025.
+                <p className='mt-3 small-regular text-neutral-600 dark:text-neutral-400'>
+                    Bacharel em Ciência da Computação — Universidade Anhembi Morumbi, 2025 · Técnico em Telecomunicações — ITB Brasílio Flores de Azevedo · Inglês avançado
                 </p>
             </div>
         </section>

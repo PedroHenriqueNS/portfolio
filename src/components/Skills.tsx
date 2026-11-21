@@ -1,7 +1,7 @@
 import {
-    AWSIcon, CSharpIcon, CSSIcon, DockerIcon, DotNetIcon, DynamoDBIcon, ExpoIcon, ExpressIcon,
-    GitIcon, GSAPIcon, HTMLIcon, JavaIcon, JavaScriptIcon, KubernetesIcon, MongoDBIcon, MySQLIcon,
-    NestJSIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, PythonIcon, ReactIcon, ReactQueryIcon,
+    ArgoCDIcon, AWSIcon, CSharpIcon, CSSIcon, DockerIcon, DotNetIcon, DynamoDBIcon, ExpoIcon, ExpressIcon,
+    GitIcon, GrafanaIcon, GSAPIcon, HTMLIcon, JavaIcon, JavaScriptIcon, KubernetesIcon, MongoDBIcon, MySQLIcon,
+    NestJSIcon, NextJSIcon, NodeJSIcon, PostgreSQLIcon, PythonIcon, RabbitMQIcon, ReactIcon, ReactQueryIcon,
     TailwindIcon, TypeScriptIcon, ViteJSIcon, ZustandIcon,
 } from "@/assets/icons"
 import SkillCard from "./SkillCard"
@@ -38,9 +38,12 @@ const frontendSkills: Skill[] = [
 const backendSkills: Skill[] = [
     { title: 'Node.js', description: 'Software', level: 4, icon: NodeJSIcon },
     { title: 'Express', description: 'Node.js Framework', level: 3, icon: ExpressIcon },
+    { title: 'RabbitMQ', description: 'Mensageria', level: 4, icon: RabbitMQIcon },
     { title: 'Python', description: 'Linguagem', level: 4, icon: PythonIcon },
     { title: 'AWS', description: 'Cloud', level: 4, icon: AWSIcon },
     { title: 'Kubernetes', description: 'Orquestração', level: 4, icon: KubernetesIcon },
+    { title: 'ArgoCD', description: 'GitOps / CD', level: 4, icon: ArgoCDIcon },
+    { title: 'Grafana', description: 'Observabilidade', level: 3, icon: GrafanaIcon },
     { title: 'Docker', description: 'Container', level: 4, icon: DockerIcon },
     { title: 'Git / GitHub', description: 'Controle de versão', level: 4, icon: GitIcon },
     { title: 'PostgreSQL', description: 'Banco de dados', level: 4, icon: PostgreSQLIcon },

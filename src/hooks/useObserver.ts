@@ -8,10 +8,8 @@ export default function useObserver(
     const [isViewing, setIsViewing] = useState(false)
     const [hasAlreadyViewed, setHasAlreadyViewed] = useState(false)
 
-    const isMobile = window.innerWidth <= 700 ? true : false
-
-
     useEffect(() => {
+        const isMobile = window.innerWidth <= 700
         const observer = new IntersectionObserver(entries => {
             const [entry] = entries
             setIsViewing(entry.isIntersecting)

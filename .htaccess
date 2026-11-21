@@ -9,7 +9,35 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
+# Página de cada projeto: /projetos/<slug> é servida pelo arquivo pré-renderizado
+# projeto-<slug>.html. Arquivos planos de propósito: um diretório projetos/ faria o
+# mod_dir redirecionar /projetos para /projetos/. A URL continua /projetos/<slug>.
+RewriteCond %{DOCUMENT_ROOT}/projeto-$1.html -f
+RewriteRule ^projetos/([a-z0-9-]+)/?$ /projeto-$1.html [L]
+
+# O arquivo pré-renderizado não é uma URL pública: quem o abre direto vai para a URL canônica.
+RewriteCond %{THE_REQUEST} \s/projeto-([a-z0-9-]+)\.html[\s?]
+RewriteRule ^ /projetos/%1 [R=301,L]
+
+# Arquivo inexistente (caminho com extensão, ou em /.well-known/) é 404, não a home:
+# robôs que procuram manifestos e o navegador que pede um asset antigo recebem um erro honesto.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} \.[a-z0-9]+$ [NC,OR]
+RewriteCond %{REQUEST_URI} ^/\.well-known/
+RewriteRule ^ - [R=404,L]
+
 # Redireciona todas as requisições para index.html, exceto arquivos existentes
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /index.html [L,QSA]
+
+# HTML e o currículo sempre revalidados: um deploy novo aparece na hora. /assets/* tem hash no nome.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|pdf)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# llms.txt em UTF-8, para os acentos chegarem certos.
+AddDefaultCharset UTF-8
+AddType "text/plain; charset=utf-8" .txt

@@ -1,6 +1,36 @@
-import { AngularIcon, AppwriteIcon, DockerIcon, ElectronIcon, ExpoIcon, ExpressIcon, FlaskIcon, IonicIcon, MySQLIcon, NextJSIcon, NodeJSIcon, PythonIcon, ReactIcon, ReactQueryIcon, SanityIcon, ShadCNIcon, SupabaseIcon, TailwindIcon, ViteJSIcon } from "@/assets/icons";
+import { AngularIcon, AppwriteIcon, AstroIcon, ClerkIcon, CloudflareIcon, NestJSIcon, RedisIcon, TypeORMIcon, TypeScriptIcon, DockerIcon, ElectronIcon, ExpoIcon, ExpressIcon, FlaskIcon, IonicIcon, MySQLIcon, NextJSIcon, NodeJSIcon, PythonIcon, ReactIcon, ReactQueryIcon, SanityIcon, ShadCNIcon, SupabaseIcon, TailwindIcon, ViteJSIcon } from "@/assets/icons";
 
 export const ProjectTechnologies = {
+    'linkeza': [
+        {
+            title: 'TypeScript',
+            image: TypeScriptIcon,
+        },
+        {
+            title: 'Astro',
+            image: AstroIcon,
+        },
+        {
+            title: 'NestJS',
+            image: NestJSIcon,
+        },
+        {
+            title: 'TypeORM',
+            image: TypeORMIcon,
+        },
+        {
+            title: 'Redis',
+            image: RedisIcon,
+        },
+        {
+            title: 'Clerk',
+            image: ClerkIcon,
+        },
+        {
+            title: 'Cloudflare',
+            image: CloudflareIcon,
+        },
+    ],
     'pautas_gobuzz': [
         {
             title: 'React.js',
@@ -242,13 +272,21 @@ export interface IExperience {
 
 export const Experiences: IExperience[] = [
     {
+        role: 'Fundador & Engenheiro de Software',
+        company: 'Linkeza',
+        location: 'São Paulo, SP',
+        period: 'out/2026 — presente',
+        current: true,
+        summary: 'Produto próprio (SaaS): encurtador de links com QR Code dinâmico e link de WhatsApp com rodízio de atendentes para negócios locais. Conduzo tudo sozinho — produto, arquitetura, desenvolvimento, identidade visual e lançamento.',
+        stack: ['TypeScript', 'Astro', 'NestJS', 'TypeORM', 'Redis', 'Clerk', 'Cloudflare'],
+    },
+    {
         role: 'Engenheiro de Software',
         highlight: 'Pleno',
         company: 'Dry Telecom',
         location: 'São Paulo, SP',
-        period: 'mar/2026 — presente',
-        current: true,
-        summary: 'Defino padrões técnicos, decisões de arquitetura e fluxos de CI/CD para um time de 5 desenvolvedores; mentoria via code reviews e pair programming; 10+ aplicações em produção (10k+ usuários, 20k+ linhas de TypeScript).',
+        period: 'mar/2026 — jul/2026',
+        summary: 'Defini padrões técnicos, decisões de arquitetura e fluxos de CI/CD para um time de 5 desenvolvedores; mentoria via code reviews e pair programming; 10+ aplicações em produção (10k+ usuários, 20k+ linhas de TypeScript).',
         stack: ['TypeScript', 'React.js', 'Next.js', 'React Native', 'NestJS', 'Python', 'AWS', 'Docker', 'PostgreSQL'],
     },
     {

@@ -42,6 +42,8 @@ import TypeORMIcon from './typeorm.svg'
 import RedisIcon from './redis.svg'
 import ClerkIcon from './clerk.svg'
 import CloudflareIcon from './cloudflare.svg'
+import TanStackIcon from './tanstack.svg'
+import VitestIcon from './vitest.svg'
 
 export {
     ReactIcon,
@@ -88,6 +90,8 @@ export {
     RedisIcon,
     ClerkIcon,
     CloudflareIcon,
+    TanStackIcon,
+    VitestIcon,
 
     GithubIcon,
 }

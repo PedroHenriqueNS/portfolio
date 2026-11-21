@@ -1,7 +1,7 @@
 import useObserver from '@/hooks/useObserver'
 import { cn } from '@/lib/utils'
 import ProjectCard from './ProjectCard'
-import { AutoCropPdfPreview, CloudBarueriPreview, EduardoBoiguesPreview, FlaviaMorandoPreview, GobuzzAdsManagerPreview, PautasGobuzzPreview, SandroMastellariPreview, SeedingControlePreview, SnowHunterPreview, SodiEasyPreview, TwoNotePreview, YTDLPGUIPreview, YTMusicClone } from '@/assets/images'
+import { AutoCropPdfPreview, ClauCamargoPreview, CloudBarueriPreview, JeModestoPreview, WSAMarmoresPreview, EduardoBoiguesPreview, FlaviaMorandoPreview, GobuzzAdsManagerPreview, PautasGobuzzPreview, SandroMastellariPreview, SeedingControlePreview, SnowHunterPreview, SodiEasyPreview, TwoNotePreview, YTDLPGUIPreview, YTMusicClone } from '@/assets/images'
 import { ProjectTechnologies } from '@/constants'
 
 const Projects = () => {
@@ -22,6 +22,51 @@ const Projects = () => {
             <h2 className='h2-bold font-jakarta'>Projetos</h2>
 
             <div className='flex-center flex-wrap gap-10'>
+                <ProjectCard
+                    title="Jé Modesto 22555"
+                    imageUrl={JeModestoPreview}
+                    technologyIcons={ProjectTechnologies['je_modesto']}
+                    creationAt='Agosto de 2026'
+                    repoUrl='Private'
+                    description={(
+                        <div className='project-description-text'>
+                            <p>Site de campanha do candidato a deputado estadual Jé Modesto, no Sudoeste Paulista, em 2026: o apoiador envia uma foto, posiciona dentro do selo oficial da campanha e baixa a imagem pronta para compartilhar.</p>
+                            <p>Todo o processamento acontece no navegador com a <strong>Canvas API</strong>: a foto nunca sai do aparelho e não existe backend. Aceita fotos de iPhone (HEIC) com um decodificador WebAssembly carregado só quando necessário.</p>
+                            <p>Reaproveita o motor de molduras do projeto da Clau Camargo, com a geometria remedida para a nova arte e o layout reproduzido a partir do design em desktop e celular.</p>
+                            <p>Feito em <strong>React 19</strong> com <strong>React Compiler</strong>, <strong>TypeScript</strong>, <strong>Vite</strong> e <strong>Tailwind CSS</strong>, com 74 testes em <strong>Vitest</strong> e deploy automatizado via <strong>GitHub Actions</strong>.</p>
+                        </div>
+                    )}
+                />
+                <ProjectCard
+                    title="Clau Camargo 55655"
+                    imageUrl={ClauCamargoPreview}
+                    technologyIcons={ProjectTechnologies['clau_camargo']}
+                    creationAt='Junho de 2026'
+                    repoUrl='Private'
+                    description={(
+                        <div className='project-description-text'>
+                            <p>Site de campanha da candidata a deputada estadual Clau Camargo em 2026, que cresceu de um gerador de moldura de foto para uma plataforma com várias frentes.</p>
+                            <p>Gerador de moldura com a foto processada só no navegador (<strong>Canvas API</strong>, suporte a HEIC), molduras co-assinadas por apoiadores em URLs próprias, páginas de vídeo por cidade para QR Codes impressos com player próprio, e a "Minha Colinha", que desenha e exporta a colinha de votação em canvas.</p>
+                            <p>As páginas de apoiadores e cidades são pré-renderizadas no build por um plugin <strong>Vite</strong> próprio, para que o link mostre a prévia certa no WhatsApp. Métricas por cidade e canal com <strong>Google Tag Manager</strong> e <strong>GA4</strong>, com política de privacidade alinhada à LGPD.</p>
+                            <p>Feito em <strong>React 19</strong> com <strong>React Compiler</strong>, <strong>TypeScript</strong>, <strong>TanStack Router</strong> e <strong>Tailwind CSS</strong>, com mais de 370 testes em <strong>Vitest</strong> e deploy via <strong>GitHub Actions</strong> a cada release.</p>
+                        </div>
+                    )}
+                />
+                <ProjectCard
+                    title="WSA Mármores e Granitos"
+                    imageUrl={WSAMarmoresPreview}
+                    technologyIcons={ProjectTechnologies['wsa_marmores']}
+                    creationAt='Janeiro de 2026'
+                    repoUrl='Private'
+                    description={(
+                        <div className='project-description-text'>
+                            <p>Site institucional de uma marmoraria, com landing page, página sobre a empresa, galeria de obras por categoria, catálogo de pedras e contato com mapa do <strong>Google Maps</strong>.</p>
+                            <p>A navegação é feita com <strong>React Router</strong> e as animações com <strong>GSAP</strong>, <strong>Motion</strong> e efeitos de parallax, com versão própria para celular.</p>
+                            <p>Todos os pedidos de orçamento levam ao <strong>WhatsApp</strong>, e o site conta com SEO, <strong>Google Analytics</strong> e política de privacidade.</p>
+                            <p>Feito em <strong>React.js</strong> com <strong>Vite</strong>, <strong>TypeScript</strong>, <strong>Tailwind CSS</strong> e componentes do <strong>ShadCN</strong>.</p>
+                        </div>
+                    )}
+                />
                 <ProjectCard
                     title="Pautas Gobuzz"
                     imageUrl={PautasGobuzzPreview}

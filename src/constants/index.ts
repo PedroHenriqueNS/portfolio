@@ -1,4 +1,4 @@
-import { AngularIcon, AppwriteIcon, AstroIcon, ClerkIcon, CloudflareIcon, NestJSIcon, RedisIcon, TypeORMIcon, TypeScriptIcon, DockerIcon, ElectronIcon, ExpoIcon, ExpressIcon, FlaskIcon, IonicIcon, MySQLIcon, NextJSIcon, NodeJSIcon, PythonIcon, ReactIcon, ReactQueryIcon, SanityIcon, ShadCNIcon, SupabaseIcon, TailwindIcon, ViteJSIcon } from "@/assets/icons";
+import { AngularIcon, AppwriteIcon, AstroIcon, GSAPIcon, TanStackIcon, VitestIcon, ClerkIcon, CloudflareIcon, NestJSIcon, RedisIcon, TypeORMIcon, TypeScriptIcon, DockerIcon, ElectronIcon, ExpoIcon, ExpressIcon, FlaskIcon, IonicIcon, MySQLIcon, NextJSIcon, NodeJSIcon, PythonIcon, ReactIcon, ReactQueryIcon, SanityIcon, ShadCNIcon, SupabaseIcon, TailwindIcon, ViteJSIcon } from "@/assets/icons";
 
 export const ProjectTechnologies = {
     'linkeza': [
@@ -30,6 +30,30 @@ export const ProjectTechnologies = {
             title: 'Cloudflare',
             image: CloudflareIcon,
         },
+    ],
+    'je_modesto': [
+        { title: 'React.js', image: ReactIcon },
+        { title: 'TypeScript', image: TypeScriptIcon },
+        { title: 'Vite', image: ViteJSIcon },
+        { title: 'Tailwind CSS', image: TailwindIcon },
+        { title: 'TanStack Router', image: TanStackIcon },
+        { title: 'Vitest', image: VitestIcon },
+    ],
+    'clau_camargo': [
+        { title: 'React.js', image: ReactIcon },
+        { title: 'TypeScript', image: TypeScriptIcon },
+        { title: 'Vite', image: ViteJSIcon },
+        { title: 'Tailwind CSS', image: TailwindIcon },
+        { title: 'TanStack Router', image: TanStackIcon },
+        { title: 'Vitest', image: VitestIcon },
+    ],
+    'wsa_marmores': [
+        { title: 'React.js', image: ReactIcon },
+        { title: 'TypeScript', image: TypeScriptIcon },
+        { title: 'Vite', image: ViteJSIcon },
+        { title: 'Tailwind CSS', image: TailwindIcon },
+        { title: 'GSAP', image: GSAPIcon },
+        { title: 'ShadCN/ui', image: ShadCNIcon },
     ],
     'pautas_gobuzz': [
         {

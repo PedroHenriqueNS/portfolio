@@ -11,6 +11,9 @@ import SnowHunterPreview from './snowhunter_preview.jpg'
 import YTMusicClone from './yt_music_clone_preview.jpg'
 import SodiEasyPreview from './sodieasy_preview.png'
 import TwoNotePreview from './twonote_preview.png'
+import WSAMarmoresPreview from './wsa_marmores_preview.jpg'
+import ClauCamargoPreview from './clau_camargo_preview.jpg'
+import JeModestoPreview from './je_modesto_preview.jpg'
 
 export {
     PautasGobuzzPreview,
@@ -26,4 +29,7 @@ export {
     YTMusicClone,
     SodiEasyPreview,
     TwoNotePreview,
+    WSAMarmoresPreview,
+    ClauCamargoPreview,
+    JeModestoPreview,
 }

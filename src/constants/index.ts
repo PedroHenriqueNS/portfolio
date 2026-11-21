@@ -298,7 +298,7 @@ export const Experiences: IExperience[] = [
     {
         role: 'Fundador & Engenheiro de Software',
         company: 'Linkeza',
-        location: 'São Paulo, SP',
+        location: 'Carapicuíba, SP',
         period: 'out/2026 — presente',
         current: true,
         summary: 'Produto próprio (SaaS): encurtador de links com QR Code dinâmico e link de WhatsApp com rodízio de atendentes para negócios locais. Conduzo tudo sozinho — produto, arquitetura, desenvolvimento, identidade visual e lançamento.',
@@ -308,18 +308,18 @@ export const Experiences: IExperience[] = [
         role: 'Engenheiro de Software',
         highlight: 'Pleno',
         company: 'Dry Telecom',
-        location: 'São Paulo, SP',
+        location: 'Barueri, SP',
         period: 'mar/2026 — jul/2026',
-        summary: 'Defini padrões técnicos, decisões de arquitetura e fluxos de CI/CD para um time de 5 desenvolvedores; mentoria via code reviews e pair programming; 10+ aplicações em produção (10k+ usuários, 20k+ linhas de TypeScript).',
-        stack: ['TypeScript', 'React.js', 'Next.js', 'React Native', 'NestJS', 'Python', 'AWS', 'Docker', 'PostgreSQL'],
+        summary: 'Projetei e implementei do zero um sistema de mensageria orientado a eventos com RabbitMQ e NestJS; APIs NestJS com DDD e SOLID; defini padrões técnicos e pipelines de CI/CD e participei das decisões de arquitetura do time; acompanhei desenvolvedores juniores com code review e pair programming; 10+ aplicações web e mobile em produção, incluindo apps com 10k+ usuários.',
+        stack: ['TypeScript', 'React.js', 'Next.js', 'React Native', 'NestJS', 'RabbitMQ', 'Python', 'AWS', 'Docker', 'PostgreSQL'],
     },
     {
         role: 'Engenheiro de Software',
         company: 'Dry Telecom',
-        location: 'São Paulo, SP',
+        location: 'Barueri, SP',
         period: 'mai/2025 — mar/2026',
-        summary: 'Interfaces web com React (Vite) e Next.js (SSR); APIs REST em NestJS com PostgreSQL/DynamoDB; automações em Python; gestão de infraestrutura AWS (EC2, EKS, Lambda, S3, RDS, SQS, Cognito, SES).',
-        stack: ['TypeScript', 'React.js', 'Next.js', 'NestJS', 'Python', 'AWS'],
+        summary: 'Interfaces web com React (Vite) e Next.js (SSR); APIs REST em NestJS com DDD e SOLID, sobre PostgreSQL/DynamoDB e filas SQS; deploys no EKS com ArgoCD e observabilidade com Grafana; automações em Python; infraestrutura AWS (EC2, EKS, Lambda, S3, RDS, SQS, Cognito, SES).',
+        stack: ['TypeScript', 'React.js', 'Next.js', 'NestJS', 'Python', 'AWS', 'ArgoCD', 'Grafana'],
     },
     {
         role: 'Analista de Dados & Desenvolvedor',
@@ -327,13 +327,13 @@ export const Experiences: IExperience[] = [
         location: 'São Paulo, SP',
         period: 'nov/2023 — fev/2025',
         summary: 'Dashboards e análise de dados de redes sociais com Python/PostgreSQL/Power BI; sistemas internos web, desktop e mobile; automações e integrações de API.',
-        stack: ['Python', 'PostgreSQL', 'React.js', 'React Native', 'Electron', 'Node.js'],
+        stack: ['TypeScript', 'React.js', 'Next.js', 'React Native', 'Electron', 'Node.js', 'Python', 'PostgreSQL'],
     },
     {
         role: 'Desenvolvedor Full Stack (Freelancer)',
         company: 'Atuação independente',
         location: 'São Paulo, SP',
-        period: 'desde 2022',
+        period: 'desde 2021',
         summary: 'Aplicações web e mobile sob demanda, ponta a ponta — requisitos, arquitetura, desenvolvimento e deploy.',
         stack: ['React.js', 'React Native', 'Next.js', 'Node.js', 'Express', 'TypeScript'],
     },
@@ -347,7 +347,7 @@ export interface IMetric {
 }
 
 export const Metrics: IMetric[] = [
-    { value: 4, suffix: '+', label: 'anos de experiência' },
+    { value: 5, suffix: '+', label: 'anos de experiência' },
     { value: 10, suffix: '+', label: 'apps em produção' },
     { value: 10, suffix: 'k+', label: 'usuários atendidos' },
     { value: 1275, label: 'commits · 234 PRs revisados' },

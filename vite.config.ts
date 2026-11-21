@@ -4,7 +4,14 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 // https://vite.dev/config/
+// Mesma data no HTML pré-renderizado e no bundle do cliente (rodapé, sitemap, llms.txt).
+const BUILD_DATE = process.env.BUILD_DATE ?? new Date().toISOString().slice(0, 10)
+process.env.BUILD_DATE = BUILD_DATE
+
 export default defineConfig({
+  define: {
+    __BUILD_DATE__: JSON.stringify(BUILD_DATE),
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

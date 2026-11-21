@@ -1,8 +1,8 @@
-import MyImage from '@/assets/images/my_img_2.jpg'
+import MyImage from '@/assets/images/my_img_2.webp'
 import { buttonVariants } from './ui/button'
 import { ArrowDownToLine } from 'lucide-react'
 import useObserver from '@/hooks/useObserver'
-import { cn } from '@/lib/utils'
+import { useEffect } from 'react'
 
 interface IPresentation {
     // isViewingPresentation: boolean
@@ -14,36 +14,38 @@ const Presentation = ({ setIsViewingPresentation }: IPresentation) => {
     const {
         containerRef,
         isViewing,
-        hasAlreadyViewed
     } = useObserver()
 
-    setIsViewingPresentation(isViewing)
+    useEffect(() => {
+        setIsViewingPresentation(isViewing)
+    }, [isViewing, setIsViewingPresentation])
 
+    // A entrada é uma animação CSS, não uma classe trocada por JavaScript: o topo da
+    // página aparece assim que o HTML pré-renderizado chega, e o LCP pode ser medido.
     return (
         <section
             ref={containerRef}
-            className={cn(
-                "p-24 px-40 flex-center gap-24 transition-all ease-in-out duration-[800ms] transform -translate-y-10 opacity-0 max-sm:flex-col max-sm:px-12 max-sm:gap-14",
-                hasAlreadyViewed && 'translate-y-0 opacity-100'
-            )}
+            className="p-24 px-40 flex-center gap-24 animate-in fade-in slide-in-from-top-10 duration-[800ms] max-sm:flex-col max-sm:px-12 max-sm:gap-14"
         >
             <img
                 className='object-cover rounded-full size-[20rem] outline-1 outline-blue-600 p-1 max-sm:size-[15rem]'
                 src={MyImage}
-                alt='Pedro Henrique, Engenheiro de Software'
+                alt='Foto de Pedro Henrique, engenheiro de software full stack'
+                width={320}
+                height={320}
                 fetchPriority='high'
             />
 
             <div className='flex flex-col gap-3 max-sm:items-center'>
-                <div className='text-4xl [&_h1]:font-jakarta font-medium flex gap-1.5 text-center'>
-                    <h1>
+                <h1 className='flex flex-col gap-3 max-sm:items-center'>
+                    <span className='text-4xl font-jakarta font-medium text-center'>
                         Olá, sou{" "}
                         <br className='sm:hidden' />
                         <span className='font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-cyan-500'>Pedro Henrique</span>
-                    </h1>
-                </div>
+                    </span>
 
-                <h3 className='text-gray-500 font-medium'>Engenheiro de Software Pleno · Full Stack</h3>
+                    <span className='text-base text-neutral-600 dark:text-neutral-400 font-medium'>Engenheiro de Software · Full Stack</span>
+                </h1>
 
                 <div className='flex gap-5 max-lg:gap-3 max-sm:flex-col max-sm:items-center'>
                     <a

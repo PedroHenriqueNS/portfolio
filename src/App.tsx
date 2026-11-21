@@ -1,38 +1,11 @@
-import { useState } from 'react'
-import Header from './components/Header'
-import Presentation from './components/Presentation'
-import AboutMe from './components/AboutMe'
-import Experience from './components/Experience'
-import Skills from './components/Skills'
-import Projects from './components/Projects'
-import FeaturedProject from './components/FeaturedProject'
-import Contacts from './components/Contacts'
+import HomePage from './pages/HomePage'
+import ProjectPage from './pages/ProjectPage'
+import { resolveProject } from './lib/route'
 
-function App() {
-
-  const [isViewingPresentation, setIsViewingPresentation] = useState(false)
-
-  return (
-    <>
-      <Header isViewingPresentation={isViewingPresentation} />
-
-      <article className='w-full flex-center flex-col'>
-        <Presentation setIsViewingPresentation={(isViewing) => setIsViewingPresentation(isViewing)} />
-
-        <AboutMe />
-
-        <Experience />
-
-        <Skills />
-
-        <FeaturedProject />
-
-        <Projects />
-
-        <Contacts />
-      </article>
-    </>
-  )
+/** Roteamento mínimo por caminho: página de projeto ou, para qualquer outro caminho, a home. */
+function App({ pathname }: { pathname: string }) {
+    const project = resolveProject(pathname)
+    return project ? <ProjectPage project={project} /> : <HomePage />
 }
 
 export default App

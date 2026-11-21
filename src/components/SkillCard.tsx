@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlickeringGrid } from "./magicui/flickering-grid";
 import { cn } from "@/lib/utils";
+import useIsBelow from "@/hooks/useIsBelow";
 
 interface SkillCardProps {
     title: string;
@@ -21,7 +22,7 @@ const SkillCard = ({
     const [isOpen, setIsOpen] = useState(false);
     const [overPos, setOverPos] = useState(false)
 
-    const isMobile = window.innerWidth <= 768 ? true : false;
+    const isMobile = useIsBelow(768);
 
     useEffect(() => {
         setOverPos(true)

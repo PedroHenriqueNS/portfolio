@@ -38,7 +38,7 @@ const ContactCard = ({ logo, description, href }: ContactCardProps) => {
                 {logo === "LinkedIn" && "LinkedIn"}
             </p>
 
-            <p className="font-jakarta text-sm text-neutral-700 font-semibold dark:text-neutral-500">{description}</p>
+            <p className="font-jakarta text-sm text-neutral-700 font-semibold dark:text-neutral-400">{description}</p>
         </a>
     )
 }

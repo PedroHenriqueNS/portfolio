@@ -4,13 +4,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Subconjunto latino em woff2, variável no peso (era TTF completo: 804 KB + 176 KB). */
 @font-face {
   font-family: "Inter";
-  src: url("./assets/fonts/Inter.ttf") format("truetype");
+  src: url("./assets/fonts/inter-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
 }
 @font-face {
   font-family: "Jakarta";
-  src: url("./assets/fonts/PlusJakartaSans.ttf") format("truetype");
+  src: url("./assets/fonts/plus-jakarta-sans-latin.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
 }
 
 @theme {

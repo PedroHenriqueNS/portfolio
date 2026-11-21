@@ -1,31 +1,26 @@
 import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
 import ProjectModal from "./ProjectModal"
+import { projectPath, type Project } from "@/constants/projects"
+import useIsBelow from "@/hooks/useIsBelow"
 
 interface ProjectCardProps {
-    title: string
-    imageUrl: string
-    technologyIcons?: Array<{
-        title: string,
-        image: string
-    }>
-    creationAt?: string
-    description: string | React.ReactNode
-    projectUrl?: string | 'Private'
-    repoUrl?: string | 'Private'
+    project: Project
 }
 
-const ProjectCard = ({
-    title,
-    imageUrl,
-    technologyIcons,
-    ...rest
-}: ProjectCardProps) => {
+/**
+ * O card é um link de verdade para a página do projeto (/projetos/<slug>), que é o
+ * que buscadores e robôs de IA seguem. Um clique comum abre o modal; com Ctrl/Cmd,
+ * Shift ou o botão do meio, o navegador abre a página normalmente.
+ */
+const ProjectCard = ({ project }: ProjectCardProps) => {
+    const { title, image: imageUrl, technologies: technologyIcons } = project
 
     const [isHover, setIsHover] = useState(false)
     const [overPos, setOverPos] = useState(false)
+    const [open, setOpen] = useState(false)
 
-    const isMobile = window.innerWidth <= 768 ? true : false;
+    const isMobile = useIsBelow(768)
 
     useEffect(() => {
         setOverPos(true)
@@ -36,14 +31,17 @@ const ProjectCard = ({
     }, [isHover])
 
     return (
-        <ProjectModal
-            title={title}
-            imageUrl={imageUrl}
-            technologyIcons={technologyIcons}
-            {...rest}
-        >
-            <div
-                className="relative flex-center cursor-pointer"
+        <>
+            <a
+                href={projectPath(project.slug)}
+                aria-label={`${title}: ver detalhes do projeto`}
+                className="relative flex-center cursor-pointer rounded-t-2xl focus-visible:outline-2 focus-visible:outline-cyan-500 focus-visible:outline-offset-4"
+                onClick={(e) => {
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+                    e.preventDefault()
+                    setIsHover(false)
+                    setOpen(true)
+                }}
                 onMouseEnter={isMobile ? undefined : () => setIsHover(true)}
                 onMouseLeave={isMobile ? undefined : () => setIsHover(false)}
             >
@@ -57,7 +55,7 @@ const ProjectCard = ({
                             "absolute flex-center flex-col size-full transition-all duration-300 gap-1 p-4 z-10 transform translate-y-1/3 max-sm:translate-y-1/4",
                             isHover && 'translate-y-0'
                         )}>
-                            <p className="font-medium text-lg drop-shadow-[0_0_10px_0_#000] text-white">{title}</p>
+                            <h3 className="font-medium text-lg drop-shadow-[0_0_10px_0_#000] text-white">{title}</h3>
 
                             <div className="flex gap-2">
                                 {technologyIcons?.map((icon, i) => (
@@ -66,6 +64,8 @@ const ProjectCard = ({
                                         key={i}
                                         src={icon.image}
                                         alt={icon.title}
+                                        width={20}
+                                        height={20}
                                     />
                                 ))}
                             </div>
@@ -87,7 +87,11 @@ const ProjectCard = ({
                                 isHover && 'brightness-[60%]'
                             )}
                             src={imageUrl}
-                            alt={`${title} preview`}
+                            alt={`Prévia do projeto ${title}`}
+                            width={480}
+                            height={254}
+                            loading="lazy"
+                            decoding="async"
                         />
                     </div>
                 </div>
@@ -99,8 +103,10 @@ const ProjectCard = ({
                         <div className="w-[30rem] max-sm:w-[20rem]" />
                     </div>
                 </div>
-            </div>
-        </ProjectModal>
+            </a>
+
+            <ProjectModal project={project} open={open} onOpenChange={setOpen} />
+        </>
     )
 }
 

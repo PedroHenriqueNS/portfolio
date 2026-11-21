@@ -1,9 +1,9 @@
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from './ui/button';
 import { Moon, Sun } from 'lucide-react';
 
-import MyImage from '@/assets/images/my_img_2.jpg'
+import MyImage from '@/assets/images/my_img_2.webp'
 
 interface IHeader {
     isViewingPresentation: boolean
@@ -12,9 +12,14 @@ interface IHeader {
 const Header = ({ isViewingPresentation }: IHeader) => {
 
     // const [isScrolled, setIsScrolled] = useState(false);
-    const [theme, setTheme] = useState<string>(() => {
-        return localStorage.getItem("data-theme") || "dark";
-    })
+    // 'dark' no HTML pré-renderizado e no primeiro render; o valor salvo é lido depois
+    // da hidratação (ler localStorage durante o render quebraria a hidratação).
+    const [theme, setTheme] = useState<string>("dark")
+
+    useEffect(() => {
+        // O script inline do <head> já aplicou o tema antes da primeira pintura; aqui só lemos o resultado.
+        setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light")
+    }, [])
 
     // useEffect(() => {
     //     const handleScroll = () => {
@@ -46,10 +51,10 @@ const Header = ({ isViewingPresentation }: IHeader) => {
                 'absolute transition-all ease-in-out duration-500 transform -translate-x-1/2 left-1/2',
                 !isViewingPresentation && 'sm:-translate-x-0 sm:left-0'
             )}>
-                <p className={cn(
-                    'text-transparent font-jakarta select-none text-3xl font-bold bg-clip-text bg-gradient-to-r from-slate-300 to-cyan-200 m-7 mx-20 z-0',
+                <a href='/' className={cn(
+                    'block text-transparent font-jakarta select-none text-3xl font-bold bg-clip-text bg-gradient-to-r from-slate-300 to-cyan-200 m-7 mx-20 z-0',
                     // isScrolled && 'from-slate-900 to-cyan-800 dark:from-slate-300 dark:to-cyan-200'
-                )}>Portfólio</p>
+                )}>Portfólio</a>
             </div>
 
             <div className={cn(
@@ -60,7 +65,9 @@ const Header = ({ isViewingPresentation }: IHeader) => {
                     <img
                         className='size-12 min-w-12 object-cover rounded-full outline-1 outline-blue-600 p-0.5'
                         src={MyImage}
-                        alt='Pedro Henrique'
+                        alt=''
+                        width={48}
+                        height={48}
                     />
                     <span className={cn(
                         'transition-all ease-in-out duration-1000 w-0 truncate text-transparent font-jakarta select-none text-xl font-bold bg-clip-text bg-gradient-to-r from-slate-300 to-cyan-200',
@@ -89,6 +96,7 @@ const Header = ({ isViewingPresentation }: IHeader) => {
                         // isScrolled && '!text-slate-800'
                     )}
                     onClick={toggleTheme}
+                    aria-label={theme == 'dark' ? 'Tema escuro ativo: mudar para o tema claro' : 'Tema claro ativo: mudar para o tema escuro'}
                 >
                     {theme == 'dark'
                         ? <Moon className='!size-6' />

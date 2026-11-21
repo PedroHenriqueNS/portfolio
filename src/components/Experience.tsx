@@ -66,7 +66,7 @@ const Experience = () => {
                         <p className='font-jakarta font-extrabold text-4xl bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-cyan-500'>
                             <Counter metric={metric} active={hasAlreadyViewed} />
                         </p>
-                        <p className='font-jakarta text-xs text-neutral-500 mt-2'>{metric.label}</p>
+                        <p className='font-jakarta text-xs text-neutral-600 dark:text-neutral-400 mt-2'>{metric.label}</p>
                     </div>
                 ))}
             </div>

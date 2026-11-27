@@ -12,7 +12,7 @@ export interface Skill {
 
 export const SKILLS: Skill[] = [
   { id: 'nextjs', title: 'Next.js', icon: 'nextjs', group: 'featured', level: 5, category: 'framework' },
-  { id: 'react-native', title: 'React Native', icon: 'react', group: 'featured', level: 4, category: 'framework' },
+  { id: 'react-native', title: 'React Native', icon: 'react-native', group: 'featured', level: 4, category: 'framework' },
   { id: 'nestjs', title: 'NestJS', icon: 'nestjs', group: 'featured', level: 5, category: 'nodejs_framework' },
   { id: 'react', title: 'React.js', icon: 'react', group: 'frontend', level: 5, category: 'lib' },
   { id: 'vite', title: 'Vite', icon: 'vitejs', group: 'frontend', level: 5, category: 'framework' },

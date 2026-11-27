@@ -57,6 +57,8 @@ export const TECH = {
   clerk: tech('Clerk', i_clerk),
   cloudflare: tech('Cloudflare', i_cloudflare),
   react: tech('React.js', i_react),
+  // Mesmo ícone do React; o título mantém o nome usado no site antigo.
+  'react-native': tech('React Native', i_react),
   vitejs: tech('Vite', i_vitejs),
   tailwind: tech('Tailwind CSS', i_tailwind),
   tanstack: tech('TanStack Router', i_tanstack),

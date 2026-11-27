@@ -54,7 +54,7 @@ export const PROJECTS: ProjectFacts[] = [
   { slug: 'auto-crop-pdf', title: 'Auto Crop PDF', kind: 'desktop', stack: ['electron', 'python', 'flask', 'vitejs'], repoUrl: 'https://github.com/PedroHenriqueNS/auto_crop_pdf', image: AutoCropPdfImage, ogImage: '/og/auto-crop-pdf.jpg', featured: false },
   { slug: 'cloud-barueri', title: 'Cloud Barueri', kind: 'web', stack: ['react', 'nodejs', 'express', 'docker', 'mysql'], image: CloudBarueriImage, ogImage: '/og/cloud-barueri.jpg', featured: false },
   { slug: 'snowhunter', title: 'SnowHunter', kind: 'web', stack: ['react', 'sanity', 'nodejs'], projectUrl: 'https://snowhunter.netlify.app/', image: SnowhunterImage, ogImage: '/og/snowhunter.jpg', featured: false },
-  { slug: 'youtube-music-clone', title: 'Youtube Music Clone', kind: 'mobile', stack: ['react', 'expo'], repoUrl: 'https://github.com/PedroHenriqueNS/yt-music-clone', image: YoutubeMusicCloneImage, ogImage: '/og/youtube-music-clone.jpg', featured: false },
-  { slug: 'sodieasy', title: 'SodiEasy', kind: 'mobile', stack: ['react', 'expo', 'nodejs', 'express'], image: SodieasyImage, ogImage: '/og/sodieasy.jpg', featured: false },
+  { slug: 'youtube-music-clone', title: 'Youtube Music Clone', kind: 'mobile', stack: ['react-native', 'expo'], repoUrl: 'https://github.com/PedroHenriqueNS/yt-music-clone', image: YoutubeMusicCloneImage, ogImage: '/og/youtube-music-clone.jpg', featured: false },
+  { slug: 'sodieasy', title: 'SodiEasy', kind: 'mobile', stack: ['react-native', 'expo', 'nodejs', 'express'], image: SodieasyImage, ogImage: '/og/sodieasy.jpg', featured: false },
   { slug: 'twonote', title: 'TwoNote', kind: 'mobile', stack: ['ionic', 'angular'], repoUrl: 'https://github.com/PedroHenriqueNS/Notes', image: TwonoteImage, ogImage: '/og/twonote.jpg', featured: false },
 ]

@@ -17,6 +17,9 @@ describe('data', () => {
       snowhunter: 'web', twonote: 'mobile', 'sandro-mastellari': 'campaign',
     })
     for (const p of PROJECTS) for (const t of p.stack) expect(TECH[t]).toBeDefined()
+    const titles = (slug: string) => PROJECTS.find((p) => p.slug === slug)!.stack.map((t) => TECH[t].title)
+    expect(titles('youtube-music-clone')).toEqual(['React Native', 'Expo'])
+    expect(titles('sodieasy')).toEqual(['React Native', 'Expo', 'Node.js', 'Express'])
   })
   it('skills and experiences', () => {
     expect(SKILLS).toHaveLength(31)

@@ -99,7 +99,7 @@
   "project_open_site": "Ver sitio",
   "project_code": "Código",
   "project_private": "Privado",
-  "project_private_detail": "Privado por contrato con el cliente.",
+  "project_private_detail": "Repositorio privado.",
   "project_next": "Siguiente proyecto",
   "project_all": "Todos los proyectos",
   "project_cover_alt": "Vista previa del proyecto {title}",

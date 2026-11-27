@@ -53,6 +53,9 @@ function start() {
       }
       // As posições dependem das fontes (o tipo gigante muda de altura quando a fonte chega).
       document.fonts?.ready.then(() => live && ScrollTrigger.refresh())
+      // WebKit: na volta à home pelo ClientRouter, uma folha de estilo ainda não vale no astro:page-load; as seções
+      // medem sem CSS e os pins saem curtos (o palco fica vazio). Um quadro depois o estilo já vale: mede de novo.
+      requestAnimationFrame(() => live && ScrollTrigger.refresh())
       return runCleanups
     },
   )

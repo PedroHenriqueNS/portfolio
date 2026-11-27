@@ -1,0 +1,197 @@
+---
+import { Image } from 'astro:assets'
+import * as m from '@/paraglide/messages.js'
+import type { Locale } from '@/i18n/locales'
+import { SKILLS } from '@/data/skills'
+import { TECH } from '@/data/tech'
+import Tip from '@/components/Tip.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) => string
+/** Mensagem cuja chave é montada a partir dos dados (skills_<grupo>, cat_<categoria>). */
+const msg = (key: string) => (m as unknown as Record<string, Message>)[key]({}, { locale })
+
+const GROUPS = ['featured', 'frontend', 'backend'] as const
+const DOTS = [1, 2, 3, 4, 5]
+---
+
+<section data-section="skills" id="skills" class="skills" aria-labelledby="skills-title">
+  <h2 id="skills-title" class="sr-only">{m.skills_title({}, { locale })}</h2>
+  {
+    GROUPS.map((g) => (
+      <div class="sk-group" data-group={g}>
+        <h3 class="sk-label">{msg(`skills_${g}`)}</h3>
+        <div class="sk-band">
+          <div class="sk-track">
+            <ul class="sk-list">
+              {SKILLS.filter((s) => s.group === g).map((s) => {
+                const level = m.skills_level({ n: s.level }, { locale })
+                const dots = (
+                  <span class="sk-dots" role="img" aria-label={level}>
+                    {DOTS.map((d) => (
+                      <i class:list={{ on: d <= s.level }} />
+                    ))}
+                  </span>
+                )
+                return (
+                  <li class="sk-item">
+                    <Tip hover id={`skill-${s.id}`} label={s.title} class="sk-name">
+                      <Fragment slot="trigger">
+                        <Image class="sk-icon" src={TECH[s.icon].icon} alt="" width={28} height={28} />
+                        <span class="sk-text">{s.title}</span>
+                      </Fragment>
+                      <span class="sk-tip">
+                        <Image src={TECH[s.icon].icon} alt="" width={20} height={20} />
+                        {msg(`cat_${s.category}`)}
+                      </span>
+                      {dots}
+                    </Tip>
+                    {dots}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+  <div class="sk-how">
+    <Tip label={m.skills_how_label({}, { locale })} id="skills-how">{m.skills_how({}, { locale })}</Tip>
+  </div>
+</section>
+
+<style>
+  .skills {
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    display: grid;
+    /* minmax(0, …): a faixa em laço é muito mais larga que a tela e não pode alargar a coluna. */
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 5svh, 3.5rem);
+    padding: 16svh 0 12svh;
+    overflow-x: clip;
+  }
+
+  .sk-label {
+    padding-inline: var(--gutter);
+    margin-bottom: 0.25rem;
+    font: 500 0.9375rem/1.2 var(--font-sans);
+    color: var(--muted);
+  }
+
+  /* Tipo gigante: a faixa corta o que passa da largura (clip: o foco não rola a faixa por conta própria). */
+  .sk-band {
+    overflow-x: clip;
+    font: 700 clamp(44px, 8vw, 132px) / 1.08 var(--font-display);
+    font-stretch: 75%;
+    letter-spacing: -0.01em;
+  }
+  .sk-track { display: flex; gap: 0.45em; }
+  .sk-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.45em;
+    padding-inline: var(--gutter);
+  }
+  /* Com motion, uma linha só em laço; as cópias (aria-hidden) são criadas pelo script. */
+  :global(html.motion) .sk-track { width: max-content; }
+  :global(html.motion) .sk-list { flex-wrap: nowrap; padding-inline: 0; }
+
+  .sk-item { position: relative; }
+  .skills :global(.sk-name) {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--ink);
+    white-space: nowrap;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: color 200ms ease;
+  }
+  .skills :global(.sk-name:focus-visible) { outline-offset: 0.06em; border-radius: 0.08em; }
+  /* Vazado alternado: o preenchimento é o fundo do tema, o traço é a tinta. */
+  .sk-item:nth-child(even) .sk-text {
+    color: var(--bg);
+    -webkit-text-stroke: 3px currentColor;
+    -webkit-text-stroke-color: var(--ink);
+    paint-order: stroke fill;
+    transition: -webkit-text-stroke-color 200ms ease;
+  }
+  .sk-item:hover .sk-text, .sk-item:has(:focus-visible) .sk-text { color: var(--accent); }
+  .sk-item:nth-child(even):hover .sk-text,
+  .sk-item:nth-child(even):has(:focus-visible) .sk-text { color: var(--bg); -webkit-text-stroke-color: var(--accent); }
+
+  .sk-icon { display: none; }
+  /* O nível fica no tooltip; na faixa, só para o leitor de tela. */
+  .sk-item > .sk-dots {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .sk-dots { display: inline-flex; gap: 0.25rem; }
+  .sk-dots i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+  }
+  .sk-dots i.on { background: var(--accent); }
+
+  .sk-tip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .sk-how { padding-inline: var(--gutter); }
+
+  @media (max-width: 767.98px) {
+    .skills { padding: 12svh 0 10svh; }
+    .sk-band { font-size: clamp(44px, 15vw, 72px); }
+    .sk-item:nth-child(even) .sk-text { -webkit-text-stroke-width: 2px; }
+
+    /* Frontend e Backend: grade de ícones com nome e nível sempre à vista. */
+    [data-group='frontend'] .sk-band,
+    [data-group='backend'] .sk-band { font: 500 0.75rem / 1.2 var(--font-sans); letter-spacing: 0; }
+    .skills [data-group='frontend'] .sk-track,
+    .skills [data-group='backend'] .sk-track { display: block; width: auto; }
+    .skills [data-group='frontend'] .sk-list,
+    .skills [data-group='backend'] .sk-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.25rem 0.5rem;
+      padding-inline: var(--gutter);
+    }
+    [data-group='frontend'] .sk-item,
+    [data-group='backend'] .sk-item { display: grid; justify-items: center; gap: 0.375rem; }
+    [data-group='frontend'] :global(.sk-name),
+    [data-group='backend'] :global(.sk-name) {
+      display: grid;
+      justify-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      min-height: 2.75rem;
+      white-space: normal;
+      text-align: center;
+    }
+    [data-group='frontend'] .sk-icon,
+    [data-group='backend'] .sk-icon { display: block; width: 1.75rem; height: 1.75rem; }
+    [data-group='frontend'] .sk-item .sk-text,
+    [data-group='backend'] .sk-item .sk-text { color: var(--ink); -webkit-text-stroke: 0; }
+    [data-group='frontend'] .sk-item > .sk-dots,
+    [data-group='backend'] .sk-item > .sk-dots { position: static; width: auto; height: auto; overflow: visible; clip-path: none; gap: 0.1875rem; }
+    [data-group='frontend'] .sk-dots i,
+    [data-group='backend'] .sk-dots i { width: 0.375rem; height: 0.375rem; border-width: 1px; }
+  }
+</style>

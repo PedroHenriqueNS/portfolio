@@ -4,13 +4,13 @@ import Base from '@/layouts/Base.astro'
 import type { Locale } from '@/i18n/locales'
 import { getProjects } from '@/lib/projects'
 import { homeSeo } from '@/lib/seo'
-import { SKILLS } from '@/data/skills'
 import { CONTACTS } from '@/data/site'
 import Hero from '@/components/sections/Hero.astro'
 import About from '@/components/sections/About.astro'
 import Experience from '@/components/sections/Experience.astro'
 import Stage from '@/components/sections/Stage.astro'
 import ProjectList from '@/components/sections/ProjectList.astro'
+import Skills from '@/components/sections/Skills.astro'
 
 interface Props {
   locale: Locale
@@ -19,17 +19,11 @@ interface Props {
 const { locale } = Astro.props
 const projects = await getProjects(locale)
 
-type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) => string
-/** Mensagem cuja chave é montada a partir dos dados (cat_*, kind_*). */
-const msg = (key: string, inputs = {}) => (m as unknown as Record<string, Message>)[key](inputs, { locale })
-
 const RESUME = {
   pt: { href: '/curriculo_PedroHenrique.pdf', text: m.hero_cta_resume({}, { locale }), label: m.hero_cta_resume_label({}, { locale }) },
   en: { href: '/resume_PedroHenrique_EN.pdf', text: m.hero_cta_resume_en({}, { locale }), label: m.hero_cta_resume_en_label({}, { locale }) },
 }
 const resumes = locale === 'pt-br' ? [RESUME.pt, RESUME.en] : [RESUME.en, RESUME.pt]
-
-const GROUPS = ['featured', 'frontend', 'backend'] as const
 
 const newTab = m.contact_new_tab({}, { locale })
 const CONTACT_LINKS = [
@@ -46,33 +40,8 @@ const CONTACT_LINKS = [
   <Experience locale={locale} />
   <Stage locale={locale} projects={projects} />
   <ProjectList locale={locale} projects={projects} />
+  <Skills locale={locale} />
   <div class="mx-auto max-w-6xl space-y-24 px-4 pt-16 pb-24 md:px-8">
-    <section data-section="skills" id="skills" aria-labelledby="skills-title">
-      <h2 id="skills-title" class="font-display text-3xl font-bold">{m.skills_title({}, { locale })}</h2>
-      <p class="mt-4">
-        <strong>{m.skills_how_label({}, { locale })}:</strong> {m.skills_how({}, { locale })}
-      </p>
-      <div class="mt-6 grid gap-8 md:grid-cols-3">
-        {
-          GROUPS.map((g) => (
-            <div>
-              <h3 class="text-xl font-semibold">{msg(`skills_${g}`)}</h3>
-              <ul class="mt-3 space-y-1">
-                {SKILLS.filter((s) => s.group === g).map((s) => (
-                  <li class="flex justify-between gap-4">
-                    <span>
-                      {s.title} <span class="text-sm">({msg(`cat_${s.category}`)})</span>
-                    </span>
-                    <span class="text-sm">{m.skills_level({ n: s.level }, { locale })}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </div>
-    </section>
-
     <section data-section="contact" id="contact" aria-labelledby="contact-title">
       <h2 id="contact-title" class="font-display condensed text-5xl font-bold">{m.contact_title({}, { locale })}</h2>
       <ul class="mt-6 grid gap-3 sm:grid-cols-2">

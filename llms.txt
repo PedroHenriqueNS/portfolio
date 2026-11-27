@@ -1,25 +1,32 @@
 # Pedro Henrique do Nascimento Silva
 
-> Engenheiro de Software Full Stack em Carapicuíba, SP (Grande São Paulo), com mais de 5 anos de experiência em TypeScript: React, Next.js, React Native, Node.js e NestJS, na AWS. Fundador do Linkeza. Português nativo, inglês avançado.
+> Engenheiro de software full stack em Carapicuíba, SP (Grande São Paulo), com mais de 5 anos de experiência em TypeScript: React, Next.js, React Native, Node.js e NestJS, na AWS. Fundador do Linkeza. Português nativo, inglês avançado.
 
-Atualizado em 2026-11-21. Fonte: https://pedrohenriquens.com.br/
+Atualizado em 2026-11-27. Fonte: https://pedrohenriquens.com.br/
+
+## Outros idiomas
+
+O mesmo conteúdo, adaptado, em inglês e em espanhol; cada projeto tem o mesmo slug nos três idiomas.
+
+- English: https://pedrohenriquens.com.br/en (projetos: https://pedrohenriquens.com.br/en/projects/<slug>)
+- Español: https://pedrohenriquens.com.br/es (proyectos: https://pedrohenriquens.com.br/es/proyectos/<slug>)
 
 ## Contato
 
 - E-mail: pedrohe.contato@gmail.com
 - WhatsApp: +55 11 97016-8417
-- GitHub: https://github.com/PedroHenriqueNS
+- GitHub: https://www.github.com/PedroHenriqueNS
 - LinkedIn: https://www.linkedin.com/in/PedroHenriqueNS/
 - Currículo em português (PDF): https://pedrohenriquens.com.br/curriculo_PedroHenrique.pdf
 - Resume in English (PDF): https://pedrohenriquens.com.br/resume_PedroHenrique_EN.pdf
 
 ## Experiência
 
-- **Fundador & Engenheiro de Software, Linkeza** (Carapicuíba, SP, out/2026 — presente): Produto próprio (SaaS): encurtador de links com QR Code dinâmico e link de WhatsApp com rodízio de atendentes para negócios locais. Conduzo tudo sozinho — produto, arquitetura, desenvolvimento, identidade visual e lançamento. Stack: TypeScript, Astro, NestJS, TypeORM, Redis, Clerk, Cloudflare.
-- **Engenheiro de Software Pleno, Dry Telecom** (Barueri, SP, mar/2026 — jul/2026): Projetei e implementei do zero um sistema de mensageria orientado a eventos com RabbitMQ e NestJS; APIs NestJS com DDD e SOLID; defini padrões técnicos e pipelines de CI/CD e participei das decisões de arquitetura do time; acompanhei desenvolvedores juniores com code review e pair programming; 10+ aplicações web e mobile em produção, incluindo apps com 10k+ usuários. Stack: TypeScript, React.js, Next.js, React Native, NestJS, RabbitMQ, Python, AWS, Docker, PostgreSQL.
-- **Engenheiro de Software, Dry Telecom** (Barueri, SP, mai/2025 — mar/2026): Interfaces web com React (Vite) e Next.js (SSR); APIs REST em NestJS com DDD e SOLID, sobre PostgreSQL/DynamoDB e filas SQS; deploys no EKS com ArgoCD e observabilidade com Grafana; automações em Python; infraestrutura AWS (EC2, EKS, Lambda, S3, RDS, SQS, Cognito, SES). Stack: TypeScript, React.js, Next.js, NestJS, Python, AWS, ArgoCD, Grafana.
-- **Analista de Dados & Desenvolvedor, GoBuzz** (São Paulo, SP, nov/2023 — fev/2025): Dashboards e análise de dados de redes sociais com Python/PostgreSQL/Power BI; sistemas internos web, desktop e mobile; automações e integrações de API. Stack: TypeScript, React.js, Next.js, React Native, Electron, Node.js, Python, PostgreSQL.
-- **Desenvolvedor Full Stack (Freelancer), Atuação independente** (São Paulo, SP, desde 2021): Aplicações web e mobile sob demanda, ponta a ponta — requisitos, arquitetura, desenvolvimento e deploy. Stack: React.js, React Native, Next.js, Node.js, Express, TypeScript.
+- **Fundador e engenheiro de software, Linkeza** (Carapicuíba, SP, outubro de 2026 – presente): Meu SaaS para negócios locais: links curtos, QR Code dinâmico e WhatsApp com rodízio de atendentes. Faço tudo sozinho, do produto ao lançamento. Stack: TypeScript, Astro, NestJS, TypeORM, Redis, Clerk, Cloudflare.
+- **Engenheiro de software pleno, Dry Telecom** (Barueri, SP, março de 2026 – julho de 2026): Criei do zero uma mensageria orientada a eventos com RabbitMQ e NestJS, defini padrões e CI/CD e acompanhei juniores. 10+ apps em produção, alguns com 10k+ usuários. Stack: TypeScript, React.js, Next.js, React Native, NestJS, RabbitMQ, Python, AWS, Docker, PostgreSQL.
+- **Engenheiro de software, Dry Telecom** (Barueri, SP, maio de 2025 – março de 2026): Interfaces em React (Vite) e Next.js (SSR), APIs REST em NestJS com DDD e SOLID, filas SQS, deploys no EKS com ArgoCD e infraestrutura AWS. Stack: TypeScript, React.js, Next.js, NestJS, Python, AWS, ArgoCD, Grafana.
+- **Analista de dados e desenvolvedor, GoBuzz** (São Paulo, SP, novembro de 2023 – fevereiro de 2025): Dashboards de dados de redes sociais com Python, PostgreSQL e Power BI, sistemas internos web, desktop e mobile, automações e integrações de API. Stack: TypeScript, React.js, Next.js, React Native, Electron, Node.js, Python, PostgreSQL.
+- **Desenvolvedor full stack (freelancer), Atuação independente** (São Paulo, SP, desde 2021): Apps web e mobile sob demanda, de ponta a ponta: requisitos, arquitetura, desenvolvimento e deploy. Stack: React.js, React Native, Next.js, Node.js, Express, TypeScript.
 
 ## Formação
 
@@ -28,27 +35,27 @@ Atualizado em 2026-11-21. Fonte: https://pedrohenriquens.com.br/
 
 ## Competências
 
-TypeScript, JavaScript, Python, React, Next.js, React Native, Expo, Vite, Tailwind CSS, Node.js, NestJS, Express, REST APIs, Domain-Driven Design, SOLID, RabbitMQ, Amazon SQS, Arquitetura orientada a eventos, PostgreSQL, MongoDB, DynamoDB, MySQL, AWS, Kubernetes, ArgoCD, Grafana, Docker, CI/CD.
+TypeScript, JavaScript, Python, React, Next.js, React Native, Expo, Vite, Tailwind CSS, Node.js, NestJS, Express, REST APIs, Domain-Driven Design, SOLID, RabbitMQ, Amazon SQS, Event-driven architecture, PostgreSQL, MongoDB, DynamoDB, MySQL, AWS, Kubernetes, ArgoCD, Grafana, Docker, CI/CD.
 
-## Projeto em destaque
+## Projetos em destaque
 
-- [Linkeza](https://pedrohenriquens.com.br/projetos/linkeza): Linkeza: encurtador de links brasileiro com QR Code dinâmico e WhatsApp com rodízio de atendentes. SaaS próprio, feito com Astro, NestJS e Redis. Stack: TypeScript, Astro, NestJS, TypeORM, Redis, Clerk, Cloudflare. (site: https://linkeza.com · código: https://github.com/linkeza)
-
-## Projetos
-
+- [Linkeza](https://pedrohenriquens.com.br/projetos/linkeza): Encurtador de links brasileiro com QR Code dinâmico e WhatsApp com rodízio de atendentes. Meu SaaS, feito com Astro, NestJS e Redis. Stack: TypeScript, Astro, NestJS, TypeORM, Redis, Clerk, Cloudflare. (site: https://linkeza.com · código: https://github.com/linkeza)
 - [Jé Modesto 22555](https://pedrohenriquens.com.br/projetos/je-modesto): Site de campanha de Jé Modesto (2026): gerador de selo com a foto processada só no navegador via Canvas API, com suporte a HEIC. React 19 e Vitest. Stack: React.js, TypeScript, Vite, Tailwind CSS, TanStack Router, Vitest.
 - [Clau Camargo 55655](https://pedrohenriquens.com.br/projetos/clau-camargo): Plataforma de campanha de Clau Camargo (2026): moldura de foto no navegador, molduras de apoiadores, vídeos por cidade para QR Codes e colinha em canvas. Stack: React.js, TypeScript, Vite, Tailwind CSS, TanStack Router, Vitest.
 - [WSA Mármores e Granitos](https://pedrohenriquens.com.br/projetos/wsa-marmores): Site institucional da WSA Mármores e Granitos: galeria de obras, catálogo de pedras e contato com mapa. React, Vite, Tailwind CSS e animações em GSAP. Stack: React.js, TypeScript, Vite, Tailwind CSS, GSAP, ShadCN/ui.
-- [Pautas Gobuzz](https://pedrohenriquens.com.br/projetos/pautas-gobuzz): Gerenciador de pautas para redes sociais com registro e estatísticas automatizados via Appwrite Functions. React, Vite, ShadCN e React Query. Stack: React.js, Vite, Appwrite, Tailwind CSS, ShadCN/ui, React Query.
+- [Pautas Gobuzz](https://pedrohenriquens.com.br/projetos/pautas-gobuzz): Gerenciador de pautas para redes sociais, com registro e estatísticas automáticos via Appwrite Functions. React, Vite, ShadCN e React Query. Stack: React.js, Vite, Appwrite, Tailwind CSS, ShadCN/ui, React Query.
+
+## Outros projetos
+
 - [Gobuzz Ads Manager](https://pedrohenriquens.com.br/projetos/gobuzz-ads-manager): Gerenciador de anúncios da Meta em Next.js: publicação, agendamento automático e insights, com toda a lógica no servidor e dados no Appwrite. Stack: React.js, Next.js, Appwrite, Tailwind CSS, ShadCN/ui.
 - [Seeding Controle](https://pedrohenriquens.com.br/projetos/seeding-controle): App desktop em Electron para seeders registrarem comentários em redes sociais, com UI otimista, React Query e sincronização em nuvem via Supabase. Stack: Electron, Vite, Supabase, Tailwind CSS, ShadCN/ui, React Query.
-- [Sandro Mastellari](https://pedrohenriquens.com.br/projetos/sandro-mastellari): Página de apresentação do candidato a vereador Sandro Mastellari, em Santos (SP), em 2024. React.js com Vite e Tailwind CSS. Stack: React.js, Vite, Tailwind CSS, ShadCN/ui. (site: https://sandromastellari.com.br/)
-- [Eduardo Boigues](https://pedrohenriquens.com.br/projetos/eduardo-boigues): Site de campanha à reeleição em Itaquaquecetuba (SP), 2024, com formulário de ideias enviado a uma API. React.js, Vite e Tailwind CSS. Stack: React.js, Vite, Tailwind CSS, ShadCN/ui. (site: https://eduardoboigues.com.br/)
-- [Flavia Morando SBC](https://pedrohenriquens.com.br/projetos/flavia-morando-sbc): Página de apresentação da candidata à prefeita de São Bernardo do Campo (SP), em 2024. React.js com Vite e Tailwind CSS. Stack: React.js, Vite, Tailwind CSS, ShadCN/ui. (site: https://flaviamorandosbc.com.br/)
+- [Sandro Mastellari](https://pedrohenriquens.com.br/projetos/sandro-mastellari): Página de Sandro Mastellari, candidato a vereador em Santos (SP) em 2024. React.js, Vite e Tailwind CSS. Stack: React.js, Vite, Tailwind CSS, ShadCN/ui. (site: https://sandromastellari.com.br/)
+- [Eduardo Boigues](https://pedrohenriquens.com.br/projetos/eduardo-boigues): Site da campanha de Eduardo Boigues à reeleição em Itaquaquecetuba (SP), 2024, com formulário de ideias enviado a uma API. React.js, Vite e Tailwind CSS. Stack: React.js, Vite, Tailwind CSS, ShadCN/ui. (site: https://eduardoboigues.com.br/)
+- [Flavia Morando SBC](https://pedrohenriquens.com.br/projetos/flavia-morando-sbc): Página de Flavia Morando, candidata a prefeita de São Bernardo do Campo (SP) em 2024. React.js, Vite e Tailwind CSS. Stack: React.js, Vite, Tailwind CSS, ShadCN/ui. (site: https://flaviamorandosbc.com.br/)
 - [YT DLP GUI](https://pedrohenriquens.com.br/projetos/yt-dlp-gui): Interface gráfica desktop em Python (CustomTkinter) para o yt-dlp: baixa vídeos de qualquer site suportado e converte qualidade e formato. Stack: Python. (código: https://github.com/PedroHenriqueNS/yt-dlp-gui)
 - [Auto Crop PDF](https://pedrohenriquens.com.br/projetos/auto-crop-pdf): App desktop que recorta PDFs automaticamente, feito para relatórios do Power BI: Electron e React no front, API local em Flask (Python) no back. Stack: Electron, Python, Flask, Vite. (código: https://github.com/PedroHenriqueNS/auto_crop_pdf)
 - [Cloud Barueri](https://pedrohenriquens.com.br/projetos/cloud-barueri): Armazenamento de arquivos grandes em servidor local com interface no estilo Google Drive: React.js, API em Node.js e MySQL, rodando em Docker. Stack: React.js, Node.js, Express, Docker, MySQL.
 - [SnowHunter](https://pedrohenriquens.com.br/projetos/snowhunter): Site para exibir projetos de modelagem 3D e novidades das redes sociais do criador, feito em React.js com conteúdo gerenciado no Sanity. Stack: React.js, Sanity, Node.js. (site: https://snowhunter.netlify.app/)
 - [Youtube Music Clone](https://pedrohenriquens.com.br/projetos/youtube-music-clone): Clone mobile do antigo YouTube Music que toca as músicas salvas no aparelho, feito em React Native com Expo. Stack: React Native, Expo. (código: https://github.com/PedroHenriqueNS/yt-music-clone)
 - [SodiEasy](https://pedrohenriquens.com.br/projetos/sodieasy): App mobile para orçamentos de materiais de construção da Sodimac pelo ID do produto, com API em Node.js que faz web scraping dos preços. Stack: React Native, Expo, Node.js, Express.
-- [TwoNote](https://pedrohenriquens.com.br/projetos/twonote): Primeiro projeto mobile, da faculdade: bloco de notas com salvamento automático feito em Angular com o framework Ionic. Stack: Ionic, Angular. (código: https://github.com/PedroHenriqueNS/Notes)
+- [TwoNote](https://pedrohenriquens.com.br/projetos/twonote): Meu primeiro app mobile, da faculdade: bloco de notas com salvamento automático, feito em Angular com Ionic. Stack: Ionic, Angular. (código: https://github.com/PedroHenriqueNS/Notes)

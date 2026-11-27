@@ -30,8 +30,8 @@ let arriving = false
 function start() {
   arriving = true
   mm?.revert()
-  mm = gsap.matchMedia()
-  mm.add(
+  const media = (mm = gsap.matchMedia())
+  media.add(
     {
       desktop: '(min-width: 768px)',
       mobile: '(max-width: 767.98px)',
@@ -53,6 +53,10 @@ function start() {
         for (const scene of SCENES) scene(document.body, { desktop, mobile, cursor })
       } catch (err) {
         console.error(err)
+        // Sem as cenas seguintes a página ficaria no layout de motion sem o motion: desfaz tudo (pins, entradas,
+        // a classe) e volta ao estático. Depois desta rodada, porque o matchMedia ainda a está montando.
+        queueMicrotask(() => media.revert())
+        return runCleanups
       }
       // As posições dependem das fontes (o tipo gigante muda de altura quando a fonte chega).
       document.fonts?.ready.then(() => live && ScrollTrigger.refresh())

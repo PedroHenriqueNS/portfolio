@@ -89,3 +89,12 @@ test.describe('com movimento reduzido', () => {
     await expect(page.locator('.pin-spacer')).toHaveCount(0)
   })
 })
+
+for (const home of ['/', '/en', '/es']) {
+  test(`os links de currículo de ${home} saem do roteador (PDF, não página)`, async ({ page }) => {
+    await page.goto(home)
+    const pdfs = page.locator('a[type="application/pdf"]')
+    await expect(pdfs).toHaveCount(4)
+    for (const a of await pdfs.all()) await expect(a).toHaveAttribute('data-astro-reload', '')
+  })
+}

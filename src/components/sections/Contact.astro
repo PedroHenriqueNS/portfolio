@@ -58,7 +58,7 @@ const LINKS = [
       {
         resumes.map((r, i) => (
           <li>
-            <a href={r.href} type="application/pdf" aria-label={r.label} class="ct-resume">
+            <a href={r.href} type="application/pdf" aria-label={r.label} data-astro-reload class="ct-resume">
               <Icon name={i === 0 ? 'download' : 'file-text'} space="after" />{r.text}
             </a>
           </li>

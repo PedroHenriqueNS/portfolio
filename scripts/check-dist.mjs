@@ -59,6 +59,7 @@ export function checkDist(dist, messages) {
   for (const [url, { file, alts }] of hreflangs) {
     const own = { 'pt-br': 'pt-BR', en: 'en', es: 'es' }[localeOf(url.slice(SITE.length) || '/')]
     if (alts[own] !== url) errors.push(`${file}: hreflang="${own}" deveria apontar para a própria página`)
+    if (alts['x-default'] !== alts['pt-BR']) errors.push(`${file}: x-default aponta para ${alts['x-default']}, esperava ${alts['pt-BR']}`)
     for (const h of ['pt-BR', 'en', 'es']) {
       const other = hreflangs.get(alts[h])
       if (!other) errors.push(`${file}: hreflang="${h}" aponta para ${alts[h]}, que não existe`)

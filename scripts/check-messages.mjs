@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
-/** Compara cada idioma com as chaves do português; devolve os problemas. */
+/** Compara as chaves de cada idioma com as do português, nos dois sentidos; devolve os problemas. */
 export function checkMessages(all) {
   const errors = []
   const base = Object.keys(all['pt-br'])
@@ -10,6 +10,7 @@ export function checkMessages(all) {
       if (!(key in messages)) errors.push(`${locale}: falta "${key}"`)
       else if (!String(messages[key]).trim()) errors.push(`${locale}: "${key}" está vazia`)
     }
+    for (const key of Object.keys(messages)) if (!base.includes(key)) errors.push(`${locale}: "${key}" não existe em pt-br`)
   }
   return errors
 }

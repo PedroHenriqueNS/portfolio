@@ -41,7 +41,7 @@ const RESUME_ICON = ['download', 'file-text'] as const
       {
         resumes.map((r, i) => (
           <li>
-            <a href={r.href} type="application/pdf" aria-label={r.label} data-action class:list={['pill', { 'pill-main': i === 0 }]}>
+            <a href={r.href} type="application/pdf" aria-label={r.label} data-astro-reload data-action class:list={['pill', { 'pill-main': i === 0 }]}>
               <Icon name={RESUME_ICON[i] ?? 'file-text'} space="after" />{r.text}
             </a>
           </li>

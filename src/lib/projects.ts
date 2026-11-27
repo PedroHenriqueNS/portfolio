@@ -22,6 +22,7 @@ export async function getProjects(locale: Locale): Promise<Project[]> {
     PROJECTS.map(async (facts) => {
       const entry = entries.get(`${locale}/${facts.slug}`)
       if (!entry) throw new Error(`Falta src/content/projects/${locale}/${facts.slug}.md`)
+      if (!entry.body?.trim()) throw new Error(`src/content/projects/${locale}/${facts.slug}.md está sem descrição`)
       const { Content } = await render(entry)
       return { ...facts, summary: entry.data.summary, Content }
     }),

@@ -1,6 +1,6 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { onRevert, type Scene } from './index'
+import { onRevert, type Scene } from './scene'
 
 /** Névoa que troca de lugar a cada 1,2 tela, luz do cursor e cabeçalho que some ao descer. */
 export const fx: Scene = (root, c) => {
@@ -29,7 +29,10 @@ export const fx: Scene = (root, c) => {
           })
       },
     })
-    onRevert(() => gsap.set(mists, { clearProps: 'transform' }))
+    onRevert(() => {
+      gsap.killTweensOf(mists)
+      gsap.set(mists, { clearProps: 'transform' })
+    })
   }
 
   const light = root.querySelector<HTMLElement>('.luz-cursor')

@@ -1,15 +1,11 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onRevert, runCleanups, type Scene } from './scene'
 import { fx } from './fx'
 import { hero } from './hero'
 import { about } from './about'
 
-export interface Conditions {
-  desktop: boolean
-  mobile: boolean
-  cursor: boolean
-}
-export type Scene = (root: HTMLElement, c: Conditions) => void
+export type { Conditions, Scene } from './scene'
 
 /** Na ordem do DOM: um gatilho criado antes de uma seção presa acima dele erra a posição. */
 export const SCENES: Scene[] = [fx, hero, about]
@@ -19,9 +15,6 @@ gsap.registerPlugin(ScrollTrigger)
 ScrollTrigger.config({ ignoreMobileResize: true })
 
 let mm: gsap.MatchMedia | undefined
-let cleanups: (() => void)[] = []
-/** Para o que a cena faz fora do Context do GSAP (ouvintes, tweens criados depois): roda quando as cenas revertem. */
-export const onRevert = (fn: () => void) => cleanups.push(fn)
 
 function start() {
   mm?.revert()
@@ -37,17 +30,23 @@ function start() {
       const { desktop, mobile, motion, cursor } = ctx.conditions as Record<string, boolean>
       if (!motion) return
       const html = document.documentElement
-      html.classList.add('motion')
-      for (const scene of SCENES) scene(document.body, { desktop, mobile, cursor })
-      return () => {
-        cleanups.forEach((fn) => fn())
-        cleanups = []
+      let live = true
+      // Registrada antes das cenas: se uma delas lançar erro, a limpeza ainda tira a classe e o que já foi ligado.
+      onRevert(() => {
+        live = false
         html.classList.remove('motion')
+      })
+      html.classList.add('motion')
+      try {
+        for (const scene of SCENES) scene(document.body, { desktop, mobile, cursor })
+      } catch (err) {
+        console.error(err)
       }
+      // As posições dependem das fontes (o tipo gigante muda de altura quando a fonte chega).
+      document.fonts?.ready.then(() => live && ScrollTrigger.refresh())
+      return runCleanups
     },
   )
-  // As posições dependem das fontes (o tipo gigante muda de altura quando a fonte chega).
-  document.fonts?.ready.then(() => ScrollTrigger.refresh())
 }
 
 document.addEventListener('astro:page-load', start)

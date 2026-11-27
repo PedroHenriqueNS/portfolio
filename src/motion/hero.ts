@@ -1,5 +1,5 @@
 import { gsap } from 'gsap'
-import type { Scene } from './index'
+import type { Scene } from './scene'
 
 /**
  * Entrada: o nome sobe entrando em foco e a foto cresce. Scroll: no desktop o nome atravessa a tela e a foto

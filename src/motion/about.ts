@@ -1,5 +1,5 @@
 import { gsap } from 'gsap'
-import type { Scene } from './index'
+import type { Scene } from './scene'
 
 /**
  * A frase se preenche na ordem de leitura. No desktop a seção fica presa por 1,3 tela;

@@ -59,6 +59,15 @@ test('no celular as três ações do hero têm 44 px ou mais', async ({ page }) 
   for (const action of await actions.all()) {
     expect((await action.boundingBox())!.height).toBeGreaterThanOrEqual(44)
   }
+  // A principal ocupa a largura toda do conteúdo; as duas secundárias ficam lado a lado embaixo.
+  const [main, second, third] = await Promise.all([0, 1, 2].map(async (i) => (await actions.nth(i).boundingBox())!))
+  const content = await page.locator('[data-section="hero"]').evaluate((el) => {
+    const s = getComputedStyle(el)
+    return el.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight)
+  })
+  expect(main.width).toBeGreaterThanOrEqual(content * 0.95)
+  expect(Math.abs(second.y - third.y)).toBeLessThanOrEqual(1)
+  expect(second.y).toBeGreaterThan(main.y + main.height - 1)
 })
 
 test('o fundo não captura o ponteiro', async ({ page }) => {

@@ -55,7 +55,13 @@ function start() {
       document.fonts?.ready.then(() => live && ScrollTrigger.refresh())
       // WebKit: na volta à home pelo ClientRouter, uma folha de estilo ainda não vale no astro:page-load; as seções
       // medem sem CSS e os pins saem curtos (o palco fica vazio). Um quadro depois o estilo já vale: mede de novo.
-      requestAnimationFrame(() => live && ScrollTrigger.refresh())
+      // Num retorno pelo histórico, a posição restaurada abaixo pode ter sido cortada pela página curta: reaplica.
+      const back = restoreY
+      requestAnimationFrame(() => {
+        if (!live) return
+        ScrollTrigger.refresh()
+        if (back !== undefined) scrollTo({ top: back, behavior: 'instant' })
+      })
       return runCleanups
     },
   )

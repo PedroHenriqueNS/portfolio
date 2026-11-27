@@ -6,7 +6,8 @@ RewriteBase /
 # O mod_dir do Apache roda depois do mod_rewrite e redireciona /en para /en/ sempre que a URL
 # aponta para uma pasta real (en/, es/), mesmo com en.html existindo. Sem esta diretiva, /en nunca
 # dá 200 (testado em httpd:2.4). A produção é LiteSpeed: confirme a diretiva lá com
-# BASE_URL=<host> yarn check:apache antes de um deploy de produção.
+# BASE_URL=<host> yarn check:apache num host de teste no mesmo servidor (ex.: subdomínio de staging)
+# antes do primeiro deploy de produção; depois do deploy serve de teste rápido (só GET e HEAD).
 DirectorySlash Off
 
 # só-produção: início
@@ -52,7 +53,7 @@ RewriteRule ^(.+)/$ /$1 [R=301,L]
 RewriteCond %{REQUEST_URI} !/404$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-RewriteRule ^(.+)$ %{DOCUMENT_ROOT}/$1.html [L]
+RewriteRule ^(.+)$ /$1.html [L]
 
 # O que sobrou e não é arquivo (nem pasta como /projetos ou /en/projects, que o Apache listaria
 # ou negaria com 403) é 404 honesto. Antes caía no index.html; agora responde a página 404.

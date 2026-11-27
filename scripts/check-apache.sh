@@ -2,7 +2,8 @@
 # Sobe dist/ num Apache 2.4 de verdade (Docker) com o public/.htaccess e confere cada pedido
 # da tabela (status, destino do redirect, corpo da 404, cache). Rode `yarn build` antes.
 # Modo remoto: BASE_URL=https://staging.exemplo.com yarn check:apache pula o Docker e roda a mesma
-# tabela nesse host (só GET/HEAD) mais as linhas de HTTPS e www. Nunca aponte para produção.
+# tabela nesse host (só GET/HEAD) mais as linhas de HTTPS e www. Use num host de teste
+# no mesmo servidor (ex.: staging) antes do 1º deploy; pode rodar na produção após um deploy (só GET/HEAD).
 # dist/ é COPIADO para o contêiner, não montado: o disco do macOS ignora maiúsculas e a produção não.
 set -u
 cd "$(dirname "$0")/.."
@@ -80,6 +81,7 @@ row "/projetos/linkeza.html?x=1" "$(got "/projetos/linkeza.html?x=1")" "301 /pro
 for d in /es/ /projetos/ /en/projects/ /es/proyectos/ /_astro/ /og/; do row "$d" "$(got "$d")" "301 ${d%/}"; done
 for d in /_astro /og; do not_found "$d" 404.html; done
 not_found /es/proyectos es/404.html
+row /404.html "$(curl -s -o "$TMP/b" -w '%{http_code}' "$BASE/404.html") $(cmp -s "$TMP/b" dist/404.html && echo corpo=404.html)" "200 corpo=404.html"
 for p in /en/404.html /es/404.html; do row "$p" "$(got "$p")" "200"; done
 for p in /404 /en/404; do row "$p" "$(got "$p")" "404"; done
 for p in /nada /projetos /projetos/nao-existe /EN; do not_found "$p" 404.html; done
@@ -91,7 +93,7 @@ for p in / /curriculo_PedroHenrique.pdf; do
 done
 
 if [ -n "$REMOTE" ]; then
-  H=${BASE#*://}
+  H=${BASE#*://}; H=${H%%:*}   # sem porta: http:// e www. usam as portas padrão
   row "http://$H/" "$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "http://$H/")" "301 https://$H/"
   if curl -s -o /dev/null "https://www.$H/" 2>/dev/null; then
     row "https://www.$H/" "$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "https://www.$H/")" "301 https://$H/"

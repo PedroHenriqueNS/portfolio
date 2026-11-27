@@ -4,7 +4,7 @@ summary: "Desktop app that crops PDFs automatically, built for Power BI reports:
 
 A desktop app that crops PDFs automatically.
 
-I built it for **Power BI** reports, which come out of the PDF export with wide margins.
+It was built for **Power BI** reports, which come out of the PDF export with wide margins.
 
 The app runs on **Electron**, with **React.js** and **Vite**.
 

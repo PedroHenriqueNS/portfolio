@@ -6,4 +6,4 @@ A web page that introduces a candidate for city council in Santos, SP, in 2024.
 
 Built with **React.js** and **Vite**, styled with **Tailwind CSS**.
 
-A simple design, made to put the candidate front and center.
+A simple design, made to highlight the candidate.

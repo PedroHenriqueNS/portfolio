@@ -4,7 +4,7 @@ summary: "App de escritorio que recorta PDFs automáticamente, hecha para report
 
 Una aplicación de escritorio para recortar PDFs automáticamente.
 
-La hice para recortar reportes de **Power BI**, que salen con márgenes grandes al exportarlos a PDF.
+Se hizo para recortar reportes de **Power BI**, que salen con márgenes grandes al exportarlos a PDF.
 
 La aplicación está hecha con **Electron** y **React.js** con **Vite**.
 

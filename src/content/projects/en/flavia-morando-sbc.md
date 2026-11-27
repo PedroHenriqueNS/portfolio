@@ -6,4 +6,4 @@ A web page that introduces Flavia Morando, a candidate for mayor of São Bernard
 
 Built with **React.js** and **Vite**, styled with **Tailwind CSS**.
 
-A simple design, based on artwork made by *designers*, that puts the candidate and her supporters front and center.
+A simple design, based on artwork made by *designers*, to highlight the candidate and her supporters.

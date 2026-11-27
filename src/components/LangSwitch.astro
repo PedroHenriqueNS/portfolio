@@ -81,7 +81,9 @@ const CODE = { 'pt-br': 'PT', en: 'EN', es: 'ES' }
     if (target.closest('[data-suggest-link]')) return remember(group.dataset.suggest!)
     if (target.closest('[data-suggest-dismiss]')) {
       remember(document.querySelector<HTMLElement>('[data-lang-suggest]')!.dataset.locale!)
-      group.closest<HTMLElement>('[data-lang-suggest]')!.hidden = true
+      const box = group.closest<HTMLElement>('[data-lang-suggest]')!
+      // Sai em fade curto, sem corte seco.
+      box.animate({ opacity: [1, 0] }, { duration: 200, easing: 'ease-out' }).finished.then(() => (box.hidden = true))
     }
   })
 </script>

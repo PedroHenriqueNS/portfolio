@@ -13,7 +13,10 @@
   --accent-2: #5A75FF; /* fim do gradiente: 3,4:1 sobre o fundo (texto grande) */
   --on-accent: #FFFFFF;
   --line: #D3D8E0;
+  /* Fecho (Contato): a cena mais escura nos dois temas; o fundo do horizonte é ainda mais fundo. */
   --closing: #060A22;
+  --closing-deep: #03051A;
+  --closing-ink: #EDEFFB;
   --shadow: rgb(0 0 0 / 0.38);
   --gutter: max(1rem, env(safe-area-inset-left, 0px));
 }
@@ -31,6 +34,7 @@ html.dark {
   --on-accent: #060918;
   --line: #1E2548;
   --closing: #03051A;
+  --closing-deep: #01020C;
   --shadow: rgb(0 0 0 / 0.6);
 }
 

@@ -33,6 +33,7 @@ test.describe('sugestão de idioma com o navegador em inglês', () => {
     await page.goto('/')
     const suggestion = page.locator('[data-lang-suggest]')
     await expect(suggestion).toBeVisible()
+    expect((await suggestion.boundingBox())!.width).toBeLessThanOrEqual(320)
     await expect(suggestion.getByRole('link', { name: 'View in English' })).toHaveAttribute('href', '/en')
     await suggestion.getByRole('button', { name: 'Not now' }).click()
     await expect(suggestion).toBeHidden()

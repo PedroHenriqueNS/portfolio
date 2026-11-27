@@ -26,18 +26,63 @@ const alts = alternates(path)
     <ThemeToggle locale={locale} />
   </div>
 </header>
-<!-- Sugestão de idioma: o script mostra o grupo do idioma do navegador na primeira visita. -->
-<aside data-lang-suggest data-locale={locale} hidden class="mx-auto max-w-6xl px-4 md:px-8">
+<!-- Sugestão de idioma: pílula sob o seletor; o script mostra o grupo do idioma do navegador na primeira visita. -->
+<aside data-lang-suggest data-locale={locale} hidden class="lang-suggest">
   {
     LOCALES.filter((l) => l !== locale).map((l) => (
-      <div data-suggest={l} lang={HTML_LANG[l]} hidden class="flex flex-wrap items-center gap-3 rounded-lg border border-line px-4 py-2">
+      <div data-suggest={l} lang={HTML_LANG[l]} hidden class="lang-suggest-pill">
         <a href={alts[l]} hreflang={HREFLANG[l]} data-suggest-link>
           {m.lang_suggest({}, { locale: l })}
         </a>
-        <button type="button" data-suggest-dismiss class="underline">
+        <button type="button" data-suggest-dismiss>
           {m.lang_suggest_dismiss({}, { locale: l })}
         </button>
       </div>
     ))
   }
 </aside>
+
+<style>
+  /* Fora do fluxo: presa ao topo do documento, logo abaixo do cabeçalho, à direita; sobe junto com a página. */
+  .lang-suggest {
+    position: absolute;
+    top: 5.25rem;
+    right: var(--gutter);
+    z-index: 39;
+    max-width: min(320px, calc(100vw - 2 * var(--gutter)));
+    animation: suggest-in 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .lang-suggest-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.125rem;
+    border: 1px solid var(--line);
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    font-size: 0.8125rem;
+    line-height: 1;
+  }
+  .lang-suggest-pill > * {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 0.875rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+    touch-action: manipulation;
+  }
+  .lang-suggest-pill a { background: var(--accent); color: var(--on-accent); font-weight: 600; text-decoration: none; }
+  .lang-suggest-pill button { color: var(--muted); cursor: pointer; }
+  .lang-suggest-pill button:hover { color: var(--ink); }
+  @keyframes suggest-in {
+    from { opacity: 0; translate: 0 -6px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes suggest-in {
+      from { opacity: 0; }
+    }
+  }
+</style>

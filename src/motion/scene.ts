@@ -5,11 +5,24 @@ export interface Conditions {
 }
 export type Scene = (root: HTMLElement, c: Conditions) => void
 
+const covering = new Set<string>()
+
 /**
- * Uma cena de tela cheia (o palco) cobre a faixa de cima: pede o cabeçalho fora enquanto isso valer.
- * O fx.ts liga `changed` e lê `covered` a cada scroll; quem liga `covered` o desliga no próprio onRevert.
+ * Uma cena de tela cheia (o palco, o fecho) cobre a faixa de cima: pede o cabeçalho fora enquanto isso valer.
+ * Cada cena liga e desliga só o próprio pedido (`set`), e o desliga no próprio onRevert.
+ * O fx.ts liga `changed` e lê `covered` a cada scroll.
  */
-export const headerCover = { covered: false, changed: () => {} }
+export const headerCover = {
+  get covered() {
+    return covering.size > 0
+  },
+  set(scene: string, on: boolean) {
+    if (on) covering.add(scene)
+    else covering.delete(scene)
+    headerCover.changed()
+  },
+  changed: () => {},
+}
 
 let cleanups: (() => void)[] = []
 

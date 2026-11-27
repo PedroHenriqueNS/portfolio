@@ -25,10 +25,7 @@ export const stage: Scene = (root, c) => {
 
   // O palco é o momento de tela cheia: enquanto cobre a faixa de cima, o cabeçalho fica fora (fx.ts).
   // Desktop: do início do pin até a moldura sair por cima. Celular: da lista no topo até ela sair por cima.
-  const cover = (on: boolean) => {
-    headerCover.covered = on
-    headerCover.changed()
-  }
+  const cover = (on: boolean) => headerCover.set('stage', on)
   const list = section.querySelector<HTMLElement>('.stage-list')!
   ScrollTrigger.create(
     st

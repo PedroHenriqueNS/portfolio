@@ -3,6 +3,7 @@
   "header_home_label": "Pedro Henrique, início",
   "theme_to_light": "Mudar para o tema claro",
   "theme_to_dark": "Mudar para o tema escuro",
+  "theme_dark_label": "Tema escuro",
   "lang_switcher_label": "Idioma",
   "lang_pt": "Português",
   "lang_en": "English",
@@ -107,5 +108,8 @@
   "seo_home_title": "Pedro Henrique | Engenheiro de software full stack",
   "seo_home_description": "Engenheiro de software full stack há mais de 5 anos, com React, Next.js, React Native, NestJS e AWS. Fundador do Linkeza. Veja projetos e experiência.",
   "seo_home_image_alt": "Pedro Henrique, engenheiro de software full stack: React, Next.js, React Native, NestJS e AWS",
-  "seo_project_title": "{title} | Projeto de Pedro Henrique"
+  "seo_project_title": "{title} | Projeto de Pedro Henrique",
+  "seo_site_name": "Pedro Henrique | Portfólio",
+  "seo_projects_list": "Projetos de Pedro Henrique",
+  "seo_person_description": "Engenheiro de software full stack com mais de 5 anos de experiência em TypeScript (React, Next.js, React Native, Node.js e NestJS) na AWS, sistemas orientados a eventos com RabbitMQ e SQS, e Kubernetes com ArgoCD e Grafana."
 }

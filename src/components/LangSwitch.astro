@@ -1,0 +1,87 @@
+---
+import * as m from '@/paraglide/messages.js'
+import { HREFLANG, HTML_LANG, LOCALES, type Locale } from '@/i18n/locales'
+import { alternates } from '@/i18n/routes'
+
+interface Props {
+  locale: Locale
+  path: string
+}
+
+const { locale, path } = Astro.props
+const alts = alternates(path)
+const NAME = { 'pt-br': m.lang_pt, en: m.lang_en, es: m.lang_es }
+const CODE = { 'pt-br': 'PT', en: 'EN', es: 'ES' }
+---
+
+<details class="lang-switch relative">
+  <summary class="icon-button">
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"></path>
+    </svg>
+    <span class="sr-only">{m.lang_switcher_label({}, { locale })}:</span>
+    <span class="text-sm">{CODE[locale]}</span>
+  </summary>
+  <ul class="absolute right-0 z-40 mt-2 min-w-40 rounded-lg border border-line bg-bg p-1">
+    {
+      LOCALES.map((l) => (
+        <li>
+          <a
+            data-lang={l}
+            href={alts[l]}
+            hreflang={HREFLANG[l]}
+            lang={HTML_LANG[l]}
+            aria-current={l === locale ? 'page' : undefined}
+            class="block rounded px-3 py-2 no-underline"
+          >
+            {NAME[l]({}, { locale: l })}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</details>
+
+<script>
+  const KEY = 'lang-choice'
+  const FROM_BROWSER: Record<string, string> = { pt: 'pt-br', en: 'en', es: 'es' }
+  const remember = (locale: string) => {
+    try {
+      localStorage.setItem(KEY, locale)
+    } catch {}
+  }
+
+  function init() {
+    // Leva a #âncora atual para a mesma seção no outro idioma.
+    for (const a of document.querySelectorAll<HTMLAnchorElement>('a[data-lang], a[data-suggest-link]')) {
+      a.setAttribute('href', a.pathname + location.hash)
+    }
+    const box = document.querySelector<HTMLElement>('[data-lang-suggest]')
+    if (!box) return
+    let choice: string | null = null
+    try {
+      choice = localStorage.getItem(KEY)
+    } catch {}
+    const wanted = FROM_BROWSER[navigator.language.slice(0, 2).toLowerCase()]
+    const group = !choice && wanted ? box.querySelector<HTMLElement>(`[data-suggest="${wanted}"]`) : null
+    if (!group) return
+    group.hidden = false
+    box.hidden = false
+  }
+
+  document.addEventListener('astro:page-load', init)
+  window.addEventListener('hashchange', init)
+  document.addEventListener('click', (event) => {
+    const target = event.target as Element
+    const lang = target.closest<HTMLElement>('a[data-lang]')?.dataset.lang
+    if (lang) return remember(lang)
+    const group = target.closest<HTMLElement>('[data-suggest]')
+    if (!group) return
+    if (target.closest('[data-suggest-link]')) return remember(group.dataset.suggest!)
+    if (target.closest('[data-suggest-dismiss]')) {
+      remember(document.querySelector<HTMLElement>('[data-lang-suggest]')!.dataset.locale!)
+      group.closest<HTMLElement>('[data-lang-suggest]')!.hidden = true
+    }
+  })
+</script>

@@ -1,0 +1,104 @@
+---
+import { Image } from 'astro:assets'
+import * as m from '@/paraglide/messages.js'
+import Base from '@/layouts/Base.astro'
+import type { Locale } from '@/i18n/locales'
+import { homePath, projectPath } from '@/i18n/routes'
+import { isPublic, nextSlug, type Project } from '@/lib/projects'
+import { formatMonth } from '@/lib/format'
+import { projectSeo } from '@/lib/seo'
+import { PROJECTS } from '@/data/projects'
+import { TECH } from '@/data/tech'
+
+interface Props {
+  locale: Locale
+  project: Project
+}
+
+const { locale, project: p } = Astro.props
+const { Content } = p
+const next = PROJECTS.find((x) => x.slug === nextSlug(p.slug))!
+const home = homePath(locale)
+const links = [
+  { url: p.projectUrl, text: m.project_open_site({}, { locale }) },
+  { url: p.repoUrl, text: m.project_code({}, { locale }) },
+].filter((l) => l.url)
+---
+
+<Base seo={projectSeo(locale, p)} locale={locale}>
+  <article class="mx-auto max-w-6xl px-4 pb-24 md:px-8">
+    <nav aria-label={m.project_breadcrumb_label({}, { locale })} class="py-4 text-sm">
+      <ol class="flex flex-wrap gap-2">
+        <li><a href={home}>{m.project_breadcrumb_home({}, { locale })}</a> /</li>
+        <li><a href={`${home}#projects`}>{m.project_breadcrumb_projects({}, { locale })}</a> /</li>
+        <li aria-current="page">{p.title}</li>
+      </ol>
+    </nav>
+
+    <Image src={p.image} alt={m.project_cover_alt({ title: p.title }, { locale })} widths={[540, 1080]} sizes="(min-width: 1152px) 1080px, 100vw" loading="eager" class="h-auto w-full rounded-2xl" />
+
+    <h1 class="font-display condensed mt-8 text-5xl leading-none font-bold md:text-7xl">{p.title}</h1>
+    {
+      p.date && (
+        <p class="mt-2">
+          <span class="sr-only">{m.project_date({}, { locale })}: </span>
+          <time datetime={p.date}>{formatMonth(p.date, locale)}</time>
+        </p>
+      )
+    }
+
+    <div class="mt-8 grid gap-12 md:grid-cols-[2fr_1fr]">
+      <div>
+        <p class="text-xl">{p.summary}</p>
+        <h2 class="font-display mt-8 text-2xl font-bold">{m.project_about({}, { locale })}</h2>
+        <div class="mt-4 space-y-4">
+          <Content />
+        </div>
+      </div>
+      <aside class="space-y-8">
+        <div>
+          <h2 class="font-display text-2xl font-bold">{m.project_stack({}, { locale })}</h2>
+          <ul class="mt-4 space-y-2">
+            {
+              p.stack.map((t) => (
+                <li class="flex items-center gap-2">
+                  <Image src={TECH[t].icon} alt="" width={20} height={20} />
+                  {TECH[t].title}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        {
+          links.length > 0 && (
+            <ul class="flex flex-wrap gap-3">
+              {links.map((l) =>
+                isPublic(l.url) ? (
+                  <li>
+                    <a href={l.url} target="_blank" rel="noopener noreferrer" class="inline-block rounded-full border border-line px-4 py-2">
+                      {l.text}
+                      <span class="sr-only">{m.contact_new_tab({}, { locale })}</span>
+                    </a>
+                  </li>
+                ) : (
+                  <li class="rounded-full border border-line px-4 py-2" title={m.project_private_detail({}, { locale })}>
+                    {l.text}: {m.project_private({}, { locale })}
+                    <span class="sr-only">. {m.project_private_detail({}, { locale })}</span>
+                  </li>
+                ),
+              )}
+            </ul>
+          )
+        }
+      </aside>
+    </div>
+
+    <nav class="mt-24 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-8">
+      <a data-project={next.slug} href={projectPath(locale, next.slug)} class="no-underline">
+        <span class="block text-sm text-ink">{m.project_next({}, { locale })}</span>
+        <span class="font-display condensed text-4xl font-bold md:text-6xl">{next.title}</span>
+      </a>
+      <a href={`${home}#projects`}>{m.project_all({}, { locale })}</a>
+    </nav>
+  </article>
+</Base>

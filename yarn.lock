@@ -695,6 +695,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource-variable/bricolage-grotesque@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@fontsource-variable/bricolage-grotesque@npm:5.3.0"
+  checksum: 10c0/aa6c03b2e797d199159a016f43e972874b13e25a4515bf9257a25532a98be3c0b21e95cea8c84e0a1be2f1a4b217a898c649dda87f7551ebb33ca09bc5ab3713
+  languageName: node
+  linkType: hard
+
+"@fontsource-variable/hanken-grotesk@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@fontsource-variable/hanken-grotesk@npm:5.3.0"
+  checksum: 10c0/b513e1fe799b66ed77b4c71433a82be47031b3eb9cc947bd9ca471532ba7bc924149c194dcafc1ffc6cb12316a177e16a93e9f25d514842314e27ae4bde77647
+  languageName: node
+  linkType: hard
+
 "@img/colour@npm:^1.1.0":
   version: 1.1.0
   resolution: "@img/colour@npm:1.1.0"
@@ -1251,6 +1265,17 @@ __metadata:
   version: 0.156.0
   resolution: "@oxc-project/types@npm:0.156.0"
   checksum: 10c0/7f101d33e967179c10d38708c71c8c602ad862843a788603d6b8c2accebf2fce420ca95a26d74d90bc35db36daa0a8285c3af1589c38ae20e46e47153549313f
+  languageName: node
+  linkType: hard
+
+"@playwright/test@npm:^1.65.1":
+  version: 1.65.1
+  resolution: "@playwright/test@npm:1.65.1"
+  dependencies:
+    playwright: "npm:1.65.1"
+  bin:
+    playwright: cli.js
+  checksum: 10c0/f3c0c6ce1d426c84c2ee370e7b7a81fcd4a7a8eaa9d51a880ec853e98ce437482772a09c58c7fbb4444002b127068f076458bec99cecca60c3b51e9ba93e2cc6
   languageName: node
   linkType: hard
 
@@ -3374,12 +3399,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"playwright-core@npm:1.65.1":
+  version: 1.65.1
+  resolution: "playwright-core@npm:1.65.1"
+  bin:
+    playwright-core: cli.js
+  checksum: 10c0/4406d4f8eff668a93aaada8382d25fcce8da5f679e9f31311888178d631ed0270eb40c0288129e41e15709c957a31932cac9753fdb332547a19bc3541d317e44
+  languageName: node
+  linkType: hard
+
+"playwright@npm:1.65.1":
+  version: 1.65.1
+  resolution: "playwright@npm:1.65.1"
+  dependencies:
+    playwright-core: "npm:1.65.1"
+  bin:
+    playwright: cli.js
+  checksum: 10c0/30ce029c9fb2a6e88cf81b150b978fd60edb59b8af5a6460f5576f0fe6e2bb739454109f0ce4904eac63cb2cf10390518d7d71d335fd695b5897734a5af7250d
+  languageName: node
+  linkType: hard
+
 "portfolio@workspace:.":
   version: 0.0.0-use.local
   resolution: "portfolio@workspace:."
   dependencies:
     "@astrojs/check": "npm:^0.9.12"
+    "@fontsource-variable/bricolage-grotesque": "npm:^5.3.0"
+    "@fontsource-variable/hanken-grotesk": "npm:^5.3.0"
     "@inlang/paraglide-js": "npm:^3.2.2"
+    "@playwright/test": "npm:^1.65.1"
     "@tailwindcss/vite": "npm:^4.3.5"
     astro: "npm:^7.4.13"
     gsap: "npm:^3.15.1"

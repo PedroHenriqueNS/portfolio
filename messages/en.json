@@ -46,6 +46,7 @@
   "xp_freelancer_summary": "Web and mobile apps on demand, end to end: requirements, architecture, development and deployment.",
   "stage_title": "Featured projects",
   "stage_open": "View project",
+  "stage_open_label": "View project: {name}",
   "stage_all": "All ({count})",
   "stage_counter_label": "Project {current} of {total}",
   "list_title": "More projects",

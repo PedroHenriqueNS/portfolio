@@ -1,8 +1,8 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { onRevert, type Scene } from './scene'
+import { headerCover, onRevert, type Scene } from './scene'
 
-/** Névoa que troca de lugar a cada 1,2 tela, luz do cursor e cabeçalho que some ao descer. */
+/** Névoa que troca de lugar a cada 1,2 tela, luz do cursor e cabeçalho que some ao descer (e sobre o palco). */
 export const fx: Scene = (root, c) => {
   const mists = [...root.querySelectorAll<HTMLElement>('.fx-bg .mist')]
   const zoneOf = () => Math.floor(scrollY / innerHeight / 1.2)
@@ -71,14 +71,18 @@ export const fx: Scene = (root, c) => {
     const onScroll = () => {
       const d = scrollY - last
       last = scrollY
-      if (Math.abs(d) > innerHeight) show(true)
+      if (headerCover.covered) show(false)
+      else if (Math.abs(d) > innerHeight) show(true)
       else if (d > 0 && scrollY > header.offsetHeight) show(false)
       else if (d < 0) show(true)
     }
     const onFocus = () => show(true)
+    // Ao cobrir, sai na hora; ao descobrir, o próximo scroll decide (descendo continua fora, subindo volta).
+    headerCover.changed = () => headerCover.covered && show(false)
     addEventListener('scroll', onScroll, { passive: true })
     header.addEventListener('focusin', onFocus)
     onRevert(() => {
+      headerCover.changed = () => {}
       removeEventListener('scroll', onScroll)
       header.removeEventListener('focusin', onFocus)
       gsap.killTweensOf(header)

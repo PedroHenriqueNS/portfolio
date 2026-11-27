@@ -46,6 +46,7 @@
   "xp_freelancer_summary": "Apps web e mobile sob demanda, de ponta a ponta: requisitos, arquitetura, desenvolvimento e deploy.",
   "stage_title": "Projetos em destaque",
   "stage_open": "Ver projeto",
+  "stage_open_label": "Ver projeto: {name}",
   "stage_all": "Todos ({count})",
   "stage_counter_label": "Projeto {current} de {total}",
   "list_title": "Outros projetos",

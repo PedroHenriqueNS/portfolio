@@ -15,7 +15,7 @@ test('as cenas sobrevivem a idas e voltas pelo ClientRouter', async ({ page }) =
   await page.evaluate(() => ((window as unknown as { __marker: number }).__marker = 1))
 
   for (let round = 0; round < 2; round++) {
-    await page.locator('a[data-project="linkeza"]').first().click()
+    await page.locator('a.stage-card[data-project="linkeza"]').click()
     await expect(page).toHaveURL(/\/projetos\/linkeza$/)
     await page.locator('body > header a').first().click()
     await expect(page).toHaveURL(/\/$/)

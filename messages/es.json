@@ -46,6 +46,7 @@
   "xp_freelancer_summary": "Apps web y móviles a pedido, de punta a punta: requisitos, arquitectura, desarrollo y despliegue.",
   "stage_title": "Proyectos destacados",
   "stage_open": "Ver proyecto",
+  "stage_open_label": "Ver proyecto: {name}",
   "stage_all": "Todos ({count})",
   "stage_counter_label": "Proyecto {current} de {total}",
   "list_title": "Otros proyectos",

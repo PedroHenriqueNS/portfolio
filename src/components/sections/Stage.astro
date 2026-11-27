@@ -25,6 +25,7 @@ const items = featured.map((p, i) => {
     href: projectPath(locale, p.slug),
     label: [msg(`kind_${p.kind}`), yearOf(p.date)].filter(Boolean).join(' · '),
     progress: m.stage_counter_label({ current: i + 1, total }, { locale }),
+    openLabel: m.stage_open_label({ name: p.title }, { locale }),
     // O tipo gigante é medido pelo número de caracteres: a frase inteira no desktop, a palavra mais longa no celular.
     style: `--c: ${p.color}; --len: ${name.length}; --chars: ${Math.max(...name.split(' ').map((w) => w.length))}`,
   }
@@ -48,13 +49,19 @@ const open = m.stage_open({}, { locale })
             </div>
             <h3 class="stage-word">{p.name}</h3>
             <a class="stage-card" data-project={p.slug} href={p.href}>
-              <Image src={p.image} alt={p.title} widths={[360, 480, 620]} sizes="(min-width: 768px) min(44vw, 620px), 88vw" />
+              <Image
+                src={p.image}
+                alt={p.title}
+                widths={[360, 480, 620]}
+                sizes="(min-width: 768px) min(44vw, 620px), 88vw"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
             </a>
             {/* Cópia vazada por cima do cartão: onde os dois se cruzam, o nome continua legível. */}
             <span class="stage-word stage-ghost" aria-hidden="true">{p.name}</span>
             <div class="stage-meta">
               <p class="stage-kind">{p.label}</p>
-              <a class="stage-open" data-project={p.slug} href={p.href}>
+              <a class="stage-open" data-project={p.slug} href={p.href} aria-label={p.openLabel}>
                 {open}
                 <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3.5 8h9M8.5 4l4 4-4 4" />

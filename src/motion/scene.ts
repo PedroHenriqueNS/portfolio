@@ -5,6 +5,12 @@ export interface Conditions {
 }
 export type Scene = (root: HTMLElement, c: Conditions) => void
 
+/**
+ * Uma cena de tela cheia (o palco) cobre a faixa de cima: pede o cabeçalho fora enquanto isso valer.
+ * O fx.ts liga `changed` e lê `covered` a cada scroll; quem liga `covered` o desliga no próprio onRevert.
+ */
+export const headerCover = { covered: false, changed: () => {} }
+
 let cleanups: (() => void)[] = []
 
 /** Para o que a cena faz fora do Context do GSAP (ouvintes, tweens criados depois): roda quando as cenas revertem. */

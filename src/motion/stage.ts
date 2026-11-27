@@ -1,6 +1,6 @@
 import { gsap } from 'gsap'
-import type { ScrollTrigger as ST } from 'gsap/ScrollTrigger'
-import { onRevert, type Scene } from './scene'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { headerCover, onRevert, type Scene } from './scene'
 
 /** Tempo de cada projeto na linha do tempo: 1 de troca e 0,5 parado. */
 const STEP = 1.5
@@ -20,13 +20,27 @@ export const stage: Scene = (root, c) => {
   // A curva de cima é medida pela moldura, que ainda não foi presa; a de baixo vem depois do pin, pela ordem do DOM.
   gsap.fromTo(capTop.firstElementChild, { scaleY: 1 }, { scaleY: 0, ease: 'none', scrollTrigger: { trigger: frame, start: 'top bottom', end: 'top top', scrub: true } })
 
-  if (c.desktop) desktop(frame, items, c.cursor)
-  else mobile(section, items)
+  const st = c.desktop ? desktop(frame, items, c.cursor) : undefined
+  if (!c.desktop) mobile(section, items)
+
+  // O palco é o momento de tela cheia: enquanto cobre a faixa de cima, o cabeçalho fica fora (fx.ts).
+  // Desktop: do início do pin até a moldura sair por cima. Celular: da lista no topo até ela sair por cima.
+  const cover = (on: boolean) => {
+    headerCover.covered = on
+    headerCover.changed()
+  }
+  const list = section.querySelector<HTMLElement>('.stage-list')!
+  ScrollTrigger.create(
+    st
+      ? { start: () => st.start, end: () => st.end + frame.offsetHeight, onToggle: (s) => cover(s.isActive) }
+      : { trigger: list, start: 'top top', end: 'bottom top', onToggle: (s) => cover(s.isActive) },
+  )
+  onRevert(() => cover(false))
 
   gsap.fromTo(capBot.firstElementChild, { scaleY: 1 }, { scaleY: 0, ease: 'none', scrollTrigger: { trigger: capBot, start: 'top bottom', end: 'top top', scrub: true } })
 }
 
-function desktop(frame: HTMLElement, items: HTMLElement[], cursor: boolean) {
+function desktop(frame: HTMLElement, items: HTMLElement[], cursor: boolean): ScrollTrigger {
   const bg = frame.querySelector<HTMLElement>('.stage-bg')!
   const count = frame.querySelector<HTMLElement>('.stage-count')!
   const label = count.textContent
@@ -70,7 +84,7 @@ function desktop(frame: HTMLElement, items: HTMLElement[], cursor: boolean) {
   })
   tl.set({}, {}, (items.length - 1) * STEP) // o último projeto também tem o seu tempo parado
   sync()
-  const st = tl.scrollTrigger as ST
+  const st = tl.scrollTrigger as ScrollTrigger
   onRevert(() => {
     items.forEach((it) => it.classList.remove('is-current'))
     count.textContent = label
@@ -84,8 +98,12 @@ function desktop(frame: HTMLElement, items: HTMLElement[], cursor: boolean) {
   frame.addEventListener('focusin', onFocus)
   onRevert(() => frame.removeEventListener('focusin', onFocus))
 
-  if (!cursor) return
-  // Os cartões inclinam para o cursor e o brilho atravessa no sentido oposto.
+  if (cursor) tiltCards(frame, cards)
+  return st
+}
+
+/** Os cartões inclinam para o cursor e o brilho atravessa no sentido oposto. */
+function tiltCards(frame: HTMLElement, cards: HTMLElement[]) {
   gsap.set(cards, { transformPerspective: 900 })
   const tilt = (px: number, py: number) =>
     gsap.to(cards, { rotationY: px * 16, rotationX: -py * 12, duration: 0.6, ease: 'power3.out', overwrite: 'auto' })

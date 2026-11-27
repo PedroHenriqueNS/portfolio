@@ -65,6 +65,9 @@ html.dark {
 
 /* O cabeçalho fixo nunca cobre o alvo de uma âncora nem o elemento focado. */
 html { color-scheme: light; scroll-padding-top: 5rem; }
+/* Sem ancoragem de scroll: o WebKit ancorava num cartão do palco preso que se move com o scroll e arrastava a
+   página sozinho até o fim do palco (6164 → 10124 px em 1,5 s); o Firefox já deslocava pelas entradas. */
+html { overflow-anchor: none; }
 html.dark { color-scheme: dark; }
 
 body {

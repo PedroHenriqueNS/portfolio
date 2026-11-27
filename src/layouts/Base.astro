@@ -91,6 +91,21 @@ const json = JSON.stringify(seo.jsonLd).replace(/</g, '\\u003c')
     </main>
     <script>
       import '@/motion/index'
+      // O Firefox não rola um elemento focado por teclado que já aparece em parte (nem com scrollIntoView, nos
+      // nomes das skills): o contorno ficava cortado na borda. No quadro seguinte, depois das rolagens das próprias
+      // seções, a página anda o que falta. Se algo já rolou (uma seção que cuida do próprio foco), não mexe.
+      document.addEventListener('focusin', (e) => {
+        const el = e.target as Element
+        if (!el.matches?.(':focus-visible') || el.closest('.pin-spacer')) return
+        const y = scrollY
+        requestAnimationFrame(() => {
+          if (scrollY !== y) return
+          const r = el.getBoundingClientRect()
+          const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0 // o cabeçalho
+          if (r.top < 0) scrollBy(0, r.top - pad)
+          else if (r.bottom > innerHeight) scrollBy(0, Math.min(r.top, r.bottom - innerHeight + 8))
+        })
+      }, true) // captura: lê o scroll antes dos focusin das seções
     </script>
   </body>
 </html>

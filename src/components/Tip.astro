@@ -84,7 +84,14 @@ const tipId = `tip-${id}`
   })
   // Aberto pelo popovertarget nativo (toque, Enter depois de fechar): o gatilho é o último tocado.
   document.addEventListener('pointerdown', (e) => (last = trigger(e.target) ?? last))
-  document.addEventListener('toggle', (e) => (e as ToggleEvent).newState === 'open' && place(), true)
+  // Ao abrir, abaixo de 768 px: a gaveta não cobre quem a abriu (foco ou toque perto do pé da tela); a página sobe o que falta.
+  const reveal = () => {
+    const c = last && card(last)
+    if (!last || wide.matches || !c?.matches(':popover-open')) return
+    const hidden = last.getBoundingClientRect().bottom + GAP - (innerHeight - 12 - c.offsetHeight) // 12: o inset da gaveta
+    if (hidden > 0) scrollBy(0, hidden)
+  }
+  document.addEventListener('toggle', (e) => (e as ToggleEvent).newState === 'open' && (place(), reveal()), true)
   document.addEventListener('scroll', place, { passive: true })
   addEventListener('resize', place)
   document.addEventListener('pointerout', (e) => {

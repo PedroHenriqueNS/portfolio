@@ -40,6 +40,21 @@ test.describe('sugestão de idioma com o navegador em inglês', () => {
     await page.reload()
     await expect(page.locator('[data-lang-suggest]')).toBeHidden()
   })
+
+  for (const path of ['/', '/projetos/linkeza']) {
+    test(`a pílula não cobre o primeiro link nem o h1 de ${path}`, async ({ page }) => {
+      await page.goto(path)
+      const pill = page.locator('[data-lang-suggest]')
+      await expect(pill).toBeVisible()
+      await page.waitForTimeout(500) // fim da entrada da pílula
+      const a = (await pill.boundingBox())!
+      for (const target of [page.locator('main a').first(), page.locator('main h1')]) {
+        const b = (await target.boundingBox())!
+        const overlap = a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height
+        expect(overlap, `${await target.evaluate((el) => el.outerHTML.slice(0, 80))}`).toBe(false)
+      }
+    })
+  }
 })
 
 test.describe('sugestão de idioma com o navegador em português', () => {

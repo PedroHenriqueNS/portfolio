@@ -168,6 +168,15 @@ const twoLines = (name: string) => {
     text-decoration: none;
     transition: color 200ms ease;
   }
+  /* Celular: a sugestão de idioma ocupa a largura toda logo abaixo do cabeçalho; enquanto ela está na tela,
+     o topo da página desce a altura da pílula para o link de voltar não ficar por baixo. */
+  @media (max-width: 767.98px) {
+    .pp { transition: padding-top 400ms var(--ease); }
+    :global(html:has([data-lang-suggest]:not([hidden]))) .pp { padding-top: 4.5rem; }
+  }
+  @media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
+    .pp { transition: none; }
+  }
   .pp-back :global(svg) { transition: translate 300ms var(--ease); }
   .pp-back:hover { color: var(--ink); }
   .pp-back:hover :global(svg) { translate: -3px 0; }

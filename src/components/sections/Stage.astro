@@ -48,7 +48,7 @@ const open = m.stage_open({}, { locale })
               {items.map((_, j) => <i class:list={{ on: j <= i }} />)}
             </div>
             <h3 class="stage-word">{p.name}</h3>
-            <a class="stage-card" data-project={p.slug} href={p.href}>
+            <a class="stage-card" data-project={p.slug} href={p.href} transition:name={`project-${p.slug}`}>
               <Image
                 src={p.image}
                 alt={p.title}

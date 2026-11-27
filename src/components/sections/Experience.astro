@@ -58,7 +58,7 @@ const closeLabel = m.xp_close({}, { locale })
             <p class="xp-summary">{e.summary}</p>
             <ul class="xp-stack">
               {e.stack.map((t) => (
-                <li title={t.name}>{t.icon ? <Image src={t.icon} alt={t.name} width={24} height={24} /> : <span>{t.name}</span>}</li>
+                <li title={t.name}>{t.icon ? <Image class="tech-icon" src={t.icon} alt={t.name} width={24} height={24} /> : <span>{t.name}</span>}</li>
               ))}
             </ul>
           </div>
@@ -74,7 +74,7 @@ const closeLabel = m.xp_close({}, { locale })
             <ul class="xp-chips">
               {e.stack.map((t) => (
                 <li>
-                  {t.icon && <Image src={t.icon} alt="" width={18} height={18} />}
+                  {t.icon && <Image class="tech-icon" src={t.icon} alt="" width={18} height={18} />}
                   {t.name}
                 </li>
               ))}

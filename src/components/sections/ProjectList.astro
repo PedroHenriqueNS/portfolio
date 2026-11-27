@@ -36,7 +36,7 @@ const items = projects
           <a class="plist-row" data-project={p.slug} href={p.href}>
             <span class="plist-name">{p.name}</span>
             <span class="plist-meta">
-              <span class="plist-thumb" aria-hidden="true">
+              <span class="plist-thumb" aria-hidden="true" transition:name={`project-${p.slug}`}>
                 <Image src={p.image} alt="" widths={[120, 420, 840]} sizes="(min-width: 768px) and (hover: hover) and (pointer: fine) min(34vw, 420px), 60px" loading="lazy" />
               </span>
               <span class="plist-label">{p.label}</span>

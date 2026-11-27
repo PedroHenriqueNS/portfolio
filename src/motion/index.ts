@@ -9,17 +9,21 @@ import { stage } from './stage'
 import { list } from './list'
 import { skills } from './skills'
 import { contact } from './contact'
+import { page } from './page'
 
 export type { Conditions, Scene } from './scene'
 
-/** Na ordem do DOM: um gatilho criado antes de uma seção presa acima dele erra a posição. */
-export const SCENES: Scene[] = [fx, hero, about, experience, stage, list, skills, contact]
+/** Na ordem do DOM: um gatilho criado antes de uma seção presa acima dele erra a posição. A página do projeto não tem as seções da home. */
+export const SCENES: Scene[] = [fx, hero, about, experience, stage, list, skills, contact, page]
 
 gsap.registerPlugin(ScrollTrigger)
 // A barra de endereço do celular muda a altura da janela; isso não deve recalcular as cenas.
 ScrollTrigger.config({ ignoreMobileResize: true })
 
 let mm: gsap.MatchMedia | undefined
+// Ao voltar pelo histórico o roteador restaura o scroll antes de as cenas criarem os pins, numa página ainda
+// mais curta: a posição sai cortada. Guarda a posição salva da entrada e a reaplica depois das cenas.
+let restoreY: number | undefined
 
 function start() {
   mm?.revert()
@@ -52,10 +56,14 @@ function start() {
       return runCleanups
     },
   )
+  if (restoreY !== undefined) scrollTo({ top: restoreY, behavior: 'instant' })
+  restoreY = undefined
 }
 
 document.addEventListener('astro:page-load', start)
-document.addEventListener('astro:before-swap', () => {
+document.addEventListener('astro:before-swap', (e) => {
+  // Num retorno pelo histórico, history.state já é a entrada de destino.
+  restoreY = e.navigationType === 'traverse' ? history.state?.scrollY : undefined
   mm?.revert()
   mm = undefined
 })

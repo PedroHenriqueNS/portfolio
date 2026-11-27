@@ -18,6 +18,8 @@
   --closing-deep: #03051A;
   --closing-ink: #EDEFFB;
   --shadow: rgb(0 0 0 / 0.38);
+  /* Fundo dos ícones de tecnologia: nenhum no claro; no escuro, um chip claro para as marcas escuras (Express, Next.js…). */
+  --icon-chip: transparent;
   --gutter: max(1rem, env(safe-area-inset-left, 0px));
 }
 
@@ -36,6 +38,14 @@ html.dark {
   --closing: #03051A;
   --closing-deep: #01020C;
   --shadow: rgb(0 0 0 / 0.6);
+  --icon-chip: #E4E7F5;
+}
+
+/* O chip cresce para fora (sombra sem desfoque): o tamanho e o layout do ícone são os mesmos nos dois temas. */
+.tech-icon {
+  border-radius: 4px;
+  background: var(--icon-chip);
+  box-shadow: 0 0 0 3px var(--icon-chip);
 }
 
 @theme {

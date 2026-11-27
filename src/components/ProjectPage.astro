@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets'
 import * as m from '@/paraglide/messages.js'
 import Base from '@/layouts/Base.astro'
+import Tip from '@/components/Tip.astro'
 import type { Locale } from '@/i18n/locales'
 import { homePath, projectPath } from '@/i18n/routes'
 import { isPublic, nextSlug, type Project } from '@/lib/projects'
@@ -18,87 +19,321 @@ interface Props {
 const { locale, project: p } = Astro.props
 const { Content } = p
 const next = PROJECTS.find((x) => x.slug === nextSlug(p.slug))!
-const home = homePath(locale)
-const links = [
-  { url: p.projectUrl, text: m.project_open_site({}, { locale }) },
-  { url: p.repoUrl, text: m.project_code({}, { locale }) },
-].filter((l) => l.url)
+const nextName = next.short ?? next.title
+const newTab = m.contact_new_tab({}, { locale })
+const site = isPublic(p.projectUrl) ? p.projectUrl : undefined
+const code = isPublic(p.repoUrl) ? p.repoUrl : undefined
+const actions = [
+  site && { kind: 'site', url: site, text: m.project_open_site({}, { locale }) },
+  code && { kind: 'code', url: code, text: m.project_code({}, { locale }) },
+].filter((a) => !!a)
+
+/** Caracteres da linha mais longa quando o nome se divide em até duas linhas pelo melhor ponto. */
+const twoLines = (name: string) => {
+  const w = name.split(' ')
+  return Math.min(...w.map((_, i) => Math.max(w.slice(0, i + 1).join(' ').length, w.slice(i + 1).join(' ').length)))
+}
+const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
 ---
 
 <Base seo={projectSeo(locale, p)} locale={locale}>
-  <article class="mx-auto max-w-6xl px-4 pb-24 md:px-8">
-    <nav aria-label={m.project_breadcrumb_label({}, { locale })} class="py-4 text-sm">
-      <ol class="flex flex-wrap gap-2">
-        <li><a href={home}>{m.project_breadcrumb_home({}, { locale })}</a> /</li>
-        <li><a href={`${home}#projects`}>{m.project_breadcrumb_projects({}, { locale })}</a> /</li>
-        <li aria-current="page">{p.title}</li>
-      </ol>
-    </nav>
+  <article class:list={['pp', { 'has-bar': actions.length > 0 }]} data-page="project">
+    <a class="pp-back" href={`${homePath(locale)}#projects`}>
+      <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12.5 8h-9M7.5 4l-4 4 4 4" />
+      </svg>
+      {m.project_all({}, { locale })}
+    </a>
 
-    <Image src={p.image} alt={m.project_cover_alt({ title: p.title }, { locale })} widths={[540, 1080]} sizes="(min-width: 1152px) 1080px, 100vw" loading="eager" class="h-auto w-full rounded-2xl" />
+    <div class="pp-cover" transition:name={`project-${p.slug}`}>
+      <Image
+        src={p.image}
+        alt={m.project_cover_alt({ title: p.title }, { locale })}
+        widths={[540, 810, 1080]}
+        sizes="(min-width: 1160px) 1080px, 100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
 
-    <h1 class="font-display condensed mt-8 text-5xl leading-none font-bold md:text-7xl">{p.title}</h1>
-    {
-      p.date && (
-        <p class="mt-2">
-          <span class="sr-only">{m.project_date({}, { locale })}: </span>
-          <time datetime={p.date}>{formatMonth(p.date, locale)}</time>
-        </p>
-      )
-    }
+    <header class="pp-head" style={`--len: ${p.title.length}; --line: ${twoLines(p.title)}`}>
+      <h1 class="pp-title" data-fit>{p.title}</h1>
+      {
+        p.date && (
+          <p class="pp-date">
+            <span class="sr-only">{m.project_date({}, { locale })}: </span>
+            <time datetime={p.date}>{formatMonth(p.date, locale)}</time>
+          </p>
+        )
+      }
+    </header>
 
-    <div class="mt-8 grid gap-12 md:grid-cols-[2fr_1fr]">
-      <div>
-        <p class="text-xl">{p.summary}</p>
-        <h2 class="font-display mt-8 text-2xl font-bold">{m.project_about({}, { locale })}</h2>
-        <div class="mt-4 space-y-4">
-          <Content />
-        </div>
+    <div class="pp-body">
+      <div class="pp-text">
+        <p class="pp-summary">{p.summary}</p>
+        <h2 class="sr-only">{m.project_about({}, { locale })}</h2>
+        <div class="pp-desc"><Content /></div>
       </div>
-      <aside class="space-y-8">
-        <div>
-          <h2 class="font-display text-2xl font-bold">{m.project_stack({}, { locale })}</h2>
-          <ul class="mt-4 space-y-2">
-            {
-              p.stack.map((t) => (
-                <li class="flex items-center gap-2">
-                  <Image src={TECH[t].icon} alt="" width={20} height={20} />
-                  {TECH[t].title}
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-        {
-          links.length > 0 && (
-            <ul class="flex flex-wrap gap-3">
-              {links.map((l) =>
-                isPublic(l.url) ? (
-                  <li>
-                    <a href={l.url} target="_blank" rel="noopener noreferrer" class="inline-block rounded-full border border-line px-4 py-2">
-                      {l.text}
-                      <span class="sr-only">{m.contact_new_tab({}, { locale })}</span>
-                    </a>
-                  </li>
-                ) : (
-                  <li class="rounded-full border border-line px-4 py-2" title={m.project_private_detail({}, { locale })}>
-                    {l.text}: {m.project_private({}, { locale })}
-                    <span class="sr-only">. {m.project_private_detail({}, { locale })}</span>
-                  </li>
-                ),
-              )}
-            </ul>
-          )
-        }
+      <aside class="pp-side">
+        <h2 class="pp-label">{m.project_stack({}, { locale })}</h2>
+        <ul class="pp-stack">
+          {
+            p.stack.map((t) => (
+              <li>
+                <Image class="tech-icon" src={TECH[t].icon} alt="" width={24} height={24} />
+                {TECH[t].title}
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="pp-links">
+          {
+            actions.map((a) => (
+              <li>
+                <a class:list={['pp-action', { primary: a.kind === 'site' }]} data-link={a.kind} href={a.url} target="_blank" rel="noopener noreferrer">
+                  {a.text}
+                  <span class="sr-only">{newTab}</span>
+                  <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d={arrow} />
+                  </svg>
+                </a>
+              </li>
+            ))
+          }
+          {
+            !code && (
+              <li class="pp-private">
+                <Tip id={`private-${p.slug}`} label={m.project_private({}, { locale })} class="pp-lock">
+                  <Fragment slot="trigger">
+                    <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" />
+                      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+                    </svg>
+                    {m.project_code({}, { locale })}
+                    <span class="sr-only">: {m.project_private({}, { locale })}</span>
+                  </Fragment>
+                  {m.project_private_detail({}, { locale })}
+                </Tip>
+              </li>
+            )
+          }
+        </ul>
       </aside>
     </div>
 
-    <nav class="mt-24 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-8">
-      <a data-project={next.slug} href={projectPath(locale, next.slug)} class="no-underline">
-        <span class="block text-sm text-ink">{m.project_next({}, { locale })}</span>
-        <span class="font-display condensed text-4xl font-bold md:text-6xl">{next.title}</span>
-      </a>
-      <a href={`${home}#projects`}>{m.project_all({}, { locale })}</a>
-    </nav>
+    <a class="pp-next" data-project={next.slug} href={projectPath(locale, next.slug)} style={`--len: ${nextName.length}; --line: ${twoLines(nextName)}`}>
+      <span class="pp-next-label">
+        {m.project_next({}, { locale })}
+        <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3.5 8h9M8.5 4l4 4-4 4" />
+        </svg>
+      </span>
+      <span class="pp-next-name">{nextName}</span>
+    </a>
+
+    {
+      actions.length > 0 && (
+        <nav class="pp-bar" aria-label={p.title}>
+          {actions.map((a) => (
+            <a class:list={['pp-action', { primary: a.kind === 'site' }]} href={a.url} target="_blank" rel="noopener noreferrer">
+              {a.text}
+              <span class="sr-only">{newTab}</span>
+              <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d={arrow} />
+              </svg>
+            </a>
+          ))}
+        </nav>
+      )
+    }
   </article>
 </Base>
+
+<style>
+  .pp {
+    /* Avanço médio de um caractere, em em, na Bricolage a 75% e peso 700 (o mesmo valor conservador do Hero no celular). */
+    --fit: 0.45;
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    max-width: 1440px;
+    margin-inline: auto;
+    padding: 1.5rem var(--gutter) 0;
+    container-type: inline-size;
+    overflow-anchor: none;
+  }
+
+  .pp-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+  .pp-back svg { transition: translate 300ms var(--ease); }
+  .pp-back:hover { color: var(--ink); }
+  .pp-back:hover svg { translate: -3px 0; }
+
+  .pp-cover {
+    /* No desktop a capa cede altura para o nome caber na primeira tela; nunca passa de 1080 px (limite da prévia). */
+    width: min(100%, 1080px, max(30rem, (100svh - 25rem) * 16 / 9));
+    margin: 0.5rem auto 0;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--line);
+  }
+  .pp-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  .pp-head { margin-top: clamp(2rem, 4vw, 3rem); }
+  .pp-title {
+    margin: 0;
+    font: 700 min(13rem, calc(100cqw / (var(--len) * var(--fit)))) / 0.86 var(--font-display);
+    font-stretch: 75%;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .pp-date { margin: 1.25rem 0 0; color: var(--muted); font-size: 1rem; font-weight: 500; }
+
+  .pp-body {
+    display: grid;
+    grid-template-columns: minmax(0, 65ch) minmax(14rem, 20rem);
+    justify-content: space-between;
+    gap: 4rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+  .pp-summary {
+    margin: 0;
+    font-size: clamp(1.375rem, 2vw, 1.75rem);
+    line-height: 1.3;
+    font-weight: 500;
+    text-wrap: pretty;
+  }
+  .pp-desc { margin-top: 2rem; font-size: 1.0625rem; line-height: 1.65; color: color-mix(in srgb, var(--ink) 86%, var(--bg)); }
+  .pp-desc :global(p) { margin: 0 0 1.1em; text-wrap: pretty; }
+  .pp-desc :global(strong) { color: var(--ink); font-weight: 600; }
+
+  .pp-label { margin: 0 0 0.75rem; color: var(--muted); font-size: 0.9375rem; font-weight: 500; }
+  .pp-stack { margin: 0; padding: 0; list-style: none; }
+  .pp-stack li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--line);
+    font-weight: 500;
+  }
+  .pp-stack li:first-child { border-top: 1px solid var(--line); }
+
+  .pp-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 2rem 0 0; padding: 0; list-style: none; }
+  .pp-action,
+  .pp-private :global(.pp-lock) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    background: transparent;
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+  }
+  .pp-action svg { transition: translate 300ms var(--ease); }
+  .pp-action:hover { border-color: var(--ink); }
+  .pp-action:hover svg { translate: 2px -2px; }
+  .pp-action.primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+  .pp-action.primary:hover { background: color-mix(in srgb, var(--accent) 86%, var(--ink)); }
+  .pp-private :global(.pp-lock) { color: var(--muted); cursor: pointer; }
+  .pp-private :global(.pp-lock:hover) { color: var(--ink); }
+
+  .pp-next {
+    display: block;
+    margin-top: clamp(6rem, 14vw, 11rem);
+    padding: 2rem 0 clamp(3rem, 8vw, 6rem);
+    border-top: 1px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+    overflow-x: clip;
+  }
+  .pp-next-label { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); font-size: 0.9375rem; font-weight: 500; }
+  .pp-next-label svg { transition: translate 300ms var(--ease); }
+  .pp-next-name {
+    display: block;
+    margin-top: 1rem;
+    font: 700 min(13rem, calc(100cqw / (var(--len) * var(--fit)))) / 0.86 var(--font-display);
+    font-stretch: 75%;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    transition: color 300ms ease;
+  }
+  .pp-next:hover .pp-next-name { color: var(--accent); }
+  .pp-next:hover .pp-next-label svg { translate: 4px 0; }
+
+  .pp-bar { display: none; }
+
+  @media (max-width: 767.98px) {
+    /* Em linhas curtas o W e o M pesam mais na média: medido até 0,472 em "WSA Mármores". */
+    .pp { --fit: 0.5; padding-top: 0.5rem; }
+    .pp-cover { width: auto; margin-inline: calc(-1 * var(--gutter)); border-radius: 0; }
+    .pp-head { margin-top: 2rem; }
+    .pp-title,
+    .pp-next-name {
+      font-size: min(28vw, calc(100cqw / (var(--line) * var(--fit))));
+      /* O tamanho vem da melhor divisão em duas linhas; o quebra-linha comum nunca passa de duas, o balanceado pode passar. */
+      text-wrap: wrap;
+    }
+    .pp-body { grid-template-columns: minmax(0, 1fr); gap: 3rem; margin-top: 2rem; }
+    .pp-desc { font-size: 1rem; }
+
+    /* A stack rola na própria linha, de borda a borda. */
+    .pp-stack {
+      display: flex;
+      gap: 0.5rem;
+      margin-inline: calc(-1 * var(--gutter));
+      padding-inline: var(--gutter);
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      scroll-padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .pp-stack li,
+    .pp-stack li:first-child {
+      flex: none;
+      padding: 0.55rem 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      scroll-snap-align: start;
+      white-space: nowrap;
+    }
+    .pp-stack li :global(img) { width: 20px; height: 20px; }
+
+    /* Os links públicos ficam na barra do pé; aqui fica só o cadeado. */
+    .pp-links .pp-action { display: none; }
+    .pp-links:not(:has(.pp-private)) { display: none; }
+
+    .pp.has-bar { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)); }
+    .pp-bar {
+      position: fixed;
+      inset: auto 0 0;
+      z-index: 30;
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.75rem var(--gutter) calc(0.75rem + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+    .pp-bar .pp-action { flex: 1; justify-content: center; min-height: 48px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-back svg, .pp-action svg, .pp-next-label svg { transition: none; }
+  }
+</style>

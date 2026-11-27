@@ -41,11 +41,11 @@ const DOTS = [1, 2, 3, 4, 5]
                   <li class="sk-item">
                     <Tip hover id={`skill-${s.id}`} label={s.title} class="sk-name">
                       <Fragment slot="trigger">
-                        <Image class="sk-icon" src={TECH[s.icon].icon} alt="" width={28} height={28} />
+                        <Image class="sk-icon tech-icon" src={TECH[s.icon].icon} alt="" width={28} height={28} />
                         <span class="sk-text">{s.title}</span>
                       </Fragment>
                       <span class="sk-tip">
-                        <Image src={TECH[s.icon].icon} alt="" width={20} height={20} />
+                        <Image class="tech-icon" src={TECH[s.icon].icon} alt="" width={20} height={20} />
                         {msg(`cat_${s.category}`)}
                       </span>
                       {dots}

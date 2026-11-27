@@ -1,8 +1,6 @@
 {
   "header_skip": "Pular para o conteúdo",
   "header_home_label": "Pedro Henrique, início",
-  "theme_to_light": "Mudar para o tema claro",
-  "theme_to_dark": "Mudar para o tema escuro",
   "theme_dark_label": "Tema escuro",
   "lang_switcher_label": "Idioma",
   "lang_pt": "Português",
@@ -88,9 +86,6 @@
   "contact_github": "GitHub",
   "contact_new_tab": "(abre em nova aba)",
   "footer_copyright": "© {year} Pedro Henrique do Nascimento Silva",
-  "footer_role": "Engenheiro de software full stack · Carapicuíba, SP",
-  "footer_updated": "Atualizado em {month}",
-  "project_breadcrumb_label": "Trilha de navegação",
   "project_breadcrumb_home": "Início",
   "project_breadcrumb_projects": "Projetos",
   "project_date": "Data",

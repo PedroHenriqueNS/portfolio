@@ -11,10 +11,8 @@ import { skills } from './skills'
 import { contact } from './contact'
 import { page } from './page'
 
-export type { Conditions, Scene } from './scene'
-
 /** Na ordem do DOM: um gatilho criado antes de uma seção presa acima dele erra a posição. A página do projeto não tem as seções da home. */
-export const SCENES: Scene[] = [fx, hero, about, experience, stage, list, skills, contact, page]
+const SCENES: Scene[] = [fx, hero, about, experience, stage, list, skills, contact, page]
 
 gsap.registerPlugin(ScrollTrigger)
 // A barra de endereço do celular muda a altura da janela; isso não deve recalcular as cenas.

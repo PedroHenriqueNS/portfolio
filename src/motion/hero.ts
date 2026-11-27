@@ -15,8 +15,6 @@ export const hero: Scene = (root, c) => {
   const photo = section.querySelector<HTMLElement>('.hero-photo')!
   const scrub = { trigger: section, start: 'top top', end: 'bottom top', scrub: 0.4 }
 
-  // overflow-anchor: o Firefox desloca o scroll pelo deslocamento de uma entrada se ancorar num elemento que se move.
-  gsap.set([name, card], { overflowAnchor: 'none' })
   const done = (el: HTMLElement, props: string) => () => gsap.set(el, { clearProps: props })
 
   // Desfoque em tipo gigante é caro: curto, limpo ao terminar, e no celular só opacidade e deslocamento.

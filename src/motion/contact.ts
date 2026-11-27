@@ -12,8 +12,6 @@ export const contact: Scene = (root, c) => {
   const title = section.querySelector<HTMLElement>('.ct-title')!
   const horizon = section.querySelector<HTMLElement>('.ct-horizon i')!
 
-  // overflow-anchor: o Firefox não ancora o scroll num elemento que se move.
-  gsap.set(title, { overflowAnchor: 'none' })
   // Desfoque em tipo gigante é caro: no celular o foco é só opacidade.
   gsap.fromTo(
     title,

@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Astro / testes
+src/paraglide
+test-results
+playwright-report
+.astro

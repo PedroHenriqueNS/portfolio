@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@source not "../../old";
+
+:root {
+  --bg: #EEF0F3;
+  --ink: #0E1420;
+  --muted: #7F899B;
+  --accent: #2B4BFF;
+  --line: #D3D8E0;
+  --closing: #060A22;
+}
+
+html.dark {
+  --bg: #060918;
+  --ink: #EDEFFB;
+  --muted: #8A92BD;
+  --accent: #6E86FF;
+  --line: #1E2548;
+  --closing: #03051A;
+}

@@ -1,0 +1,18 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- Definição do gradiente -->
+    <defs>
+        <linearGradient id="textGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+            <!-- <stop offset="0%" stop-color="#005F99"/> -->
+            <stop offset="0%" stop-color="#3b82f6"/>
+            <!-- <stop offset="100%" stop-color="#00AEEF"/> -->
+            <stop offset="100%" stop-color="#06b6d4"/>
+        </linearGradient>
+    </defs>
+
+    <!-- Fundo circular -->
+    <circle cx="100" cy="100" r="90" fill="#121212"/>
+    <circle cx="100" cy="100" r="94" fill="none" stroke="url(#textGradient)" stroke-width="04"/>
+
+    <!-- Texto com gradiente -->
+    <text x="100" y="135" font-size="100" font-weight="bold" text-anchor="middle" fill="url(#textGradient)" font-family="Arial, sans-serif">PH</text>
+</svg>

@@ -1,4 +1,5 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
+import { KIND_ICON } from '../../src/data/icons'
 
 const icon = (loc: ReturnType<Page['locator']>) => loc.locator('svg[data-icon]')
 
@@ -74,4 +75,51 @@ test('ícones na página do projeto', async ({ page }) => {
     await expect(icon(page.locator(sel).first()), sel).not.toHaveCount(0)
   }
   await expectAllDecorative(page)
+})
+
+const rotate = (el: Locator) => el.evaluate((e) => getComputedStyle(e).rotate)
+
+test('abrir um chip gira só o "+", não o ícone da frente', async ({ page }) => {
+  await page.goto('/')
+  const chip = page.locator('[data-section="about"] .about-edu .tip-chip').first()
+  await chip.focus()
+  await page.keyboard.press('Enter')
+  await expect.poll(() => rotate(chip.locator('svg[data-icon="plus"]'))).toBe('45deg')
+  expect(await rotate(chip.locator('svg[data-icon]:not([data-icon="plus"])'))).toBe('none')
+})
+
+test('abrir o código privado não gira o cadeado', async ({ page }) => {
+  await page.goto('/projetos/cloud-barueri')
+  const lock = page.locator('.pp-lock')
+  await lock.focus()
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.pp-private [popover]:popover-open, .pp-private + [popover]:popover-open, [popover]:popover-open')).toHaveCount(1)
+  await page.waitForTimeout(400)
+  expect(await rotate(lock.locator('svg[data-icon="lock"]'))).toBe('none')
+})
+
+test('o tipo tem o mesmo ícone no palco, na lista e na página do projeto', async ({ page }) => {
+  await page.goto('/')
+  const stage = await page.locator('[data-section="stage"] .stage-item:has(a[data-project="linkeza"]) .stage-kind svg[data-icon]').getAttribute('data-icon')
+  const list = await page.locator('[data-section="projects"] a[data-project="sandro-mastellari"] .plist-label svg[data-icon]').getAttribute('data-icon')
+  expect(stage).toBe(KIND_ICON.saas)
+  expect(list).toBe(KIND_ICON.campaign)
+  for (const [slug, kind] of [['linkeza', 'saas'], ['sandro-mastellari', 'campaign']] as const) {
+    await page.goto(`/projetos/${slug}`)
+    await expect(page.locator('.pp-kind svg[data-icon]')).toHaveAttribute('data-icon', KIND_ICON[kind])
+  }
+})
+
+test.describe('sugestão de idioma', () => {
+  test.use({ locale: 'en-US' })
+  test('a pílula tem o ícone de idioma e o "x"', async ({ page }) => {
+    await page.goto('/')
+    const pill = page.locator('[data-lang-suggest] [data-suggest]:not([hidden])')
+    await expect(pill.locator('svg[data-icon="languages"]')).toBeVisible()
+    await expect(pill.locator('svg[data-icon="x"]')).toBeVisible()
+    const box = (await page.locator('[data-lang-suggest]').boundingBox())!
+    expect(box.width).toBeLessThanOrEqual(320)
+    const tops = await pill.locator('a, button').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().top)))
+    expect(new Set(tops).size).toBe(1)
+  })
 })

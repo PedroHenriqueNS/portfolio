@@ -9,7 +9,7 @@ interface Props {
   hover?: boolean
   class?: string
   /** Ícone antes do texto do chip padrão. */
-  icon?: string
+  icon?: IconName
 }
 
 const { label, id, hover = false, class: cls, icon } = Astro.props
@@ -22,7 +22,7 @@ const tipId = `tip-${id}`
       <slot name="trigger" />
     ) : (
       <>
-        {icon && <Icon name={icon as IconName} />}
+        {icon && <Icon name={icon} />}
         <span>{label}</span>
         <Icon name="plus" size="14px" />
       </>
@@ -124,10 +124,10 @@ const tipId = `tip-${id}`
     touch-action: manipulation;
     transition: border-color 200ms ease, background-color 200ms ease;
   }
-  .tip-chip :global(svg) { transition: rotate 250ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .tip-chip :global(svg[data-icon="plus"]) { transition: rotate 250ms cubic-bezier(0.2, 0.8, 0.2, 1); }
   .tip-chip:hover { border-color: var(--ink); }
   .tip-chip:has(+ :popover-open) { border-color: var(--accent); }
-  .tip-chip:has(+ :popover-open) :global(svg) { rotate: 45deg; }
+  .tip-chip:has(+ :popover-open) :global(svg[data-icon="plus"]) { rotate: 45deg; }
 
   .tip-card {
     margin: 0;

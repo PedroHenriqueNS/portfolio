@@ -99,3 +99,33 @@ test('no celular, Tab e Shift+Tab nunca param atrás de outra folha', async ({ p
     }
   }
 })
+
+test('o local da primeira entrada aparece com o ícone no trecho revelado', async ({ page }) => {
+  await page.goto('/')
+  const item = section(page).locator('.xp-item').first()
+  if (isMobile(page)) {
+    await item.locator('.xp-open').click()
+    const loc = page.locator('dialog[data-drawer][open] .xp-location')
+    await expect(loc).toHaveText(/Carapicuíba, SP/)
+    await expect(loc.locator('svg[data-icon="map-pin"]')).toBeVisible()
+  } else {
+    const top = await section(page).evaluate((el) => el.closest('.pin-spacer')!.getBoundingClientRect().top + scrollY)
+    await page.evaluate((y) => scrollTo(0, y + 100), top)
+    await item.locator('.xp-toggle').focus()
+    await page.keyboard.press('Enter')
+    const loc = item.locator('.xp-more .xp-location')
+    await expect(loc).toBeVisible()
+    await expect(loc).toHaveText(/Carapicuíba, SP/)
+    await expect(loc.locator('svg[data-icon="map-pin"]')).toBeVisible()
+  }
+})
+
+test.describe('sem JavaScript (local)', () => {
+  test.use({ javaScriptEnabled: false })
+  test('no celular, o local aparece na folha', async ({ page }) => {
+    test.skip(!isMobile(page), 'só no celular')
+    await page.goto('/')
+    await expect(section(page).locator('.xp-more .xp-location').first()).toContainText('Carapicuíba, SP')
+    await expect(section(page).locator('.xp-more .xp-location').first()).toBeVisible()
+  })
+})

@@ -55,6 +55,7 @@ const closeLabel = m.xp_close({}, { locale })
           <p class="xp-period"><Icon name="calendar" space="after" />{e.period}</p>
           <div class="xp-more" id={`xp-${e.id}-more`}>
             <p class="xp-summary">{e.summary}</p>
+            <p class="xp-location"><Icon name="map-pin" space="after" />{e.location}</p>
             <ul class="xp-stack">
               {e.stack.map((t) => (
                 <li title={t.name}>{t.icon ? <Image class="tech-icon" src={t.icon} alt={t.name} width={24} height={24} /> : <span>{t.name}</span>}</li>
@@ -67,6 +68,7 @@ const closeLabel = m.xp_close({}, { locale })
           <Drawer id={`xp-${e.id}-drawer`} title={e.company} closeLabel={closeLabel}>
             <p class="xp-drawer-meta">{e.role} · {e.period}</p>
             <p class="xp-summary">{e.summary}</p>
+            <p class="xp-location"><Icon name="map-pin" space="after" />{e.location}</p>
             <ul class="xp-chips">
               {e.stack.map((t) => (
                 <li>
@@ -191,6 +193,7 @@ const closeLabel = m.xp_close({}, { locale })
     line-height: 1.55;
     color: var(--muted);
   }
+  .xp-location { font-size: 0.8125rem; color: var(--muted); }
   .xp-stack { display: flex; flex-wrap: wrap; gap: 0.875rem; }
   .xp-stack li { display: grid; place-items: center; min-height: 1.5rem; font-size: 0.8125rem; color: var(--muted); }
   .xp-stack img { width: 1.5rem; height: 1.5rem; }
@@ -257,7 +260,7 @@ const closeLabel = m.xp_close({}, { locale })
     }
     :global(html.motion) .xp-item { position: sticky; top: calc(5rem + var(--i) * 0.875rem); }
     .xp-role { color: var(--sheet-ink); }
-    .xp-period, .xp-more .xp-summary, .xp-stack li { color: var(--sheet-soft); }
+    .xp-period, .xp-more .xp-summary, .xp-more .xp-location, .xp-stack li { color: var(--sheet-soft); }
     .xp-dot { background: var(--sheet-dot); }
     /* Ícones de marca escuros somem na folha invertida: cada um ganha uma base clara. */
     .xp-stack img { box-sizing: content-box; padding: 0.25rem; border-radius: 0.5rem; background: var(--bg); }

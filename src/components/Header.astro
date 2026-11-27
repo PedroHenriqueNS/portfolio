@@ -4,6 +4,7 @@ import { HREFLANG, HTML_LANG, LOCALES, type Locale } from '@/i18n/locales'
 import { alternates, homePath } from '@/i18n/routes'
 import LangSwitch from './LangSwitch.astro'
 import ThemeToggle from './ThemeToggle.astro'
+import Icon from './Icon.astro'
 
 interface Props {
   locale: Locale
@@ -32,10 +33,10 @@ const alts = alternates(path)
     LOCALES.filter((l) => l !== locale).map((l) => (
       <div data-suggest={l} lang={HTML_LANG[l]} hidden class="lang-suggest-pill">
         <a href={alts[l]} hreflang={HREFLANG[l]} data-suggest-link>
-          {m.lang_suggest({}, { locale: l })}
+          <Icon name="languages" space="after" />{m.lang_suggest({}, { locale: l })}
         </a>
         <button type="button" data-suggest-dismiss>
-          {m.lang_suggest_dismiss({}, { locale: l })}
+          <Icon name="x" space="after" />{m.lang_suggest_dismiss({}, { locale: l })}
         </button>
       </div>
     ))
@@ -73,6 +74,9 @@ const alts = alternates(path)
     border-radius: 9999px;
     white-space: nowrap;
     touch-action: manipulation;
+  }
+  @media (max-width: 479.98px) {
+    .lang-suggest-pill > * { padding: 0 0.625rem; }
   }
   .lang-suggest-pill a { background: var(--accent); color: var(--on-accent); font-weight: 600; text-decoration: none; }
   .lang-suggest-pill button { color: var(--muted); cursor: pointer; }

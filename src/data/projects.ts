@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro'
 import type { TechId } from './tech'
-import LinkezaImage from '@/assets/images/linkeza.jpg'
+import LinkezaImage from '@/assets/images/linkeza_preview.webp'
 import JeModestoImage from '@/assets/images/je_modesto_preview.webp'
 import ClauCamargoImage from '@/assets/images/clau_camargo_preview.webp'
 import WsaMarmoresImage from '@/assets/images/wsa_marmores_preview.webp'

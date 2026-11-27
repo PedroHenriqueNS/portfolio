@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { expectSectionAtTop } from './anchor'
 
 test('o tema alterna, nunca deixa o fundo transparente e sobrevive ao reload', async ({ page }) => {
   await page.goto('/')
@@ -66,14 +67,17 @@ test.describe('sugestão de idioma com o navegador em português', () => {
   })
 })
 
-test('o seletor de idioma leva à mesma seção no outro idioma', async ({ page }) => {
-  await page.goto('/#contact')
-  await page.locator('.lang-switch summary').click()
-  await expect(page.locator('a[data-lang="es"]')).toHaveAttribute('href', '/es#contact')
-  await page.locator('a[data-lang="es"]').click()
-  await expect(page).toHaveURL(/\/es#contact$/)
-  await expect(page.locator('html')).toHaveAttribute('lang', 'es')
-})
+for (const lang of ['en', 'es']) {
+  test(`o seletor de idioma leva à mesma seção em ${lang}`, async ({ page }) => {
+    await page.goto('/#contact')
+    await page.locator('.lang-switch summary').click()
+    await expect(page.locator(`a[data-lang="${lang}"]`)).toHaveAttribute('href', `/${lang}#contact`)
+    await page.locator(`a[data-lang="${lang}"]`).click()
+    await expect(page).toHaveURL(new RegExp(`/${lang}#contact$`))
+    await expect(page.locator('html')).toHaveAttribute('lang', lang === 'en' ? 'en-US' : 'es')
+    await expectSectionAtTop(page, 'contact')
+  })
+}
 
 test('o tema escuro continua depois de uma navegação do ClientRouter', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' })

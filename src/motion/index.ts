@@ -24,8 +24,11 @@ let mm: gsap.MatchMedia | undefined
 // Ao voltar pelo histórico o roteador restaura o scroll antes de as cenas criarem os pins, numa página ainda
 // mais curta: a posição sai cortada. Guarda a posição salva da entrada e a reaplica depois das cenas.
 let restoreY: number | undefined
+// Verdadeiro só na primeira rodada das cenas de uma página; uma troca de breakpoint não volta à âncora.
+let arriving = false
 
 function start() {
+  arriving = true
   mm?.revert()
   mm = gsap.matchMedia()
   mm.add(
@@ -56,17 +59,21 @@ function start() {
       // WebKit: na volta à home pelo ClientRouter, uma folha de estilo ainda não vale no astro:page-load; as seções
       // medem sem CSS e os pins saem curtos (o palco fica vazio). Um quadro depois o estilo já vale: mede de novo.
       // Num retorno pelo histórico, a posição restaurada abaixo pode ter sido cortada pela página curta: reaplica.
+      // Numa chegada com #âncora o roteador rola antes de os pins existirem; eles somam altura acima do alvo: rola de novo.
       const back = restoreY
+      const hash = arriving && back === undefined ? location.hash : ''
       requestAnimationFrame(() => {
         if (!live) return
         ScrollTrigger.refresh()
         if (back !== undefined) scrollTo({ top: back, behavior: 'instant' })
+        else if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'instant' })
       })
       return runCleanups
     },
   )
   if (restoreY !== undefined) scrollTo({ top: restoreY, behavior: 'instant' })
   restoreY = undefined
+  arriving = false
 }
 
 document.addEventListener('astro:page-load', start)

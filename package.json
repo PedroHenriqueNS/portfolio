@@ -12,6 +12,7 @@
     "check": "astro check",
     "check:messages": "node scripts/check-messages.mjs",
     "e2e": "playwright test",
+    "check:apache": "bash scripts/check-apache.sh",
     "og:image": "node scripts/og-image.mjs"
   },
   "devDependencies": {

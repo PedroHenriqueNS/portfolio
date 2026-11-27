@@ -1,0 +1,69 @@
+# Site estático em três idiomas (pt-BR na raiz, /en, /es). Cada página é um <caminho>.html.
+# Testado contra um Apache 2.4 de verdade: yarn build && yarn check:apache (scripts/check-apache.sh).
+RewriteEngine On
+RewriteBase /
+
+# Sem isto, uma pasta (en/, es/, projetos/) faria o mod_dir redirecionar /en para /en/.
+# As URLs limpas são servidas pelas regras abaixo; /en/ é redirecionada por nós para /en.
+DirectorySlash Off
+
+# só-produção: início
+# Força HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Canonicaliza no apex (remove www)
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+# só-produção: fim
+
+# Legado: /projeto-<slug>.html (arquivo plano do site antigo, já indexado) vai para a URL canônica.
+RewriteRule ^projeto-([a-z0-9-]+)\.html$ /projetos/$1 [R=301,L]
+
+# O arquivo pré-renderizado não é uma URL pública: /index.html, /en.html, /projetos/<slug>.html
+# vão para a URL limpa. Olha o pedido original (THE_REQUEST) para não repetir o redirect
+# quando a regra de baixo reescreve internamente para <caminho>.html. 404.html fica de fora.
+RewriteCond %{THE_REQUEST} \s/[^\s?]*\.html[\s?]
+RewriteCond %{REQUEST_URI} !/404\.html$
+RewriteRule ^index\.html$ / [R=301,L]
+RewriteCond %{THE_REQUEST} \s/[^\s?]*\.html[\s?]
+RewriteCond %{REQUEST_URI} !/404\.html$
+RewriteRule ^(.+)\.html$ /$1 [R=301,L]
+
+# /index (sem extensão) também é a home duplicada.
+RewriteRule ^index$ / [R=301,L]
+
+# Barra final não é URL: /en/ e /projetos/linkeza/ vão para a versão sem barra.
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# Regra geral: se existe <caminho>.html, serve esse arquivo na URL limpa (/en, /projetos/<slug>).
+# /404 não vira página: a 404 só aparece como resposta de erro.
+RewriteCond %{REQUEST_URI} !/404$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.+)$ /$1.html [L]
+
+# O que sobrou e não é arquivo (nem pasta como /projetos ou /en/projects, que o Apache listaria
+# ou negaria com 403) é 404 honesto. Antes caía no index.html; agora responde a página 404.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^.+$ - [R=404,L]
+
+# Página 404 por idioma: /en/... usa en/404.html, /es/... usa es/404.html, o resto a da raiz.
+ErrorDocument 404 /404.html
+<If "%{REQUEST_URI} =~ m#^/en(/|$)#">
+  ErrorDocument 404 /en/404.html
+</If>
+<If "%{REQUEST_URI} =~ m#^/es(/|$)#">
+  ErrorDocument 404 /es/404.html
+</If>
+
+# HTML e o currículo sempre revalidados: um deploy novo aparece na hora. _astro/* tem hash no nome.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|pdf)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# llms.txt em UTF-8, para os acentos chegarem certos.
+AddDefaultCharset UTF-8
+AddType "text/plain; charset=utf-8" .txt

@@ -5,6 +5,8 @@ import type { Locale } from '@/i18n/locales'
 import { SKILLS } from '@/data/skills'
 import { TECH } from '@/data/tech'
 import Tip from '@/components/Tip.astro'
+import Icon from '@/components/Icon.astro'
+import { GROUP_ICON } from '@/data/icons'
 
 interface Props {
   locale: Locale
@@ -24,7 +26,7 @@ const DOTS = [1, 2, 3, 4, 5]
   {
     GROUPS.map((g) => (
       <div class="sk-group" data-group={g}>
-        <h3 class="sk-label">{msg(`skills_${g}`)}</h3>
+        <h3 class="sk-label"><Icon name={GROUP_ICON[g]} space="after" />{msg(`skills_${g}`)}</h3>
         <div class="sk-band">
           <div class="sk-track">
             <ul class="sk-list">
@@ -61,7 +63,7 @@ const DOTS = [1, 2, 3, 4, 5]
     ))
   }
   <div class="sk-how">
-    <Tip label={m.skills_how_label({}, { locale })} id="skills-how">{m.skills_how({}, { locale })}</Tip>
+    <Tip label={m.skills_how_label({}, { locale })} id="skills-how" icon="workflow">{m.skills_how({}, { locale })}</Tip>
   </div>
 </section>
 

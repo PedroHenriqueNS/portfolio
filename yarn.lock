@@ -1067,6 +1067,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lucide/astro@npm:^1.82.0":
+  version: 1.82.0
+  resolution: "@lucide/astro@npm:1.82.0"
+  peerDependencies:
+    astro: ^4 || ^5 || ^6 || ^7
+  checksum: 10c0/4dd9a91ab708461933db5cbfc18d5d982affb84cdbd20fcf7dc7b628623ec1091808e29c74f4fc17f43936c2b0c28efb3bc69b415d1dbe6beec3f3fafb57cdfa
+  languageName: node
+  linkType: hard
+
 "@napi-rs/wasm-runtime@npm:1.2.4":
   version: 1.2.4
   resolution: "@napi-rs/wasm-runtime@npm:1.2.4"
@@ -3427,6 +3436,7 @@ __metadata:
     "@fontsource-variable/bricolage-grotesque": "npm:^5.3.0"
     "@fontsource-variable/hanken-grotesk": "npm:^5.3.0"
     "@inlang/paraglide-js": "npm:^3.2.2"
+    "@lucide/astro": "npm:^1.82.0"
     "@playwright/test": "npm:^1.65.1"
     "@tailwindcss/vite": "npm:^4.3.5"
     astro: "npm:^7.4.13"

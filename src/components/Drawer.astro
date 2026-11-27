@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro'
 // Detalhe em gaveta: <dialog> nativo. Abaixo de 768 px sobe do pé da tela; acima disso é um painel centrado.
 // Quem abre é um botão com `commandfor={id} command="show-modal"` (funciona sem script onde o navegador
 // conhece comandos); o script abaixo cobre os demais, anima o fechamento e fecha com toque fora.
@@ -16,9 +17,7 @@ const { id, title, closeLabel } = Astro.props
     <div class="drawer-head">
       <h2 id={`${id}-title`} class="drawer-title">{title}</h2>
       <button type="button" class="icon-button drawer-close" data-drawer-close aria-label={closeLabel}>
-        <svg aria-hidden="true" viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
-          <path d="M4 4l8 8M12 4l-8 8"></path>
-        </svg>
+        <Icon name="x" size="18px" />
       </button>
     </div>
     <slot />

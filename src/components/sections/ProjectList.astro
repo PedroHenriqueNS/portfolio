@@ -5,6 +5,8 @@ import type { Locale } from '@/i18n/locales'
 import { projectPath } from '@/i18n/routes'
 import type { Project } from '@/lib/projects'
 import { yearOf } from '@/lib/format'
+import Icon from '@/components/Icon.astro'
+import { KIND_ICON } from '@/data/icons'
 
 interface Props {
   locale: Locale
@@ -21,6 +23,7 @@ const items = projects
     slug: p.slug,
     image: p.image,
     name: p.short ?? p.title,
+    icon: KIND_ICON[p.kind],
     href: projectPath(locale, p.slug),
     // Mesmo rótulo do palco; sem data, só o tipo.
     label: [msg(`kind_${p.kind}`), yearOf(p.date)].filter(Boolean).join(' · '),
@@ -39,7 +42,7 @@ const items = projects
               <span class="plist-thumb" aria-hidden="true" transition:name={`project-${p.slug}`}>
                 <Image src={p.image} alt="" widths={[120, 420, 840]} sizes="(min-width: 768px) and (hover: hover) and (pointer: fine) min(34vw, 420px), 60px" loading="lazy" />
               </span>
-              <span class="plist-label">{p.label}</span>
+              <span class="plist-label"><Icon name={p.icon} space="after" />{p.label}</span>
             </span>
           </a>
         </li>

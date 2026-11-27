@@ -19,6 +19,7 @@ const units = raw.split(/\*\*(.+?)\*\*/).flatMap((part, i) =>
   i % 2 ? [{ text: part, num: true }] : part.split(/(\s+)/).filter(Boolean).map((text) => ({ text, num: false })),
 )
 const EDUCATION = ['cs', 'telecom', 'english'] as const
+const EDU_ICON = { cs: 'graduation-cap', telecom: 'radio-tower', english: 'languages' } as const
 ---
 
 <section data-section="about" id="about" class="about" aria-labelledby="about-title">
@@ -35,7 +36,7 @@ const EDUCATION = ['cs', 'telecom', 'english'] as const
     {
       EDUCATION.map((e) => (
         <li>
-          <Tip label={msg(`edu_${e}_label`)} id={`edu-${e}`}>
+          <Tip label={msg(`edu_${e}_label`)} id={`edu-${e}`} icon={EDU_ICON[e]}>
             {msg(`edu_${e}_detail`)}
           </Tip>
         </li>

@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import * as m from '@/paraglide/messages.js'
 import type { Locale } from '@/i18n/locales'
 import photo from '@/assets/images/pedro.jpg'
+import Icon from '@/components/Icon.astro'
 
 interface Props {
   locale: Locale
@@ -14,6 +15,7 @@ const name = m.hero_name({}, { locale })
 // O tamanho do nome sai do número de letras: no desktop a linha enche a largura; no celular, cada palavra.
 const [first, ...rest] = name.split(' ')
 const last = rest.join(' ')
+const RESUME_ICON = ['download', 'file-text'] as const
 ---
 
 <section data-section="hero" id="hero" class="hero" style={`--chars: ${name.length}; --w1: ${first.length}; --w2: ${last.length}`}>
@@ -40,13 +42,13 @@ const last = rest.join(' ')
         resumes.map((r, i) => (
           <li>
             <a href={r.href} type="application/pdf" aria-label={r.label} data-action class:list={['pill', { 'pill-main': i === 0 }]}>
-              {r.text}
+              <Icon name={RESUME_ICON[i] ?? 'file-text'} space="after" />{r.text}
             </a>
           </li>
         ))
       }
       <li>
-        <a href="#contact" data-action class="pill">{m.hero_cta_contact({}, { locale })}</a>
+        <a href="#contact" data-action class="pill"><Icon name="message-circle" space="after" />{m.hero_cta_contact({}, { locale })}</a>
       </li>
     </ul>
   </div>

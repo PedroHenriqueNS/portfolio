@@ -125,3 +125,8 @@ a { color: var(--accent); text-underline-offset: 0.2em; }
 
 html:not(.dark) .theme-icon-sun,
 html.dark .theme-icon-moon { display: none; }
+
+/* Ícones de interface (src/components/Icon.astro): seguem o texto, nunca encolhem. */
+svg[data-icon] { display: inline-block; flex: none; vertical-align: -0.18em; }
+svg[data-icon].ic-after { margin-inline-end: 0.4em; }
+svg[data-icon].ic-before { margin-inline-start: 0.4em; }

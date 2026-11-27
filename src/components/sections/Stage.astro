@@ -5,6 +5,8 @@ import type { Locale } from '@/i18n/locales'
 import { projectPath } from '@/i18n/routes'
 import type { Project } from '@/lib/projects'
 import { yearOf } from '@/lib/format'
+import Icon from '@/components/Icon.astro'
+import { KIND_ICON } from '@/data/icons'
 
 interface Props {
   locale: Locale
@@ -60,12 +62,10 @@ const open = m.stage_open({}, { locale })
             {/* Cópia vazada por cima do cartão: onde os dois se cruzam, o nome continua legível. */}
             <span class="stage-word stage-ghost" aria-hidden="true">{p.name}</span>
             <div class="stage-meta">
-              <p class="stage-kind">{p.label}</p>
+              <p class="stage-kind"><Icon name={KIND_ICON[p.kind]} space="after" />{p.label}</p>
               <a class="stage-open" data-project={p.slug} href={p.href} aria-label={p.openLabel}>
                 {open}
-                <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3.5 8h9M8.5 4l4 4-4 4" />
-                </svg>
+                <Icon name="arrow-right" space="before" />
               </a>
             </div>
             <span class="stage-shade" aria-hidden="true"></span>
@@ -76,7 +76,7 @@ const open = m.stage_open({}, { locale })
     <div class="stage-bar">
       <div class="stage-bar-inner">
         <span class="stage-count" aria-hidden="true">1 / {total}</span>
-        <a class="stage-all" href="#projects">{m.stage_all({ count: projects.length }, { locale })}</a>
+        <a class="stage-all" href="#projects"><Icon name="layout-grid" space="after" />{m.stage_all({ count: projects.length }, { locale })}</a>
       </div>
     </div>
   </div>
@@ -198,8 +198,8 @@ const open = m.stage_open({}, { locale })
     touch-action: manipulation;
   }
   .stage-open { background: var(--stage-ink); color: var(--c); }
-  .stage-open svg { transition: translate 300ms var(--ease); }
-  .stage-open:hover svg { translate: 3px 0; }
+  .stage-open :global(svg) { transition: translate 300ms var(--ease); }
+  .stage-open:hover :global(svg) { translate: 3px 0; }
   .stage-all {
     border: 1px solid rgb(255 255 255 / 0.7);
     color: var(--stage-ink);
@@ -272,6 +272,6 @@ const open = m.stage_open({}, { locale })
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .stage-open svg, .stage-all { transition: none; }
+    .stage-open :global(svg), .stage-all { transition: none; }
   }
 </style>

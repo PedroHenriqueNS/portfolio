@@ -10,6 +10,8 @@ import { formatMonth } from '@/lib/format'
 import { projectSeo } from '@/lib/seo'
 import { PROJECTS } from '@/data/projects'
 import { TECH } from '@/data/tech'
+import Icon from '@/components/Icon.astro'
+import { KIND_ICON } from '@/data/icons'
 
 interface Props {
   locale: Locale
@@ -19,6 +21,8 @@ interface Props {
 const { locale, project: p } = Astro.props
 const { Content } = p
 const next = PROJECTS.find((x) => x.slug === nextSlug(p.slug))!
+type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) => string
+const kindLabel = (m as unknown as Record<string, Message>)[`kind_${p.kind}`]({}, { locale })
 const nextName = next.short ?? next.title
 const newTab = m.contact_new_tab({}, { locale })
 const site = isPublic(p.projectUrl) ? p.projectUrl : undefined
@@ -33,15 +37,12 @@ const twoLines = (name: string) => {
   const w = name.split(' ')
   return Math.min(...w.map((_, i) => Math.max(w.slice(0, i + 1).join(' ').length, w.slice(i + 1).join(' ').length)))
 }
-const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
 ---
 
 <Base seo={projectSeo(locale, p)} locale={locale}>
   <article class:list={['pp', { 'has-bar': actions.length > 0 }]} data-page="project">
     <a class="pp-back" href={`${homePath(locale)}#projects`}>
-      <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12.5 8h-9M7.5 4l-4 4 4 4" />
-      </svg>
+      <Icon name="arrow-left" space="after" />
       {m.project_all({}, { locale })}
     </a>
 
@@ -58,14 +59,18 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
 
     <header class="pp-head" style={`--len: ${p.title.length}; --line: ${twoLines(p.title)}`}>
       <h1 class="pp-title" data-fit>{p.title}</h1>
-      {
-        p.date && (
-          <p class="pp-date">
-            <span class="sr-only">{m.project_date({}, { locale })}: </span>
-            <time datetime={p.date}>{formatMonth(p.date, locale)}</time>
-          </p>
-        )
-      }
+      <p class="pp-metaline">
+        <span class="pp-kind"><Icon name={KIND_ICON[p.kind]} space="after" />{kindLabel}</span>
+        {
+          p.date && (
+            <span class="pp-date">
+              <Icon name="calendar" space="after" />
+              <span class="sr-only">{m.project_date({}, { locale })}: </span>
+              <time datetime={p.date}>{formatMonth(p.date, locale)}</time>
+            </span>
+          )
+        }
+      </p>
     </header>
 
     <div class="pp-body">
@@ -75,7 +80,7 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
         <div class="pp-desc"><Content /></div>
       </div>
       <aside class="pp-side">
-        <h2 class="pp-label">{m.project_stack({}, { locale })}</h2>
+        <h2 class="pp-label"><Icon name="layers" space="after" />{m.project_stack({}, { locale })}</h2>
         <ul class="pp-stack">
           {
             p.stack.map((t) => (
@@ -93,9 +98,7 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
                 <a class:list={['pp-action', { primary: a.kind === 'site' }]} data-link={a.kind} href={a.url} target="_blank" rel="noopener noreferrer">
                   {a.text}
                   <span class="sr-only">{newTab}</span>
-                  <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                    <path d={arrow} />
-                  </svg>
+                  <Icon name={a.kind === 'site' ? 'external-link' : 'code'} space="before" />
                 </a>
               </li>
             ))
@@ -105,10 +108,7 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
               <li class="pp-private">
                 <Tip id={`private-${p.slug}`} label={m.project_private({}, { locale })} class="pp-lock">
                   <Fragment slot="trigger">
-                    <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" />
-                      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
-                    </svg>
+                    <Icon name="lock" space="after" />
                     {m.project_code({}, { locale })}
                     <span class="sr-only">: {m.project_private({}, { locale })}</span>
                   </Fragment>
@@ -124,9 +124,7 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
     <a class="pp-next" data-project={next.slug} href={projectPath(locale, next.slug)} style={`--len: ${nextName.length}; --line: ${twoLines(nextName)}`}>
       <span class="pp-next-label">
         {m.project_next({}, { locale })}
-        <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3.5 8h9M8.5 4l4 4-4 4" />
-        </svg>
+        <Icon name="arrow-right" space="before" />
       </span>
       <span class="pp-next-name">{nextName}</span>
     </a>
@@ -138,9 +136,7 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
             <a class:list={['pp-action', { primary: a.kind === 'site' }]} href={a.url} target="_blank" rel="noopener noreferrer">
               {a.text}
               <span class="sr-only">{newTab}</span>
-              <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                <path d={arrow} />
-              </svg>
+              <Icon name={a.kind === 'site' ? 'external-link' : 'code'} space="before" />
             </a>
           ))}
         </nav>
@@ -172,9 +168,9 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
     text-decoration: none;
     transition: color 200ms ease;
   }
-  .pp-back svg { transition: translate 300ms var(--ease); }
+  .pp-back :global(svg) { transition: translate 300ms var(--ease); }
   .pp-back:hover { color: var(--ink); }
-  .pp-back:hover svg { translate: -3px 0; }
+  .pp-back:hover :global(svg) { translate: -3px 0; }
 
   .pp-cover {
     /* No desktop a capa cede altura para o nome caber na primeira tela; nunca passa de 1080 px (limite da prévia). */
@@ -195,7 +191,8 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
     letter-spacing: -0.015em;
     text-wrap: balance;
   }
-  .pp-date { margin: 1.25rem 0 0; color: var(--muted); font-size: 1rem; font-weight: 500; }
+  .pp-kind + .pp-date::before { content: '·'; margin: 0 0.6em; }
+  .pp-metaline { margin: 1.25rem 0 0; color: var(--muted); font-size: 1rem; font-weight: 500; }
 
   .pp-body {
     display: grid;
@@ -244,9 +241,9 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
     background: transparent;
     transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
   }
-  .pp-action svg { transition: translate 300ms var(--ease); }
+  .pp-action :global(svg) { transition: translate 300ms var(--ease); }
   .pp-action:hover { border-color: var(--ink); }
-  .pp-action:hover svg { translate: 2px -2px; }
+  .pp-action:hover :global(svg) { translate: 2px -2px; }
   .pp-action.primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
   .pp-action.primary:hover { background: color-mix(in srgb, var(--accent) 86%, var(--ink)); }
   .pp-private :global(.pp-lock) { color: var(--muted); cursor: pointer; }
@@ -262,7 +259,7 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
     overflow-x: clip;
   }
   .pp-next-label { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); font-size: 0.9375rem; font-weight: 500; }
-  .pp-next-label svg { transition: translate 300ms var(--ease); }
+  .pp-next-label :global(svg) { transition: translate 300ms var(--ease); }
   .pp-next-name {
     display: block;
     margin-top: 1rem;
@@ -273,7 +270,7 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
     transition: color 300ms ease;
   }
   .pp-next:hover .pp-next-name { color: var(--accent); }
-  .pp-next:hover .pp-next-label svg { translate: 4px 0; }
+  .pp-next:hover .pp-next-label :global(svg) { translate: 4px 0; }
 
   .pp-bar { display: none; }
 
@@ -334,6 +331,6 @@ const arrow = 'M4.5 11.5l7-7M5.5 4.5h6v6'
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .pp-back svg, .pp-action svg, .pp-next-label svg { transition: none; }
+    .pp-back :global(svg), .pp-action :global(svg), .pp-next-label :global(svg) { transition: none; }
   }
 </style>

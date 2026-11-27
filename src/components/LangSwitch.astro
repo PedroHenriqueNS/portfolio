@@ -2,6 +2,7 @@
 import * as m from '@/paraglide/messages.js'
 import { HREFLANG, HTML_LANG, LOCALES, type Locale } from '@/i18n/locales'
 import { alternates } from '@/i18n/routes'
+import Icon from './Icon.astro'
 
 interface Props {
   locale: Locale
@@ -16,10 +17,7 @@ const CODE = { 'pt-br': 'PT', en: 'EN', es: 'ES' }
 
 <details class="lang-switch relative">
   <summary class="icon-button">
-    <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"></path>
-    </svg>
+    <Icon name="globe" size="20px" />
     <span class="sr-only">{m.lang_switcher_label({}, { locale })}:</span>
     <span class="text-sm">{CODE[locale]}</span>
   </summary>

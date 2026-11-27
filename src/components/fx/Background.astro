@@ -1,0 +1,72 @@
+---
+// Fundo da página inteira: névoa de cobalto (4 manchas; 2 no celular) e a luz do cursor.
+// O grão fica em body::after (global.css). Nada aqui carrega informação.
+---
+
+<div class="fx-bg" aria-hidden="true">
+  <span class="mist"><i></i></span>
+  <span class="mist"><i></i></span>
+  <span class="mist"><i></i></span>
+  <span class="mist"><i></i></span>
+  <div class="luz-cursor"></div>
+</div>
+
+<style>
+  .fx-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  html:global(.dark) .fx-bg .mist { opacity: 0.55; }
+
+  /* Duas camadas por mancha: o span leva a troca de lugar (GSAP, transform); o i leva a forma e a deriva lenta (CSS). */
+  .mist {
+    position: absolute;
+    left: -10vmax;
+    top: -8vmax;
+    width: 46vmax;
+    height: 46vmax;
+  }
+  .mist i {
+    position: absolute;
+    inset: 0;
+    border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%;
+    background: var(--accent);
+    opacity: 0.16;
+    filter: blur(64px);
+    animation: drift 34s ease-in-out infinite alternate;
+  }
+  .mist:nth-child(2) { left: 60vw; top: 6vh; }
+  .mist:nth-child(2) i { opacity: 0.1; animation-duration: 41s; animation-delay: -12s; }
+  .mist:nth-child(3) { left: 18vw; top: 52vh; }
+  .mist:nth-child(3) i { background: #9db0ff; opacity: 0.22; animation-duration: 37s; animation-delay: -20s; }
+  .mist:nth-child(4) { left: 68vw; top: 58vh; }
+  .mist:nth-child(4) i { background: #c9d3ff; opacity: 0.3; animation-duration: 45s; animation-delay: -6s; }
+  @keyframes drift {
+    to { translate: 6vw -5vh; scale: 1.15; }
+  }
+
+  @media (max-width: 767.98px) {
+    .mist:nth-child(n + 3) { display: none; }
+    .mist { width: 70vmax; height: 70vmax; }
+    .mist:nth-child(2) { left: 30vw; top: 55vh; }
+  }
+
+  .luz-cursor {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60vmax;
+    height: 60vmax;
+    margin: -30vmax 0 0 -30vmax;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 24%, transparent), transparent);
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mist i { animation: none; }
+  }
+</style>

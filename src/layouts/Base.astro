@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions'
 import '@/styles/global.css'
 import Header from '@/components/Header.astro'
+import Background from '@/components/fx/Background.astro'
 import { HREFLANG, HTML_LANG, LOCALES, OG_LOCALE, type Locale } from '@/i18n/locales'
 import { alternates, pagePath } from '@/i18n/routes'
 import { SITE, type Seo } from '@/lib/seo'
@@ -28,13 +29,12 @@ const json = JSON.stringify(seo.jsonLd).replace(/</g, '\\u003c')
     <script is:inline>
       (function () {
         function apply() {
-          var dark
+          var saved = null
           try {
-            var saved = localStorage.getItem('data-theme')
-            dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
-          } catch (e) {
-            dark = true
-          }
+            saved = localStorage.getItem('data-theme')
+          } catch (e) {}
+          // Sem escolha salva (ou sem localStorage): segue o sistema.
+          var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
           document.documentElement.classList.toggle('dark', dark)
           var meta = document.querySelector('meta[name="theme-color"]')
           if (meta) meta.setAttribute('content', dark ? '#060918' : '#EEF0F3')
@@ -84,9 +84,13 @@ const json = JSON.stringify(seo.jsonLd).replace(/</g, '\\u003c')
     <ClientRouter />
   </head>
   <body>
+    <Background />
     <Header locale={locale} path={path} />
     <main id="main" tabindex="-1">
       <slot />
     </main>
+    <script>
+      import '@/motion/index'
+    </script>
   </body>
 </html>

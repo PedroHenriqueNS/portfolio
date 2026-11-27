@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets'
 import * as m from '@/paraglide/messages.js'
 import Base from '@/layouts/Base.astro'
 import type { Locale } from '@/i18n/locales'
@@ -10,7 +9,8 @@ import { homeSeo } from '@/lib/seo'
 import { EXPERIENCES, xpKey } from '@/data/experiences'
 import { SKILLS } from '@/data/skills'
 import { CONTACTS } from '@/data/site'
-import photo from '@/assets/images/pedro.jpg'
+import Hero from '@/components/sections/Hero.astro'
+import About from '@/components/sections/About.astro'
 
 interface Props {
   locale: Locale
@@ -31,9 +31,6 @@ const RESUME = {
 }
 const resumes = locale === 'pt-br' ? [RESUME.pt, RESUME.en] : [RESUME.en, RESUME.pt]
 
-// `**trecho**` na frase do Sobre vira <strong>: as partes ímpares do split.
-const sentence = m.about_sentence({}, { locale }).split(/\*\*(.+?)\*\*/)
-const EDUCATION = ['cs', 'telecom', 'english'] as const
 const GROUPS = ['featured', 'frontend', 'backend'] as const
 const kindLabel = (p: (typeof projects)[number]) => [msg(`kind_${p.kind}`), yearOf(p.date)].filter(Boolean).join(' · ')
 
@@ -47,53 +44,9 @@ const CONTACT_LINKS = [
 ---
 
 <Base seo={homeSeo(locale, projects)} locale={locale}>
+  <Hero locale={locale} resumes={resumes} />
+  <About locale={locale} />
   <div class="mx-auto max-w-6xl space-y-24 px-4 pb-24 md:px-8">
-    <section data-section="hero" id="hero" class="grid items-center gap-8 pt-8 md:grid-cols-[1fr_auto]">
-      <div>
-        <h1 class="font-display condensed text-6xl leading-none font-bold md:text-8xl">{m.hero_name({}, { locale })}</h1>
-        <p class="mt-4 text-xl">{m.hero_role({}, { locale })}</p>
-        <ul class="mt-8 flex flex-wrap gap-3">
-          {
-            resumes.map((r) => (
-              <li>
-                <a href={r.href} type="application/pdf" aria-label={r.label} class="inline-block rounded-full border border-line px-4 py-2">
-                  {r.text}
-                </a>
-              </li>
-            ))
-          }
-          <li>
-            <a href="#contact" class="inline-block rounded-full border border-line px-4 py-2">{m.hero_cta_contact({}, { locale })}</a>
-          </li>
-        </ul>
-      </div>
-      <Image
-        src={photo}
-        alt={m.hero_photo_alt({}, { locale })}
-        widths={[320, 640, 960]}
-        sizes="(min-width: 768px) 320px, 80vw"
-        loading="eager"
-        class="h-auto w-full max-w-80 rounded-2xl"
-      />
-    </section>
-
-    <section data-section="about" id="about" aria-labelledby="about-title">
-      <h2 id="about-title" class="font-display text-3xl font-bold">{m.about_title({}, { locale })}</h2>
-      <p class="mt-4 max-w-3xl text-2xl">
-        {sentence.map((part, i) => (i % 2 ? <strong class="text-accent">{part}</strong> : part))}
-      </p>
-      <h3 class="sr-only">{m.edu_title({}, { locale })}</h3>
-      <ul class="mt-6 flex flex-wrap gap-3">
-        {
-          EDUCATION.map((e) => (
-            <li class="rounded-full border border-line px-4 py-2">
-              <strong>{msg(`edu_${e}_label`)}</strong> <span>{msg(`edu_${e}_detail`)}</span>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
     <section data-section="experience" id="experience" aria-labelledby="experience-title">
       <h2 id="experience-title" class="font-display text-3xl font-bold">{m.xp_title({}, { locale })}</h2>
       <ol class="mt-6 space-y-8">

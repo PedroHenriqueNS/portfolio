@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
 const aboutPins = (page: Page) => page.locator('.pin-spacer:has([data-section="about"])')
+const experiencePins = (page: Page) => page.locator('.pin-spacer:has([data-section="experience"])')
 const headerBottom = (page: Page) => page.locator('body > header').evaluate((el) => el.getBoundingClientRect().bottom)
 
 test('as cenas sobrevivem a idas e voltas pelo ClientRouter', async ({ page }) => {
@@ -22,6 +23,8 @@ test('as cenas sobrevivem a idas e voltas pelo ClientRouter', async ({ page }) =
 
     await expect(page.locator('html')).toHaveClass(/\bmotion\b/)
     await expect(aboutPins(page)).toHaveCount(1)
+    await expect(experiencePins(page)).toHaveCount(1)
+    await expect(page.locator('.pin-spacer')).toHaveCount(2)
     await page.evaluate(() => scrollTo(0, 0))
     await page.mouse.move(200, 400)
     await page.mouse.wheel(0, 600)

@@ -4,13 +4,13 @@ import Base from '@/layouts/Base.astro'
 import type { Locale } from '@/i18n/locales'
 import { projectPath } from '@/i18n/routes'
 import { getProjects } from '@/lib/projects'
-import { formatPeriod, yearOf } from '@/lib/format'
+import { yearOf } from '@/lib/format'
 import { homeSeo } from '@/lib/seo'
-import { EXPERIENCES, xpKey } from '@/data/experiences'
 import { SKILLS } from '@/data/skills'
 import { CONTACTS } from '@/data/site'
 import Hero from '@/components/sections/Hero.astro'
 import About from '@/components/sections/About.astro'
+import Experience from '@/components/sections/Experience.astro'
 
 interface Props {
   locale: Locale
@@ -22,7 +22,7 @@ const featured = projects.filter((p) => p.featured)
 const others = projects.filter((p) => !p.featured)
 
 type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) => string
-/** Mensagem cuja chave é montada a partir dos dados (xp_*, cat_*, kind_*). */
+/** Mensagem cuja chave é montada a partir dos dados (cat_*, kind_*). */
 const msg = (key: string, inputs = {}) => (m as unknown as Record<string, Message>)[key](inputs, { locale })
 
 const RESUME = {
@@ -46,31 +46,8 @@ const CONTACT_LINKS = [
 <Base seo={homeSeo(locale, projects)} locale={locale}>
   <Hero locale={locale} resumes={resumes} />
   <About locale={locale} />
+  <Experience locale={locale} />
   <div class="mx-auto max-w-6xl space-y-24 px-4 pb-24 md:px-8">
-    <section data-section="experience" id="experience" aria-labelledby="experience-title">
-      <h2 id="experience-title" class="font-display text-3xl font-bold">{m.xp_title({}, { locale })}</h2>
-      <ol class="mt-6 space-y-8">
-        {
-          EXPERIENCES.map((e) => (
-            <li class="grid gap-2 md:grid-cols-[6rem_1fr]">
-              <span class="font-display text-3xl font-bold">{e.year}</span>
-              <div>
-                <h3 class="text-xl font-semibold">
-                  {msg(xpKey(e.id, 'role'))} · {e.company || msg(xpKey(e.id, 'company'))}
-                  {e.current && <span class="ml-2 rounded-full border border-line px-2 text-sm font-normal">{m.xp_current({}, { locale })}</span>}
-                </h3>
-                <p class="text-sm">
-                  {formatPeriod(e, locale)} · {e.location}
-                </p>
-                <p class="mt-2 max-w-3xl">{msg(xpKey(e.id, 'summary'))}</p>
-                <p class="mt-2 text-sm">{e.stack.join(', ')}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ol>
-    </section>
-
     <section data-section="stage" id="stage" aria-labelledby="stage-title">
       <h2 id="stage-title" class="font-display text-3xl font-bold">{m.stage_title({}, { locale })}</h2>
       <ul class="mt-6 grid gap-4 md:grid-cols-2">

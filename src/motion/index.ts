@@ -4,11 +4,12 @@ import { onRevert, runCleanups, type Scene } from './scene'
 import { fx } from './fx'
 import { hero } from './hero'
 import { about } from './about'
+import { experience } from './experience'
 
 export type { Conditions, Scene } from './scene'
 
 /** Na ordem do DOM: um gatilho criado antes de uma seção presa acima dele erra a posição. */
-export const SCENES: Scene[] = [fx, hero, about]
+export const SCENES: Scene[] = [fx, hero, about, experience]
 
 gsap.registerPlugin(ScrollTrigger)
 // A barra de endereço do celular muda a altura da janela; isso não deve recalcular as cenas.

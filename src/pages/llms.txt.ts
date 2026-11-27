@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import * as m from '@/paraglide/messages.js'
 import { homePath, projectPath } from '@/i18n/routes'
-import { EXPERIENCES, xpKey } from '@/data/experiences'
+import { EXPERIENCES, isCurrentRole, xpKey } from '@/data/experiences'
 import { TECH } from '@/data/tech'
 import { CONTACTS } from '@/data/site'
 import { getProjects, isPublic, type Project } from '@/lib/projects'
@@ -23,9 +23,12 @@ export const GET: APIRoute = async () => {
     const stack = p.stack.map((t) => TECH[t].title).join(', ')
     return `- [${p.title}](${SITE}${projectPath(locale, p.slug)}): ${p.summary} Stack: ${stack}.${links ? ` (${links})` : ''}`
   }
-  const experience = EXPERIENCES.map((e) => {
+  const experience = EXPERIENCES.flatMap((e) => {
     const company = e.company || msg(xpKey(e.id, 'company'))
-    return `- **${msg(xpKey(e.id, 'role'))}, ${company}** (${e.location}, ${formatPeriod(e, locale)}): ${msg(xpKey(e.id, 'summary'))} Stack: ${e.stack.join(', ')}.`
+    return e.roles.map((r) => {
+      const period = formatPeriod({ ...r, current: isCurrentRole(e, r) }, locale)
+      return `- **${msg(xpKey(r.id, 'role'))}, ${company}** (${e.location}, ${period}): ${msg(xpKey(r.id, 'summary'))} Stack: ${r.stack.join(', ')}.`
+    })
   })
 
   const text = `# ${NAME}

@@ -2,9 +2,9 @@
 import { Image } from 'astro:assets'
 import * as m from '@/paraglide/messages.js'
 import type { Locale } from '@/i18n/locales'
-import { EXPERIENCES, xpKey } from '@/data/experiences'
+import { EXPERIENCES, isCurrentRole, stackOf, xpKey } from '@/data/experiences'
 import { TECH } from '@/data/tech'
-import { formatPeriod } from '@/lib/format'
+import { formatMonth, formatPeriod } from '@/lib/format'
 import Drawer from '@/components/Drawer.astro'
 import Icon from '@/components/Icon.astro'
 
@@ -17,14 +17,23 @@ type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) =>
 const msg = (key: string) => (m as unknown as Record<string, Message>)[key]({}, { locale })
 
 const icons = new Map(Object.values(TECH).map((t) => [t.title, t.icon]))
-const items = EXPERIENCES.map((e) => ({
-  ...e,
-  company: e.company || msg(xpKey(e.id, 'company')),
-  role: msg(xpKey(e.id, 'role')),
-  summary: msg(xpKey(e.id, 'summary')),
-  period: formatPeriod(e, locale),
-  stack: e.stack.map((name) => ({ name, icon: icons.get(name) })),
-}))
+const items = EXPERIENCES.map((e) => {
+  const roles = e.roles.map((r) => ({
+    role: msg(xpKey(r.id, 'role')),
+    summary: msg(xpKey(r.id, 'summary')),
+    period: formatPeriod({ ...r, current: isCurrentRole(e, r) }, locale),
+  }))
+  return {
+    ...e,
+    company: e.company || msg(xpKey(e.id, 'company')),
+    roles,
+    role: roles[0].role,
+    // Mais de um cargo: o selo traz o início do mais recente (a promoção).
+    promoted: e.roles.length > 1 ? m.xp_promoted({ date: formatMonth(e.roles[0].start, locale)! }, { locale }) : undefined,
+    period: formatPeriod(e, locale),
+    stack: stackOf(e).map((name) => ({ name, icon: icons.get(name) })),
+  }
+})
 const current = m.xp_current({}, { locale })
 const openLabel = m.xp_open({}, { locale })
 const closeLabel = m.xp_close({}, { locale })
@@ -52,9 +61,21 @@ const closeLabel = m.xp_close({}, { locale })
             )}
           </h3>
           <p class="xp-role">{e.role}</p>
+          {e.promoted && <p class="xp-promo"><Icon name="trending-up" space="after" />{e.promoted}</p>}
           <p class="xp-period"><Icon name="calendar" space="after" />{e.period}</p>
           <div class="xp-more" id={`xp-${e.id}-more`}>
-            <p class="xp-summary">{e.summary}</p>
+            {e.promoted ? (
+              <ol class="xp-steps">
+                {e.roles.map((r) => (
+                  <li class="xp-step">
+                    <p class="xp-step-meta"><span class="xp-step-role">{r.role}</span> · <span class="xp-nowrap">{r.period}</span></p>
+                    <p class="xp-summary">{r.summary}</p>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p class="xp-summary">{e.roles[0].summary}</p>
+            )}
             <p class="xp-location"><Icon name="map-pin" space="after" />{e.location}</p>
             <ul class="xp-stack">
               {e.stack.map((t) => (
@@ -66,8 +87,12 @@ const closeLabel = m.xp_close({}, { locale })
             <Icon name="layers" space="after" />{openLabel}
           </button>
           <Drawer id={`xp-${e.id}-drawer`} title={e.company} closeLabel={closeLabel}>
-            <p class="xp-drawer-meta">{e.role} · {e.period}</p>
-            <p class="xp-summary">{e.summary}</p>
+            {e.roles.map((r) => (
+              <>
+                <p class="xp-drawer-meta"><span class="xp-step-role">{r.role}</span> · <span class="xp-nowrap">{r.period}</span></p>
+                <p class="xp-summary">{r.summary}</p>
+              </>
+            ))}
             <p class="xp-location"><Icon name="map-pin" space="after" />{e.location}</p>
             <ul class="xp-chips">
               {e.stack.map((t) => (
@@ -172,6 +197,19 @@ const closeLabel = m.xp_close({}, { locale })
     color: var(--muted);
   }
   .xp-role { color: var(--ink); }
+  /* Selo da promoção, logo depois do cargo: pequeno, no acento, para não competir com o nome. */
+  .xp-promo {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin: 0.5rem 0 0.625rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
 
   /* O espaço do resumo fica sempre reservado: abrir e fechar não muda a altura. */
   .xp-more {
@@ -193,6 +231,11 @@ const closeLabel = m.xp_close({}, { locale })
     line-height: 1.55;
     color: var(--muted);
   }
+  /* Um bloco por cargo, do mais recente para o mais antigo. */
+  .xp-steps { display: grid; gap: 1rem; }
+  .xp-step { display: grid; gap: 0.25rem; }
+  .xp-step-meta { font-size: 0.8125rem; color: var(--muted); }
+  .xp-more .xp-step-role { font-weight: 600; color: var(--ink); }
   .xp-location { font-size: 0.8125rem; color: var(--muted); }
   .xp-stack { display: flex; flex-wrap: wrap; gap: 0.875rem; }
   .xp-stack li { display: grid; place-items: center; min-height: 1.5rem; font-size: 0.8125rem; color: var(--muted); }
@@ -260,7 +303,9 @@ const closeLabel = m.xp_close({}, { locale })
     }
     :global(html.motion) .xp-item { position: sticky; top: calc(5rem + var(--i) * 0.875rem); }
     .xp-role { color: var(--sheet-ink); }
-    .xp-period, .xp-more .xp-summary, .xp-more .xp-location, .xp-stack li { color: var(--sheet-soft); }
+    .xp-period, .xp-more .xp-summary, .xp-more .xp-location, .xp-step-meta, .xp-stack li { color: var(--sheet-soft); }
+    .xp-more .xp-step-role { color: var(--sheet-ink); }
+    .xp-promo { align-self: flex-start; border-color: var(--sheet-line); color: var(--sheet-ink); }
     .xp-dot { background: var(--sheet-dot); }
     /* Ícones de marca escuros somem na folha invertida: cada um ganha uma base clara. */
     .xp-stack img { box-sizing: content-box; padding: 0.25rem; border-radius: 0.5rem; background: var(--bg); }
@@ -299,6 +344,8 @@ const closeLabel = m.xp_close({}, { locale })
   }
 
   .xp-drawer-meta { margin-bottom: 0.75rem; font-weight: 500; }
+  .xp-summary + .xp-drawer-meta { margin-top: 1.5rem; }
+  .xp-nowrap { white-space: nowrap; }
   .xp-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
   .xp-chips li {
     display: inline-flex;

@@ -33,6 +33,7 @@
   "xp_since": "since {year}",
   "xp_open": "See summary and stack",
   "xp_close": "Close",
+  "xp_promoted": "Promoted in {date}",
   "xp_linkeza_role": "Founder and software engineer",
   "xp_linkeza_summary": "My SaaS for local businesses: short links, dynamic QR Codes and WhatsApp with rotating agents. I do everything alone, from product to launch.",
   "xp_dry_pleno_role": "Mid-level software engineer",

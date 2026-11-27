@@ -35,3 +35,15 @@ Só faz GET e HEAD. A pasta do host de teste fica fora de `public_html/`; dentro
 1. Os fatos em `src/data/projects.ts` (e a imagem em `src/assets/images/`).
 2. O texto nos três idiomas: `src/content/projects/{pt-br,en,es}/<slug>.md` (`summary` no cabeçalho, a descrição no corpo; vazio falha o build).
 3. Os números literais: `17` em `scripts/check-apache.sh` (+1 por projeto) e `57` e `54` em `scripts/check-dist.mjs` (páginas e URLs do sitemap, +3 cada).
+
+## Documentação
+
+- [docs/SUMMARY.md](docs/SUMMARY.md): o que é o site, status e prioridades.
+- [docs/PRD.md](docs/PRD.md): problema, público, objetivos, não objetivos e critérios de pronto.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): estrutura, ciclo do motion, resolução de URLs e decisões.
+- [docs/FEATURES.md](docs/FEATURES.md): cada funcionalidade, onde está no código e seu status.
+- [docs/STACK.md](docs/STACK.md): versões, serviços e ferramentas.
+- [docs/ROADMAP.md](docs/ROADMAP.md): fases, o que falta e as dívidas pequenas.
+- [docs/CONVENTIONS.md](docs/CONVENTIONS.md): regras de código, commits, testes e o mapa de manutenção destes documentos.
+- [docs/PITFALLS.md](docs/PITFALLS.md): armadilhas conhecidas, uma regra por entrada.
+- [docs/PITFALLS-HISTORY.md](docs/PITFALLS-HISTORY.md): a história por trás de cada armadilha.

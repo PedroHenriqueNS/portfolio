@@ -11,7 +11,8 @@
     "test": "vitest run",
     "check": "astro check",
     "check:messages": "node scripts/check-messages.mjs",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "og:image": "node scripts/og-image.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1",

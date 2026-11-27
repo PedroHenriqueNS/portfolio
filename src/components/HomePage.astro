@@ -2,9 +2,7 @@
 import * as m from '@/paraglide/messages.js'
 import Base from '@/layouts/Base.astro'
 import type { Locale } from '@/i18n/locales'
-import { projectPath } from '@/i18n/routes'
 import { getProjects } from '@/lib/projects'
-import { yearOf } from '@/lib/format'
 import { homeSeo } from '@/lib/seo'
 import { SKILLS } from '@/data/skills'
 import { CONTACTS } from '@/data/site'
@@ -12,6 +10,7 @@ import Hero from '@/components/sections/Hero.astro'
 import About from '@/components/sections/About.astro'
 import Experience from '@/components/sections/Experience.astro'
 import Stage from '@/components/sections/Stage.astro'
+import ProjectList from '@/components/sections/ProjectList.astro'
 
 interface Props {
   locale: Locale
@@ -19,7 +18,6 @@ interface Props {
 
 const { locale } = Astro.props
 const projects = await getProjects(locale)
-const others = projects.filter((p) => !p.featured)
 
 type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) => string
 /** Mensagem cuja chave é montada a partir dos dados (cat_*, kind_*). */
@@ -32,7 +30,6 @@ const RESUME = {
 const resumes = locale === 'pt-br' ? [RESUME.pt, RESUME.en] : [RESUME.en, RESUME.pt]
 
 const GROUPS = ['featured', 'frontend', 'backend'] as const
-const kindLabel = (p: (typeof projects)[number]) => [msg(`kind_${p.kind}`), yearOf(p.date)].filter(Boolean).join(' · ')
 
 const newTab = m.contact_new_tab({}, { locale })
 const CONTACT_LINKS = [
@@ -48,23 +45,8 @@ const CONTACT_LINKS = [
   <About locale={locale} />
   <Experience locale={locale} />
   <Stage locale={locale} projects={projects} />
+  <ProjectList locale={locale} projects={projects} />
   <div class="mx-auto max-w-6xl space-y-24 px-4 pt-16 pb-24 md:px-8">
-    <section data-section="projects" id="projects" aria-labelledby="projects-title">
-      <h2 id="projects-title" class="font-display text-3xl font-bold">{m.list_title({}, { locale })}</h2>
-      <ul class="mt-6 divide-y divide-line border-y border-line">
-        {
-          others.map((p) => (
-            <li>
-              <a data-project={p.slug} href={projectPath(locale, p.slug)} class="flex flex-wrap items-baseline justify-between gap-2 py-4 text-ink no-underline">
-                <span class="text-xl font-semibold">{p.title}</span>
-                <span class="text-sm">{kindLabel(p)}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
     <section data-section="skills" id="skills" aria-labelledby="skills-title">
       <h2 id="skills-title" class="font-display text-3xl font-bold">{m.skills_title({}, { locale })}</h2>
       <p class="mt-4">

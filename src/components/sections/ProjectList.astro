@@ -1,0 +1,125 @@
+---
+import { Image } from 'astro:assets'
+import * as m from '@/paraglide/messages.js'
+import type { Locale } from '@/i18n/locales'
+import { projectPath } from '@/i18n/routes'
+import type { Project } from '@/lib/projects'
+import { yearOf } from '@/lib/format'
+
+interface Props {
+  locale: Locale
+  projects: Project[]
+}
+
+const { locale, projects } = Astro.props
+type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) => string
+const msg = (key: string) => (m as unknown as Record<string, Message>)[key]({}, { locale })
+
+const items = projects
+  .filter((p) => !p.featured)
+  .map((p) => ({
+    slug: p.slug,
+    image: p.image,
+    name: p.short ?? p.title,
+    href: projectPath(locale, p.slug),
+    // Mesmo rótulo do palco; sem data, só o tipo.
+    label: [msg(`kind_${p.kind}`), yearOf(p.date)].filter(Boolean).join(' · '),
+  }))
+---
+
+<section data-section="projects" id="projects" class="plist" aria-labelledby="projects-title" style={`--rows: ${Math.ceil(items.length / 2)}`}>
+  <h2 id="projects-title" class="plist-title">{m.list_title({}, { locale })}</h2>
+  <ul class="plist-rows">
+    {
+      items.map((p) => (
+        <li>
+          <a class="plist-row" data-project={p.slug} href={p.href}>
+            <span class="plist-name">{p.name}</span>
+            <span class="plist-meta">
+              <span class="plist-thumb" aria-hidden="true">
+                <Image src={p.image} alt="" widths={[120, 420, 840]} sizes="(min-width: 768px) and (hover: hover) and (pointer: fine) min(34vw, 420px), 60px" loading="lazy" />
+              </span>
+              <span class="plist-label">{p.label}</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .plist {
+    /* Largura da miniatura em repouso; a grande (no hover) repete-se em list.ts. */
+    --tw: 46px;
+    --big: min(34vw, 420px);
+    padding: 18vh var(--gutter) 10vh;
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+  .plist-title {
+    font: 700 clamp(40px, 7vw, 112px) / 0.95 var(--font-display);
+    font-stretch: 75%;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: clamp(24px, 5vh, 56px);
+  }
+  .plist-rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .plist-rows li { border-bottom: 1px solid var(--line); }
+
+  .plist-row {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 44px;
+    padding: 30px 0 12px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .plist-name {
+    font: 600 clamp(24px, 3vw, 44px) / 1.05 var(--font-display);
+    letter-spacing: -0.03em;
+    transition: color 0.3s;
+  }
+  .plist-row:hover .plist-name,
+  .plist-row:focus-visible .plist-name,
+  .plist-row[data-focus='true'] .plist-name { color: var(--accent); }
+  .plist-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+  .plist-meta { position: relative; flex: none; }
+  .plist-label { font: 500 14px / 1.2 var(--font-sans); color: var(--muted); white-space: nowrap; }
+
+  .plist-thumb {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 6px);
+    width: var(--tw);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 3px;
+    background: var(--line);
+    pointer-events: none;
+    transform-origin: 100% 100%;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .plist-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .plist-row[data-focus='true'] .plist-thumb { transform: scale(1.25); }
+
+  /* Com o cursor (list.ts liga o atributo): a miniatura tem o tamanho grande no layout e o script a reduz. */
+  .plist[data-follow] .plist-thumb { width: var(--big); border-radius: 10px; transition: none; }
+  .plist[data-follow] .plist-row:hover,
+  .plist[data-follow] .plist-row:focus-visible { z-index: 2; }
+
+  @media (min-width: 768px) {
+    .plist { --tw: 54px; }
+    .plist-rows {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(var(--rows), auto);
+      grid-auto-flow: column;
+      column-gap: 5vw;
+    }
+  }
+</style>

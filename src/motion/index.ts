@@ -6,11 +6,12 @@ import { hero } from './hero'
 import { about } from './about'
 import { experience } from './experience'
 import { stage } from './stage'
+import { list } from './list'
 
 export type { Conditions, Scene } from './scene'
 
 /** Na ordem do DOM: um gatilho criado antes de uma seção presa acima dele erra a posição. */
-export const SCENES: Scene[] = [fx, hero, about, experience, stage]
+export const SCENES: Scene[] = [fx, hero, about, experience, stage, list]
 
 gsap.registerPlugin(ScrollTrigger)
 // A barra de endereço do celular muda a altura da janela; isso não deve recalcular as cenas.

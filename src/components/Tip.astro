@@ -1,0 +1,181 @@
+---
+import Icon, { type IconName } from './Icon.astro'
+// Detalhe sob demanda: botão nativo de popover (teclado, toque e clique; nunca só hover).
+// No desktop o cartão ancora no botão; abaixo de 768 px vira gaveta presa ao pé da tela.
+// `hover`: abre também com o cursor em cima e com o foco. `class` troca o chip por um gatilho próprio (slot "trigger").
+interface Props {
+  label: string
+  id: string
+  hover?: boolean
+  class?: string
+  /** Ícone antes do texto do chip padrão. */
+  icon?: IconName
+}
+
+const { label, id, hover = false, class: cls, icon } = Astro.props
+const tipId = `tip-${id}`
+---
+
+<button type="button" class={cls ?? 'tip-chip'} popovertarget={tipId} style={`anchor-name: --${tipId}`} data-tip-hover={hover ? '' : undefined}>
+  {
+    Astro.slots.has('trigger') ? (
+      <slot name="trigger" />
+    ) : (
+      <>
+        {icon && <Icon name={icon} />}
+        <span>{label}</span>
+        <Icon name="plus" size="14px" />
+      </>
+    )
+  }
+</button>
+<div id={tipId} popover class="tip-card" style={`position-anchor: --${tipId}`}>
+  <p class="tip-title">{label}</p>
+  <div class="tip-body"><slot /></div>
+</div>
+
+<script>
+  // Hover e foco abrem os gatilhos `data-tip-hover`; o clique (toque) continua com o popovertarget nativo.
+  // No documento: sobrevive às trocas do ClientRouter e vale sem motion.
+  // Vários gatilhos podem abrir o mesmo cartão (as cópias de uma faixa em laço), e eles se movem por transform,
+  // que o anchor positioning não acompanha em todo navegador: o cartão é posto junto de quem o abriu, por script.
+  const trigger = (t: EventTarget | null) => (t as Element | null)?.closest?.<HTMLButtonElement>('[data-tip-hover]') ?? null
+  const card = (b: HTMLButtonElement) => b.popoverTargetElement as HTMLElement | null
+  const wide = matchMedia('(min-width: 768px)')
+  const GAP = 10
+  const EDGE = 8
+  let last: HTMLButtonElement | null = null
+  const place = () => {
+    const c = last && card(last)
+    if (!last || !c?.matches(':popover-open')) return
+    if (!wide.matches) {
+      // Abaixo de 768 px vale a gaveta do CSS.
+      for (const p of ['position-area', 'inset', 'margin', 'left', 'top']) c.style.removeProperty(p)
+      return
+    }
+    const r = last.getBoundingClientRect()
+    const above = r.top - c.offsetHeight - GAP
+    c.style.setProperty('position-area', 'none')
+    c.style.inset = 'auto'
+    c.style.margin = '0'
+    c.style.left = `${Math.max(EDGE, Math.min(r.left, innerWidth - c.offsetWidth - EDGE))}px`
+    c.style.top = `${above >= EDGE ? above : r.bottom + GAP}px`
+  }
+  const open = (b: HTMLButtonElement) => {
+    const c = card(b)
+    last = b
+    if (!c) return
+    if (!c.matches(':popover-open')) {
+      c.showPopover()
+      // O clique que vem logo depois (mouse, Enter, toque que focou) não deve fechar o que acabou de abrir.
+      b.dataset.tipAuto = ''
+    }
+    place()
+  }
+  const close = (b: HTMLButtonElement) => {
+    delete b.dataset.tipAuto
+    const c = card(b)
+    if (c?.matches(':popover-open') && last === b) c.hidePopover()
+  }
+  const fine = matchMedia('(hover: hover) and (pointer: fine)')
+  document.addEventListener('pointerover', (e) => {
+    const b = trigger(e.target)
+    if (b && e.pointerType === 'mouse' && fine.matches) open(b)
+  })
+  // Aberto pelo popovertarget nativo (toque, Enter depois de fechar): o gatilho é o último tocado.
+  document.addEventListener('pointerdown', (e) => (last = trigger(e.target) ?? last))
+  // Ao abrir, abaixo de 768 px: a gaveta não cobre quem a abriu (foco ou toque perto do pé da tela); a página sobe o que falta.
+  const reveal = () => {
+    const c = last && card(last)
+    if (!last || wide.matches || !c?.matches(':popover-open')) return
+    const hidden = last.getBoundingClientRect().bottom + GAP - (innerHeight - 12 - c.offsetHeight) // 12: o inset da gaveta
+    if (hidden > 0) scrollBy(0, hidden)
+  }
+  document.addEventListener('toggle', (e) => (e as ToggleEvent).newState === 'open' && (place(), reveal()), true)
+  document.addEventListener('scroll', place, { passive: true })
+  addEventListener('resize', place)
+  document.addEventListener('pointerout', (e) => {
+    const b = trigger(e.target)
+    if (b && e.pointerType === 'mouse' && !b.contains(e.relatedTarget as Node) && !b.matches(':focus-visible')) close(b)
+  })
+  document.addEventListener('focusin', (e) => {
+    const b = trigger(e.target)
+    if (b) open(b)
+  })
+  document.addEventListener('focusout', (e) => {
+    const b = trigger(e.target)
+    if (b && !b.matches(':hover')) close(b)
+  })
+  document.addEventListener('click', (e) => {
+    const b = trigger(e.target)
+    if (b && 'tipAuto' in b.dataset) {
+      e.preventDefault()
+      delete b.dataset.tipAuto
+    }
+  })
+</script>
+
+<style>
+  .tip-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1.125rem;
+    border: 1px solid var(--line);
+    border-radius: 9999px;
+    font: 500 0.9375rem/1 var(--font-sans);
+    color: var(--ink);
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: border-color 200ms ease, background-color 200ms ease;
+  }
+  .tip-chip :global(svg[data-icon="plus"]) { transition: rotate 250ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .tip-chip:hover { border-color: var(--ink); }
+  .tip-chip:has(+ :popover-open) { border-color: var(--accent); }
+  .tip-chip:has(+ :popover-open) :global(svg[data-icon="plus"]) { rotate: 45deg; }
+
+  .tip-card {
+    margin: 0;
+    inset: auto 0.75rem 0.75rem;
+    width: auto;
+    max-width: none;
+    padding: 1rem 1.25rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: var(--bg);
+    color: var(--ink);
+    /* Explícito: o gatilho pode estar dentro de tipo gigante (as faixas de skills). */
+    font: 400 0.9375rem / 1.45 var(--font-sans);
+    font-stretch: normal;
+    letter-spacing: normal;
+    white-space: normal;
+    box-shadow: 0 24px 48px -24px var(--shadow);
+    opacity: 0;
+    translate: 0 0.75rem;
+    transition: opacity 200ms ease, translate 250ms cubic-bezier(0.2, 0.8, 0.2, 1), overlay 250ms allow-discrete, display 250ms allow-discrete;
+  }
+  .tip-card:popover-open { opacity: 1; translate: 0 0; }
+  @starting-style {
+    .tip-card:popover-open { opacity: 0; translate: 0 0.75rem; }
+  }
+  .tip-title { margin-bottom: 0.25rem; font-weight: 600; }
+  .tip-body { color: var(--muted); }
+
+  @media (min-width: 768px) {
+    @supports (position-area: top) {
+      .tip-card {
+        inset: auto;
+        position-area: top span-right;
+        position-try-fallbacks: flip-block;
+        margin: 0 0 0.625rem;
+        max-width: 22rem;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tip-card, .tip-card:popover-open { translate: none; }
+  }
+</style>

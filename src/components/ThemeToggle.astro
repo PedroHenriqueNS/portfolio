@@ -1,0 +1,35 @@
+---
+import * as m from '@/paraglide/messages.js'
+import type { Locale } from '@/i18n/locales'
+import Icon from './Icon.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+---
+
+<button id="theme-toggle" type="button" aria-pressed="false" aria-label={m.theme_dark_label({}, { locale })} class="icon-button">
+  <Icon name="moon" size="20px" class="theme-icon-moon" />
+  <Icon name="sun" size="20px" class="theme-icon-sun" />
+</button>
+
+<script>
+  const root = document.documentElement
+  const sync = () => document.getElementById('theme-toggle')?.setAttribute('aria-pressed', String(root.classList.contains('dark')))
+
+  document.addEventListener('astro:page-load', sync)
+  document.addEventListener('click', (event) => {
+    if (!(event.target as Element).closest('#theme-toggle')) return
+    const dark = !root.classList.contains('dark')
+    root.classList.add('theme-fade')
+    root.classList.toggle('dark', dark)
+    try {
+      localStorage.setItem('data-theme', dark ? 'dark' : 'light')
+    } catch {}
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#060918' : '#EEF0F3')
+    sync()
+    setTimeout(() => root.classList.remove('theme-fade'), 300)
+  })
+</script>

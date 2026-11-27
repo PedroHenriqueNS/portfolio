@@ -1,0 +1,107 @@
+---
+import * as m from '@/paraglide/messages.js'
+import type { Locale } from '@/i18n/locales'
+import Tip from '@/components/Tip.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) => string
+const msg = (key: string) => (m as unknown as Record<string, Message>)[key]({}, { locale })
+
+const raw = m.about_sentence({}, { locale })
+const plain = raw.replace(/\*\*/g, '')
+// `**trecho**` vira um número em gradiente (as partes ímpares do split); cada trecho preenche como uma unidade,
+// as demais palavras uma a uma. Os espaços ficam como texto entre as unidades.
+const units = raw.split(/\*\*(.+?)\*\*/).flatMap((part, i) =>
+  i % 2 ? [{ text: part, num: true }] : part.split(/(\s+)/).filter(Boolean).map((text) => ({ text, num: false })),
+)
+const EDUCATION = ['cs', 'telecom', 'english'] as const
+const EDU_ICON = { cs: 'graduation-cap', telecom: 'radio-tower', english: 'languages' } as const
+---
+
+<section data-section="about" id="about" class="about" aria-labelledby="about-title">
+  <div class="about-shapes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <h2 id="about-title" class="sr-only">{m.about_title({}, { locale })}</h2>
+  <p class="about-sentence" data-fit>
+    <span class="sr-only">{plain}</span>
+    <span aria-hidden="true">
+      {units.map((u) => (/^\s+$/.test(u.text) ? ' ' : u.num ? <strong class="w num">{u.text}</strong> : <span class="w">{u.text}</span>))}
+    </span>
+  </p>
+  <h3 class="sr-only">{m.edu_title({}, { locale })}</h3>
+  <ul class="about-edu">
+    {
+      EDUCATION.map((e) => (
+        <li>
+          <Tip label={msg(`edu_${e}_label`)} id={`edu-${e}`} icon={EDU_ICON[e]}>
+            {msg(`edu_${e}_detail`)}
+          </Tip>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .about {
+    position: relative;
+    display: grid;
+    min-height: 100svh;
+    align-content: center;
+    gap: clamp(2.5rem, 7svh, 4.5rem);
+    padding: 12svh var(--gutter);
+    overflow-x: clip;
+  }
+
+  .about-sentence {
+    position: relative;
+    max-width: 21ch;
+    font: 600 clamp(2.125rem, 5.2vw, 5.25rem) / 1.04 var(--font-display);
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  /* Posto pelo script até a frase entrar na tela (motion/about.ts): por cima da opacidade que o GSAP escreve. */
+  .about-sentence.is-unseen :global(.w) { opacity: 1 !important; }
+  .num {
+    font-weight: inherit;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .about-edu {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Formas flutuantes: detalhes pequenos nas bordas, longe da frase. */
+  .about-shapes { position: absolute; inset: 0; pointer-events: none; }
+  .about-shapes i {
+    position: absolute;
+    left: 70%;
+    top: 14%;
+    width: var(--s, 44px);
+    aspect-ratio: 1;
+    border: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    border-radius: 28%;
+  }
+  .about-shapes i:nth-child(2) { left: 88%; top: 40%; --s: 14px; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--accent) 45%, transparent); }
+  .about-shapes i:nth-child(3) { left: 80%; top: 70%; --s: 64px; border-color: var(--line); }
+  .about-shapes i:nth-child(4) { left: 6%; top: 86%; --s: 12px; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--accent) 30%, transparent); }
+  .about-shapes i:nth-child(5) { left: 52%; top: 90%; --s: 22px; }
+  .about-shapes i:nth-child(6) { left: 93%; top: 8%; --s: 20px; border-color: var(--line); }
+
+  @media (max-width: 767.98px) {
+    .about { min-height: auto; padding-block: 16svh; }
+    .about-shapes i:nth-child(1) { left: 78%; top: 6%; }
+    .about-shapes i:nth-child(3) { left: 82%; top: 84%; --s: 44px; }
+  }
+</style>

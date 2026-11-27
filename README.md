@@ -1,94 +1,49 @@
-# Portfolio - Pedro Henrique
+# Portfolio
 
-This is a personal portfolio project built using **React**, **TypeScript**, and **Vite**. It showcases my skills, projects, and contact information in a visually appealing and responsive design.
+Site pessoal de Pedro Henrique em Astro (saída estática) com Tailwind e GSAP. O site anterior (React + Vite) está em `old/`, com `package.json` e `yarn.lock` próprios.
 
-## Features
+## Comandos
 
-- **React + TypeScript**: Modern development stack for building scalable and maintainable applications.
-- **Vite**: Fast development environment with optimized builds.
-- **Tailwind CSS**: Utility-first CSS framework for styling.
-- **Responsive Design**: Fully responsive layout for desktop and mobile devices.
-- **Dark Mode**: Theme toggle between light and dark modes.
-- **Interactive Components**: Custom components like tooltips, modals, and drawers using Radix UI.
-- **Project Showcase**: Detailed project cards with descriptions, technologies used, and links to repositories or live demos.
+`yarn dev`, `yarn build`, `yarn preview`, `yarn test`, `yarn check`.
 
-## Technologies Used
+- `yarn e2e`: Playwright (Chromium e Firefox, 1440 e 390 px) contra o `dist/`; rode `yarn build` antes.
+- `yarn check:apache`: sobe o `dist/` num Apache 2.4 em Docker com o `public/.htaccess` e confere status, redirects, 404 e cache; rode `yarn build` antes.
+- `yarn og:image`: gera `public/og-image.jpg` (1200×630), à mão.
 
-- **Frontend**: React, TypeScript, Vite
-- **Styling**: Tailwind CSS, Tailwind Merge, Tailwind Animate
-- **UI Components**: Radix UI (Dialog, Tooltip, Popover, Switch, Drawer)
-- **Icons**: Lucide React
-- **State Management**: React Hooks
-- **Build Tools**: Vite, SWC
-- **Linting**: ESLint with TypeScript and React-specific rules
+## Versões instaladas
 
-## Project Structure
+Node 22.23.4 ou mais novo (mínimo do Astro instalado). astro 7.4.13, tailwindcss 4.3.5, gsap 3.15.1, typescript 5.9.3, vitest 5.1.2.
 
-The project is organized as follows:
+## Antes de publicar
 
-```
-portfolio/
-├── .github/            # GitHub Actions workflows (actually for auto deployment at Hostinger)
-├── public/             # Public assets
-├── src/
-│   ├── assets/         # Static assets (svg icons, fonts and project images)
-│   ├── components/     # Reusable React components
-│   ├── constants/      # Constants used across the app
-│   ├── hooks/          # Some custom React hooks
-│   ├── lib/            # Utility functions
-│   ├── App.tsx         # Main application component
-│   └── main.tsx        # Entry point
-├── package.json        # Project dependencies and scripts
-├── vite.config.ts      # Vite configuration
-├── tsconfig.json       # TypeScript configuration
-└── README.md           # Project documentation
+O merge na `main` publica em produção: o push dispara `.github/workflows/deploy.yml`, que builda e copia o `dist/` para o Hostinger.
+
+A produção é LiteSpeed, e três coisas do `public/.htaccess` só foram provadas em Apache: `DirectorySlash Off`, o `ErrorDocument` e a 404 por idioma. Antes do merge, confira num host de teste no mesmo servidor:
+
+```sh
+yarn build && BASE_URL=https://<host de teste> yarn check:apache
 ```
 
-## Installation and Setup
+Só faz GET e HEAD. A pasta do host de teste fica fora de `public_html/`; dentro dela, o próximo deploy a apaga.
 
-To run this project locally, follow these steps:
+- **Falha:** uma linha `causa: o servidor ignorou DirectorySlash Off` em `/en` ou `/es` quer dizer que as homes em inglês e espanhol entram em loop de redirect. Não publique.
+- **Logo depois do deploy:** o mesmo comando contra `https://pedrohenriquens.com.br`, a partir de um build local do mesmo commit.
+- **Voltar atrás:** reverta o commit de merge na `main` (`git revert -m 1 <merge>` e push). O site antigo volta para a raiz do repositório, o mesmo workflow o builda e o `rsync --delete` o republica por cima.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/PedroHenriqueNS/portfolio.git
-   cd portfolio
-   ```
+## Adicionar um projeto
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+1. Os fatos em `src/data/projects.ts` (e a imagem em `src/assets/images/`).
+2. O texto nos três idiomas: `src/content/projects/{pt-br,en,es}/<slug>.md` (`summary` no cabeçalho, a descrição no corpo; vazio falha o build).
+3. Os números literais: `17` em `scripts/check-apache.sh` (+1 por projeto) e `57` e `54` em `scripts/check-dist.mjs` (páginas e URLs do sitemap, +3 cada).
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+## Documentação
 
-4. Open your browser and navigate to `http://localhost:5173`.
-
-## Build for Production
-
-To create a production build, run:
-
-```bash
-npm run build
-```
-
-The optimized build will be available in the `dist` directory.
-
-The build has three steps:
-
-1. `vite build` bundles the client.
-2. `vite build --ssr src/entry-server.tsx` bundles a server renderer (build-time only, never shipped).
-3. `scripts/prerender.mjs` renders every page to static HTML, so search engines and AI crawlers (which usually don't run JavaScript) read the whole site:
-   - `dist/index.html` (home) and `dist/projeto-<slug>.html` (one page per project, served at `/projetos/<slug>` by `public/.htaccess`);
-   - each page's own `<title>`, description, canonical, Open Graph/Twitter tags and JSON-LD;
-   - `dist/sitemap.xml` and `dist/llms.txt`.
-
-Project data (title, summary, description, stack, links) lives in `src/constants/projects.tsx`: the grid, the project pages, the JSON-LD, the sitemap and `llms.txt` all come from it. Adding a project is one entry there plus a 1200x630 image in `public/og/<slug>.jpg`.
-
-## Contact
-
-- **Email**: pedrohe.contato@gmail.com
-- **GitHub**: [@PedroHenriqueNS](https://github.com/PedroHenriqueNS)
-- **LinkedIn**: [Pedro Henrique](https://www.linkedin.com/in/PedroHenriqueNS/)
+- [docs/SUMMARY.md](docs/SUMMARY.md): o que é o site, status e prioridades.
+- [docs/PRD.md](docs/PRD.md): problema, público, objetivos, não objetivos e critérios de pronto.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): estrutura, ciclo do motion, resolução de URLs e decisões.
+- [docs/FEATURES.md](docs/FEATURES.md): cada funcionalidade, onde está no código e seu status.
+- [docs/STACK.md](docs/STACK.md): versões, serviços e ferramentas.
+- [docs/ROADMAP.md](docs/ROADMAP.md): fases, o que falta e as dívidas pequenas.
+- [docs/CONVENTIONS.md](docs/CONVENTIONS.md): regras de código, commits, testes e o mapa de manutenção destes documentos.
+- [docs/PITFALLS.md](docs/PITFALLS.md): armadilhas conhecidas, uma regra por entrada.
+- [docs/PITFALLS-HISTORY.md](docs/PITFALLS-HISTORY.md): a história por trás de cada armadilha.

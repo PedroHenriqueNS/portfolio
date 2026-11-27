@@ -1,0 +1,44 @@
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onRevert, type Scene } from './scene'
+
+/**
+ * A frase se preenche na ordem de leitura, de um fantasma (0,08) até 1. No desktop a seção fica presa por 1,3 tela;
+ * no celular não prende: o preenchimento acompanha a passagem do bloco pela tela.
+ */
+export const about: Scene = (root, c) => {
+  const section = root.querySelector<HTMLElement>('[data-section="about"]')
+  if (!section) return
+  const sentence = section.querySelector<HTMLElement>('.about-sentence')!
+
+  // Frente nítida: cada palavra leva o dobro do intervalo entre palavras, então no máximo duas estão em transição.
+  gsap.fromTo(
+    section.querySelectorAll('.about-sentence .w'),
+    { opacity: 0.08 },
+    {
+      opacity: 1,
+      duration: 0.16,
+      stagger: 0.08,
+      ease: 'none',
+      scrollTrigger: c.desktop
+        ? { trigger: section, start: 'top top', end: '+=130%', pin: true, scrub: 0.3 }
+        : { trigger: sentence, start: 'top 85%', end: 'bottom 45%', scrub: 0.3 },
+    },
+  )
+  // Até a frase apontar no pé da tela, as palavras ficam inteiras por cima do fantasma (que ninguém vê ainda):
+  // quem lê a página carregada no topo, como a auditoria de contraste, encontra texto legível.
+  sentence.classList.add('is-unseen')
+  ScrollTrigger.create({ trigger: sentence, start: 'top bottom', once: true, onEnter: () => sentence.classList.remove('is-unseen') })
+  onRevert(() => sentence.classList.remove('is-unseen'))
+
+  // Formas flutuantes: cada uma sobe ou desce numa velocidade própria; no celular, a metade do percurso.
+  const reach = c.desktop ? 1 : 0.5
+  section.querySelectorAll<HTMLElement>('.about-shapes i').forEach((shape, i) => {
+    const dir = i % 2 ? -1 : 1
+    gsap.fromTo(
+      shape,
+      { y: 0, rotate: 0 },
+      { y: dir * (120 + i * 60) * reach, rotate: dir * 90, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: '+=260%', scrub: 0.8 } },
+    )
+  })
+}

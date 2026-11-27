@@ -1,0 +1,167 @@
+---
+import Icon from './Icon.astro'
+// Detalhe em gaveta: <dialog> nativo. Abaixo de 768 px sobe do pé da tela; acima disso é um painel centrado.
+// Quem abre é um botão com `commandfor={id} command="show-modal"` (funciona sem script onde o navegador
+// conhece comandos); o script abaixo cobre os demais, anima o fechamento e fecha com toque fora.
+interface Props {
+  id: string
+  title: string
+  closeLabel: string
+}
+
+const { id, title, closeLabel } = Astro.props
+---
+
+<dialog id={id} data-drawer class="drawer" aria-labelledby={`${id}-title`}>
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <h2 id={`${id}-title`} class="drawer-title">{title}</h2>
+      <button type="button" class="icon-button drawer-close" data-drawer-close aria-label={closeLabel}>
+        <Icon name="x" size="18px" />
+      </button>
+    </div>
+    <slot />
+  </div>
+</dialog>
+
+<script>
+  // Fora do núcleo de motion: vale com movimento reduzido. Ouvintes no documento sobrevivem às trocas do ClientRouter.
+  const DRAWER = 'dialog[data-drawer]'
+
+  function close(d: HTMLDialogElement) {
+    if (!d.open || d.dataset.closing !== undefined) return
+    d.dataset.closing = ''
+    let timer = 0
+    const done = (e?: TransitionEvent) => {
+      if (e && e.target !== d) return
+      d.removeEventListener('transitionend', done)
+      clearTimeout(timer)
+      delete d.dataset.closing
+      d.close() // o navegador devolve o foco a quem abriu
+    }
+    d.addEventListener('transitionend', done)
+    timer = window.setTimeout(done, 450) // sem transição (ou interrompida), fecha mesmo assim
+  }
+
+  document.addEventListener('click', (e) => {
+    const target = e.target as Element
+    // Navegador sem comandos de botão: abre pelo script.
+    const opener = !('command' in HTMLButtonElement.prototype) && target.closest?.('button[commandfor][command="show-modal"]')
+    if (opener) {
+      const d = document.getElementById(opener.getAttribute('commandfor')!)
+      if (d instanceof HTMLDialogElement && d.matches(DRAWER) && !d.open) d.showModal()
+      return
+    }
+    const closer = target.closest?.('[data-drawer-close]')
+    if (closer) return close(closer.closest<HTMLDialogElement>(DRAWER)!)
+    // O próprio <dialog> só recebe o clique no fundo: o painel ocupa todo o conteúdo dele.
+    if (target instanceof HTMLDialogElement && target.matches(DRAWER)) close(target)
+  })
+
+  // Esc: troca o fechamento seco pelo animado. `cancel` não borbulha; a captura no documento o alcança.
+  document.addEventListener(
+    'cancel',
+    (e) => {
+      const d = e.target as Element
+      if (!(d instanceof HTMLDialogElement) || !d.matches(DRAWER)) return
+      e.preventDefault()
+      close(d)
+    },
+    true,
+  )
+</script>
+
+<style>
+  .drawer {
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    inset: auto 0 0;
+    width: 100%;
+    max-width: none;
+    max-height: 88svh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    opacity: 0;
+    translate: 0 100%;
+    transition: translate 420ms var(--ease), opacity 220ms ease;
+  }
+  .drawer[open]:not([data-closing]) { opacity: 1; translate: 0 0; }
+  @starting-style {
+    .drawer[open] { opacity: 0; translate: 0 100%; }
+  }
+
+  .drawer::backdrop {
+    background: color-mix(in srgb, var(--closing) 55%, transparent);
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+  .drawer[open]:not([data-closing])::backdrop { opacity: 1; }
+  @starting-style {
+    .drawer[open]::backdrop { opacity: 0; }
+  }
+
+  .drawer-panel {
+    max-height: inherit;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.75rem var(--gutter) calc(1.75rem + env(safe-area-inset-bottom, 0px));
+    border: 1px solid var(--line);
+    border-bottom: 0;
+    border-radius: 1.5rem 1.5rem 0 0;
+    background: var(--bg);
+    box-shadow: 0 -24px 48px -24px var(--shadow);
+  }
+  /* Alça: sinal de que a folha veio do pé da tela. */
+  .drawer-panel::before {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 4px;
+    margin: 0 auto 0.5rem;
+    border-radius: 9999px;
+    background: var(--line);
+  }
+
+  .drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .drawer-title {
+    font: 700 clamp(1.75rem, 8vw, 2.5rem) / 1 var(--font-display);
+    font-stretch: 75%;
+    letter-spacing: -0.02em;
+  }
+  .drawer-close { flex: none; margin-right: -0.625rem; }
+
+  @media (min-width: 768px) {
+    .drawer {
+      inset: 0;
+      width: min(34rem, 100% - 2 * var(--gutter));
+      max-height: min(80vh, 44rem);
+      margin: auto;
+      translate: 0 1.5rem;
+    }
+    @starting-style {
+      .drawer[open] { translate: 0 1.5rem; }
+    }
+    .drawer-panel {
+      padding: 1.5rem 1.75rem 1.75rem;
+      border-bottom: 1px solid var(--line);
+      border-radius: 1.25rem;
+      box-shadow: 0 32px 64px -32px var(--shadow);
+    }
+    .drawer-panel::before { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .drawer, .drawer[open]:not([data-closing]) { translate: none; transition: opacity 160ms ease; }
+    @starting-style {
+      .drawer[open] { translate: none; }
+    }
+  }
+</style>

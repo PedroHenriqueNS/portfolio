@@ -1,0 +1,37 @@
+---
+import * as m from '@/paraglide/messages.js'
+import Base from '@/layouts/Base.astro'
+import type { Locale } from '@/i18n/locales'
+import { getProjects } from '@/lib/projects'
+import { homeSeo } from '@/lib/seo'
+import Hero from '@/components/sections/Hero.astro'
+import About from '@/components/sections/About.astro'
+import Experience from '@/components/sections/Experience.astro'
+import Stage from '@/components/sections/Stage.astro'
+import ProjectList from '@/components/sections/ProjectList.astro'
+import Skills from '@/components/sections/Skills.astro'
+import Contact from '@/components/sections/Contact.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const projects = await getProjects(locale)
+
+const RESUME = {
+  pt: { href: '/curriculo_PedroHenrique.pdf', text: m.hero_cta_resume({}, { locale }), label: m.hero_cta_resume_label({}, { locale }) },
+  en: { href: '/resume_PedroHenrique_EN.pdf', text: m.hero_cta_resume_en({}, { locale }), label: m.hero_cta_resume_en_label({}, { locale }) },
+}
+const resumes = locale === 'pt-br' ? [RESUME.pt, RESUME.en] : [RESUME.en, RESUME.pt]
+---
+
+<Base seo={homeSeo(locale, projects)} locale={locale}>
+  <Hero locale={locale} resumes={resumes} />
+  <About locale={locale} />
+  <Experience locale={locale} />
+  <Stage locale={locale} projects={projects} />
+  <ProjectList locale={locale} projects={projects} />
+  <Skills locale={locale} />
+  <Contact locale={locale} resumes={resumes} />
+</Base>

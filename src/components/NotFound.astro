@@ -1,0 +1,22 @@
+---
+import * as m from '@/paraglide/messages.js'
+import Base from '@/layouts/Base.astro'
+import type { Locale } from '@/i18n/locales'
+import { homePath } from '@/i18n/routes'
+import { notFoundSeo } from '@/lib/seo'
+import Icon from './Icon.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+---
+
+<Base seo={notFoundSeo(locale)} locale={locale}>
+  <div class="mx-auto max-w-6xl px-4 py-24 md:px-8">
+    <h1 class="font-display condensed text-8xl font-bold">{m.notfound_title({}, { locale })}</h1>
+    <p class="mt-4 text-xl">{m.notfound_text({}, { locale })}</p>
+    <p class="mt-8"><a href={homePath(locale)}><Icon name="house" space="after" />{m.notfound_home({}, { locale })}</a></p>
+  </div>
+</Base>

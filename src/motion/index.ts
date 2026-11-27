@@ -1,0 +1,87 @@
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onRevert, runCleanups, type Scene } from './scene'
+import { fx } from './fx'
+import { hero } from './hero'
+import { about } from './about'
+import { experience } from './experience'
+import { stage } from './stage'
+import { list } from './list'
+import { skills } from './skills'
+import { contact } from './contact'
+import { page } from './page'
+
+/** Na ordem do DOM: um gatilho criado antes de uma seção presa acima dele erra a posição. A página do projeto não tem as seções da home. */
+const SCENES: Scene[] = [fx, hero, about, experience, stage, list, skills, contact, page]
+
+gsap.registerPlugin(ScrollTrigger)
+// A barra de endereço do celular muda a altura da janela; isso não deve recalcular as cenas.
+ScrollTrigger.config({ ignoreMobileResize: true })
+
+let mm: gsap.MatchMedia | undefined
+// Ao voltar pelo histórico o roteador restaura o scroll antes de as cenas criarem os pins, numa página ainda
+// mais curta: a posição sai cortada. Guarda a posição salva da entrada e a reaplica depois das cenas.
+let restoreY: number | undefined
+// Verdadeiro só na primeira rodada das cenas de uma página; uma troca de breakpoint não volta à âncora.
+let arriving = false
+
+function start() {
+  arriving = true
+  mm?.revert()
+  const media = (mm = gsap.matchMedia())
+  media.add(
+    {
+      desktop: '(min-width: 768px)',
+      mobile: '(max-width: 767.98px)',
+      motion: '(prefers-reduced-motion: no-preference)',
+      cursor: '(hover: hover) and (pointer: fine)',
+    },
+    (ctx) => {
+      const { desktop, mobile, motion, cursor } = ctx.conditions as Record<string, boolean>
+      if (!motion) return
+      const html = document.documentElement
+      let live = true
+      // Registrada antes das cenas: se uma delas lançar erro, a limpeza ainda tira a classe e o que já foi ligado.
+      onRevert(() => {
+        live = false
+        html.classList.remove('motion')
+      })
+      html.classList.add('motion')
+      try {
+        for (const scene of SCENES) scene(document.body, { desktop, mobile, cursor })
+      } catch (err) {
+        console.error(err)
+        // Sem as cenas seguintes a página ficaria no layout de motion sem o motion: desfaz tudo (pins, entradas,
+        // a classe) e volta ao estático. Depois desta rodada, porque o matchMedia ainda a está montando.
+        queueMicrotask(() => media.revert())
+        return runCleanups
+      }
+      // As posições dependem das fontes (o tipo gigante muda de altura quando a fonte chega).
+      document.fonts?.ready.then(() => live && ScrollTrigger.refresh())
+      // WebKit: na volta à home pelo ClientRouter, uma folha de estilo ainda não vale no astro:page-load; as seções
+      // medem sem CSS e os pins saem curtos (o palco fica vazio). Um quadro depois o estilo já vale: mede de novo.
+      // Num retorno pelo histórico, a posição restaurada abaixo pode ter sido cortada pela página curta: reaplica.
+      // Numa chegada com #âncora o roteador rola antes de os pins existirem; eles somam altura acima do alvo: rola de novo.
+      const back = restoreY
+      const hash = arriving && back === undefined ? location.hash : ''
+      requestAnimationFrame(() => {
+        if (!live) return
+        ScrollTrigger.refresh()
+        if (back !== undefined) scrollTo({ top: back, behavior: 'instant' })
+        else if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'instant' })
+      })
+      return runCleanups
+    },
+  )
+  if (restoreY !== undefined) scrollTo({ top: restoreY, behavior: 'instant' })
+  restoreY = undefined
+  arriving = false
+}
+
+document.addEventListener('astro:page-load', start)
+document.addEventListener('astro:before-swap', (e) => {
+  // Num retorno pelo histórico, history.state já é a entrada de destino.
+  restoreY = e.navigationType === 'traverse' ? history.state?.scrollY : undefined
+  mm?.revert()
+  mm = undefined
+})

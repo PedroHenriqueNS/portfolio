@@ -11,6 +11,7 @@ import { CONTACTS } from '@/data/site'
 import Hero from '@/components/sections/Hero.astro'
 import About from '@/components/sections/About.astro'
 import Experience from '@/components/sections/Experience.astro'
+import Stage from '@/components/sections/Stage.astro'
 
 interface Props {
   locale: Locale
@@ -18,7 +19,6 @@ interface Props {
 
 const { locale } = Astro.props
 const projects = await getProjects(locale)
-const featured = projects.filter((p) => p.featured)
 const others = projects.filter((p) => !p.featured)
 
 type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) => string
@@ -47,24 +47,8 @@ const CONTACT_LINKS = [
   <Hero locale={locale} resumes={resumes} />
   <About locale={locale} />
   <Experience locale={locale} />
-  <div class="mx-auto max-w-6xl space-y-24 px-4 pb-24 md:px-8">
-    <section data-section="stage" id="stage" aria-labelledby="stage-title">
-      <h2 id="stage-title" class="font-display text-3xl font-bold">{m.stage_title({}, { locale })}</h2>
-      <ul class="mt-6 grid gap-4 md:grid-cols-2">
-        {
-          featured.map((p) => (
-            <li>
-              <a data-project={p.slug} href={projectPath(locale, p.slug)} class="block rounded-2xl border border-line p-6 text-ink no-underline">
-                <span class="font-display text-2xl font-bold">{p.title}</span>
-                <span class="block text-sm">{kindLabel(p)}</span>
-                <span class="mt-2 block">{p.summary}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
+  <Stage locale={locale} projects={projects} />
+  <div class="mx-auto max-w-6xl space-y-24 px-4 pt-16 pb-24 md:px-8">
     <section data-section="projects" id="projects" aria-labelledby="projects-title">
       <h2 id="projects-title" class="font-display text-3xl font-bold">{m.list_title({}, { locale })}</h2>
       <ul class="mt-6 divide-y divide-line border-y border-line">

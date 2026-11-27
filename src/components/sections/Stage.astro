@@ -1,0 +1,270 @@
+---
+import { Image } from 'astro:assets'
+import * as m from '@/paraglide/messages.js'
+import type { Locale } from '@/i18n/locales'
+import { projectPath } from '@/i18n/routes'
+import type { Project } from '@/lib/projects'
+import { yearOf } from '@/lib/format'
+
+interface Props {
+  locale: Locale
+  projects: Project[]
+}
+
+const { locale, projects } = Astro.props
+type Message = (inputs: Record<string, unknown>, options: { locale: Locale }) => string
+const msg = (key: string) => (m as unknown as Record<string, Message>)[key]({}, { locale })
+
+const featured = projects.filter((p) => p.featured)
+const total = featured.length
+const items = featured.map((p, i) => {
+  const name = p.short ?? p.title
+  return {
+    ...p,
+    name,
+    href: projectPath(locale, p.slug),
+    label: [msg(`kind_${p.kind}`), yearOf(p.date)].filter(Boolean).join(' · '),
+    progress: m.stage_counter_label({ current: i + 1, total }, { locale }),
+    // O tipo gigante é medido pelo número de caracteres: a frase inteira no desktop, a palavra mais longa no celular.
+    style: `--c: ${p.color}; --len: ${name.length}; --chars: ${Math.max(...name.split(' ').map((w) => w.length))}`,
+  }
+})
+const first = items[0].color
+const last = items.at(-1)!.color
+const open = m.stage_open({}, { locale })
+---
+
+<section data-section="stage" id="stage" class="stage" aria-labelledby="stage-title" style={`--first: ${first}; --last: ${last}`}>
+  <h2 id="stage-title" class="sr-only">{m.stage_title({}, { locale })}</h2>
+  <div class="stage-cap stage-cap-top" aria-hidden="true"><i></i></div>
+  <div class="stage-frame">
+    <div class="stage-bg" aria-hidden="true"></div>
+    <ol class="stage-list">
+      {
+        items.map((p, i) => (
+          <li class="stage-item" style={p.style} data-color={p.color}>
+            <div class="stage-progress" role="img" aria-label={p.progress}>
+              {items.map((_, j) => <i class:list={{ on: j <= i }} />)}
+            </div>
+            <h3 class="stage-word">{p.name}</h3>
+            <a class="stage-card" data-project={p.slug} href={p.href}>
+              <Image src={p.image} alt={p.title} widths={[360, 480, 620]} sizes="(min-width: 768px) min(44vw, 620px), 88vw" />
+            </a>
+            {/* Cópia vazada por cima do cartão: onde os dois se cruzam, o nome continua legível. */}
+            <span class="stage-word stage-ghost" aria-hidden="true">{p.name}</span>
+            <div class="stage-meta">
+              <p class="stage-kind">{p.label}</p>
+              <a class="stage-open" data-project={p.slug} href={p.href}>
+                {open}
+                <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3.5 8h9M8.5 4l4 4-4 4" />
+                </svg>
+              </a>
+            </div>
+            <span class="stage-shade" aria-hidden="true"></span>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="stage-bar">
+      <div class="stage-bar-inner">
+        <span class="stage-count" aria-hidden="true">1 / {total}</span>
+        <a class="stage-all" href="#projects">{m.stage_all({ count: projects.length }, { locale })}</a>
+      </div>
+    </div>
+  </div>
+  <div class="stage-cap stage-cap-bot" aria-hidden="true"><i></i></div>
+</section>
+
+<script>
+  // "Todos" leva o scroll e o foco à lista. Em captura, antes do ClientRouter tratar a âncora.
+  document.addEventListener(
+    'click',
+    (e) => {
+      const link = (e.target as Element).closest?.('a.stage-all')
+      const list = document.getElementById('projects')
+      if (!link || !list || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+      e.preventDefault()
+      if (!list.hasAttribute('tabindex')) list.tabIndex = -1
+      list.scrollIntoView({ block: 'start' })
+      list.focus({ preventScroll: true })
+    },
+    true,
+  )
+</script>
+
+<style>
+  .stage {
+    /* Texto do palco: branco sobre a cor de cada projeto (contraste medido nas cinco, no relatório da Tarefa 8). */
+    --stage-ink: #fff;
+    --fit: 0.47;
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    color: var(--stage-ink);
+  }
+
+  /* Bordas curvas: a cor do palco sai do fundo da página como uma cúpula (entrada) e uma gota (saída). */
+  .stage-cap { height: clamp(40px, 13vw, 150px); }
+  .stage-cap i { display: block; height: 100%; }
+  .stage-cap-top { margin-bottom: -1px; }
+  .stage-cap-top i { background: var(--first); border-radius: 50% 50% 0 0 / 100% 100% 0 0; transform-origin: 50% 100%; }
+  .stage-cap-bot { margin-top: -1px; }
+  .stage-cap-bot i { background: var(--last); border-radius: 0 0 50% 50% / 0 0 100% 100%; transform-origin: 50% 0; }
+
+  .stage-frame { position: relative; container-type: inline-size; }
+  .stage-bg { display: none; }
+
+  /* Luz de palco: de cima, e uma sombra no pé, que some nas bordas para não marcar a emenda com as curvas. */
+  .stage-item::before, .stage-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(70% 55% at 50% 0%, rgb(255 255 255 / 0.2), transparent 70%),
+      radial-gradient(80% 60% at 50% 100%, rgb(0 0 0 / 0.3), transparent 70%);
+    mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+  }
+
+  .stage-item {
+    position: relative;
+    display: grid;
+    grid-template-areas: "stack";
+    place-items: center;
+    min-height: 92svh;
+    padding: 14svh var(--gutter);
+    overflow: clip;
+    background: var(--c);
+  }
+  .stage-item > :is(.stage-word, .stage-card) { grid-area: stack; position: relative; }
+
+  .stage-word {
+    margin: 0;
+    font: 700 min(calc(90cqw / (var(--len) * var(--fit))), 40svh) / 0.82 var(--font-display);
+    font-stretch: 75%;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .stage-ghost {
+    z-index: 2;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--stage-ink);
+    pointer-events: none;
+  }
+
+  .stage-card {
+    z-index: 1;
+    display: block;
+    width: min(44vw, 620px);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 6px solid var(--stage-ink);
+    border-radius: 14px;
+    background: var(--stage-ink);
+    rotate: -3deg;
+    box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.65);
+  }
+  .stage-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .stage-card:focus-visible, .stage-open:focus-visible, .stage-all:focus-visible { outline: 3px solid var(--stage-ink); outline-offset: 4px; }
+
+  .stage-meta {
+    position: absolute;
+    left: var(--gutter);
+    bottom: 5svh;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .stage-kind { margin: 0; font-size: 0.9375rem; font-weight: 500; }
+
+  .stage-open, .stage-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1.125rem;
+    border-radius: 9999px;
+    font: 600 0.9375rem/1 var(--font-sans);
+    text-decoration: none;
+    touch-action: manipulation;
+  }
+  .stage-open { background: var(--stage-ink); color: var(--c); }
+  .stage-open svg { transition: translate 300ms var(--ease); }
+  .stage-open:hover svg { translate: 3px 0; }
+  .stage-all {
+    border: 1px solid rgb(255 255 255 / 0.7);
+    color: var(--stage-ink);
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+  .stage-all:hover { background: var(--stage-ink); color: var(--last); }
+
+  .stage-progress, .stage-count, .stage-shade { display: none; }
+
+  /* Sem motion: a barra fecha a lista na cor do último projeto. */
+  .stage-bar { background: var(--last); }
+  .stage-bar-inner { display: flex; justify-content: flex-end; align-items: center; gap: 1.25rem; padding: 0 var(--gutter) 4svh; }
+
+  /* Desktop com motion: o palco fica preso; stage.ts troca palavra, cartão e cor. */
+  @media (min-width: 768px) {
+    :global(html.motion) .stage-frame { height: 100vh; overflow: clip; }
+    :global(html.motion) .stage-bg { display: block; position: absolute; inset: 0; background: var(--first); }
+    :global(html.motion) .stage-item { position: absolute; inset: 0; min-height: 0; background: none; pointer-events: none; }
+    :global(html.motion) .stage-item::before { content: none; }
+    :global(html.motion) .stage-item.is-current :is(.stage-card, .stage-open) { pointer-events: auto; }
+    :global(html.motion) .stage-card { rotate: none; }
+    :global(html.motion) .stage-bar { position: absolute; right: 0; bottom: 5svh; z-index: 6; background: none; }
+    :global(html.motion) .stage-bar-inner { padding: 0 var(--gutter); }
+    :global(html.motion) .stage-count { display: inline; font-size: 0.9375rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+  }
+
+  /* Brilho que atravessa o cartão: só com cursor (a inclinação vem do stage.ts). */
+  @media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+    :global(html.motion) .stage-card::after {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      pointer-events: none;
+      background: linear-gradient(115deg, transparent 42%, rgb(255 255 255 / 0.45) 50%, transparent 58%);
+      translate: var(--sx, -240%) 0;
+      transition: translate 500ms var(--ease);
+    }
+  }
+
+  /* Celular: painéis de uma tela; com motion, cada um gruda no topo e o anterior recua. */
+  @media (max-width: 767.98px) {
+    .stage-item {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      min-height: 100svh;
+      padding: 1.25rem var(--gutter) 1.25rem;
+    }
+    .stage-progress { display: flex; gap: 0.3rem; }
+    .stage-progress i { flex: 1; height: 3px; border-radius: 3px; background: rgb(255 255 255 / 0.35); }
+    .stage-progress i.on { background: var(--stage-ink); }
+    .stage-word {
+      margin-top: 1.5rem;
+      /* A moldura não tem margem: a largura útil desconta as duas margens laterais. */
+      font-size: min(calc((100cqw - 2 * var(--gutter)) / (var(--chars) * 0.54)), 30vw);
+      white-space: normal;
+    }
+    .stage-ghost { display: none; }
+    .stage-card { width: 88%; margin: auto; }
+    .stage-meta { position: relative; left: auto; bottom: auto; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .stage-bar-inner { padding: 1.25rem var(--gutter); }
+
+    :global(html.motion) .stage-item { position: sticky; top: 0; height: 100svh; transform-origin: 50% 0; }
+    :global(html.motion) .stage-item:not(:first-child) { border-radius: 1.5rem 1.5rem 0 0; }
+    :global(html.motion) .stage-shade { display: block; position: absolute; inset: 0; z-index: 5; border-radius: inherit; background: #000; opacity: 0; pointer-events: none; }
+    /* "Todos" sempre à mão: gruda no pé da tela por todo o palco, ao lado do "Ver projeto". */
+    :global(html.motion) .stage-bar { position: sticky; bottom: 1.25rem; z-index: 6; height: 0; background: none; }
+    :global(html.motion) .stage-bar-inner { position: absolute; right: var(--gutter); bottom: 0; padding: 0; }
+    :global(html.motion) .stage-all { background: rgb(0 0 0 / 0.28); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stage-open svg, .stage-all { transition: none; }
+  }
+</style>

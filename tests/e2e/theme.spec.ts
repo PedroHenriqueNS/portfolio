@@ -64,7 +64,7 @@ test('o tema escuro continua depois de uma navegação do ClientRouter', async (
   await page.goto('/')
   await page.locator('#theme-toggle').click()
   await expect(page.locator('html')).toHaveClass(/\bdark\b/)
-  await page.locator('a[data-project="linkeza"]').click()
+  await page.locator('a[data-project="linkeza"]').first().click()
   await expect(page).toHaveURL(/\/projetos\/linkeza$/)
   await expect(page.locator('html')).toHaveClass(/\bdark\b/)
   await expect(page.locator('#theme-toggle')).toHaveAttribute('aria-pressed', 'true')

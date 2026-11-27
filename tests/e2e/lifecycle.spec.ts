@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 
 const aboutPins = (page: Page) => page.locator('.pin-spacer:has([data-section="about"])')
 const experiencePins = (page: Page) => page.locator('.pin-spacer:has([data-section="experience"])')
+const stagePins = (page: Page) => page.locator('.pin-spacer:has(.stage-frame)')
 const headerBottom = (page: Page) => page.locator('body > header').evaluate((el) => el.getBoundingClientRect().bottom)
 
 test('as cenas sobrevivem a idas e voltas pelo ClientRouter', async ({ page }) => {
@@ -14,7 +15,7 @@ test('as cenas sobrevivem a idas e voltas pelo ClientRouter', async ({ page }) =
   await page.evaluate(() => ((window as unknown as { __marker: number }).__marker = 1))
 
   for (let round = 0; round < 2; round++) {
-    await page.locator('a[data-project="linkeza"]').click()
+    await page.locator('a[data-project="linkeza"]').first().click()
     await expect(page).toHaveURL(/\/projetos\/linkeza$/)
     await page.locator('body > header a').first().click()
     await expect(page).toHaveURL(/\/$/)
@@ -24,13 +25,19 @@ test('as cenas sobrevivem a idas e voltas pelo ClientRouter', async ({ page }) =
     await expect(page.locator('html')).toHaveClass(/\bmotion\b/)
     await expect(aboutPins(page)).toHaveCount(1)
     await expect(experiencePins(page)).toHaveCount(1)
-    await expect(page.locator('.pin-spacer')).toHaveCount(2)
+    await expect(stagePins(page)).toHaveCount(1)
+    await expect(page.locator('.pin-spacer')).toHaveCount(3)
     await page.evaluate(() => scrollTo(0, 0))
     await page.mouse.move(200, 400)
     await page.mouse.wheel(0, 600)
     await expect.poll(() => headerBottom(page)).toBeLessThanOrEqual(0)
     await page.mouse.wheel(0, -100)
     await expect.poll(() => headerBottom(page)).toBeGreaterThan(0)
+    // O palco voltou inteiro: no fim do pin mostra o último projeto.
+    const stageEnd = await stagePins(page).evaluate((el) => el.getBoundingClientRect().bottom + scrollY - innerHeight)
+    await page.evaluate((y) => scrollTo(0, y), stageEnd)
+    await expect(page.locator('.stage-count')).toHaveText('5 / 5')
+    await page.evaluate(() => scrollTo(0, 0))
   }
   expect(errors).toEqual([])
 })

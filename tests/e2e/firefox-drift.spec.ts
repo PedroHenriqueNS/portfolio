@@ -12,3 +12,16 @@ test('o scroll para onde foi mandado, sem deriva', async ({ page, browserName })
     expect(Math.abs((await page.evaluate(() => scrollY)) - y), `em ${y}`).toBeLessThanOrEqual(1)
   }
 })
+
+// No celular as seções grudam (sticky) e entram por translate ao longo da página inteira: três pontos no meio dela.
+test('no celular, o scroll para onde foi mandado no meio da página', async ({ page, browserName }) => {
+  test.skip(browserName !== 'firefox' || page.viewportSize()!.width !== 390, 'só no Firefox, em 390×844')
+  await page.goto('/')
+  await page.evaluate(() => document.fonts.ready)
+  const max = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight)
+  for (const y of [0.3, 0.55, 0.8].map((f) => Math.round(max * f))) {
+    await page.evaluate((v) => scrollTo(0, v), y)
+    await page.waitForTimeout(300) // o que o brief manda medir: onde o scroll está 300 ms depois
+    expect(Math.abs((await page.evaluate(() => scrollY)) - y), `em ${y}`).toBeLessThanOrEqual(1)
+  }
+})

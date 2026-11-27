@@ -44,6 +44,32 @@ test('no desktop, Enter numa entrada revela o resumo e a stack sem mudar a altur
   expect(Math.abs(after - height)).toBeLessThanOrEqual(1)
 })
 
+test('no desktop, as entradas já pintam fechadas, sem animar o fechamento na carga', async ({ page }) => {
+  test.skip(isMobile(page), 'só no desktop')
+  await page.addInitScript(() => {
+    const w = window as unknown as { __xpRuns: number }
+    w.__xpRuns = 0
+    document.addEventListener('transitionrun', (e) => (e.target as Element).matches('.xp-more, .xp-toggle svg') && w.__xpRuns++)
+  })
+  await page.goto('/')
+  await expect(section(page).locator('.xp-toggle').first()).toHaveAttribute('aria-expanded', 'false')
+  await page.waitForTimeout(400)
+  expect(await page.evaluate(() => (window as unknown as { __xpRuns: number }).__xpRuns)).toBe(0)
+})
+
+test.describe('sem JavaScript', () => {
+  test.use({ javaScriptEnabled: false })
+  test('no celular, o resumo e a stack aparecem na folha', async ({ page }) => {
+    test.skip(!isMobile(page), 'só no celular')
+    await page.goto('/')
+    const summaries = section(page).locator('.xp-more .xp-summary')
+    await expect(summaries).toHaveCount(5)
+    for (const s of await summaries.all()) await expect(s).toBeVisible()
+    await expect(section(page).locator('.xp-more .xp-stack').first()).toBeVisible()
+    await expect(section(page).locator('.xp-open').first()).toBeHidden()
+  })
+})
+
 test('no celular, o botão da folha abre a gaveta e Esc devolve o foco', async ({ page }) => {
   test.skip(!isMobile(page), 'só no celular')
   await page.goto('/')

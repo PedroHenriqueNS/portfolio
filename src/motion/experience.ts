@@ -14,9 +14,16 @@ export const experience: Scene = (root, c) => {
   if (c.desktop) {
     const track = section.querySelector<HTMLElement>('.xp-list')!
     const dist = () => Math.max(0, track.scrollWidth - innerWidth)
-    const toggles = section.querySelectorAll('.xp-toggle')
-    toggles.forEach((t) => t.setAttribute('aria-expanded', 'false'))
-    onRevert(() => toggles.forEach((t) => t.setAttribute('aria-expanded', 'true')))
+    // Fechar (e reabrir na reversão) sem transição: ela é só para o toque do usuário, não para a carga.
+    const animated = section.querySelectorAll<HTMLElement>('.xp-more, .xp-toggle svg')
+    const setAll = (open: boolean) => {
+      animated.forEach((el) => (el.style.transition = 'none'))
+      section.querySelectorAll('.xp-toggle').forEach((t) => t.setAttribute('aria-expanded', String(open)))
+      void section.offsetHeight // aplica o estado novo antes de devolver a transição
+      animated.forEach((el) => (el.style.transition = ''))
+    }
+    setAll(false)
+    onRevert(() => setAll(true))
 
     const st = gsap.to(track, {
       x: () => -dist(),

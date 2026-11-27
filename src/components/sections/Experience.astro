@@ -84,6 +84,15 @@ const closeLabel = m.xp_close({}, { locale })
       ))
     }
   </ol>
+  <noscript>
+    <!-- Sem script a gaveta pode não abrir: no celular, o resumo e a stack ficam na própria folha. -->
+    <style is:inline>
+      @media (max-width: 767.98px) {
+        [data-section="experience"] .xp-more { display: grid; margin-bottom: 1.5rem; }
+        [data-section="experience"] .xp-open { display: none; }
+      }
+    </style>
+  </noscript>
 </section>
 
 <script>
@@ -214,28 +223,56 @@ const closeLabel = m.xp_close({}, { locale })
   @media (max-width: 767.98px) {
     .xp { padding: 8svh var(--gutter) 12svh; }
     .xp-list { gap: 0; }
+    /* Duas superfícies alternadas, feitas dos tokens: a clara (um tom acima do fundo) e a invertida (tinta);
+       a atual leva o acento. Cada folha define as próprias cores de texto, traço e linha. */
     .xp-item {
-      --sheet: var(--bg);
+      --sheet: color-mix(in srgb, var(--ink) 7%, var(--bg));
+      --sheet-ink: var(--ink);
+      --sheet-soft: color-mix(in srgb, var(--ink) 70%, var(--sheet));
+      --sheet-stroke: color-mix(in srgb, var(--ink) 55%, var(--sheet));
+      --sheet-line: color-mix(in srgb, var(--ink) 22%, var(--sheet));
+      --sheet-dot: var(--accent);
       display: flex;
       flex-direction: column;
       min-height: 52svh;
       margin-bottom: 1.125rem;
       padding: clamp(1.375rem, 6vw, 2.5rem);
-      border: 1px solid var(--line);
+      border: 1px solid var(--sheet-line);
       border-radius: 1.75rem;
       background: var(--sheet);
-      box-shadow: 0 -20px 40px -32px var(--shadow);
+      color: var(--sheet-ink);
+      box-shadow: 0 -14px 36px -14px var(--shadow), 0 1px 0 0 var(--sheet-line);
       transform-origin: 50% 0;
     }
-    .xp-item:nth-child(even) { --sheet: color-mix(in srgb, var(--ink) 5%, var(--bg)); }
+    .xp-item:nth-child(even) {
+      --sheet: var(--ink);
+      --sheet-ink: var(--bg);
+      --sheet-soft: color-mix(in srgb, var(--bg) 75%, var(--sheet));
+      --sheet-stroke: color-mix(in srgb, var(--bg) 62%, var(--sheet));
+      --sheet-line: color-mix(in srgb, var(--bg) 25%, var(--sheet));
+    }
+    .xp-item:first-child {
+      --sheet: var(--accent);
+      --sheet-ink: var(--on-accent);
+      --sheet-soft: color-mix(in srgb, var(--on-accent) 85%, var(--sheet));
+      --sheet-stroke: color-mix(in srgb, var(--on-accent) 72%, var(--sheet));
+      --sheet-line: color-mix(in srgb, var(--on-accent) 30%, var(--sheet));
+      --sheet-dot: var(--on-accent);
+    }
     :global(html.motion) .xp-item { position: sticky; top: calc(5rem + var(--i) * 0.875rem); }
+    .xp-role { color: var(--sheet-ink); }
+    .xp-period, .xp-more .xp-summary, .xp-stack li { color: var(--sheet-soft); }
+    .xp-dot { background: var(--sheet-dot); }
+    /* Ícones de marca escuros somem na folha invertida: cada um ganha uma base clara. */
+    .xp-stack img { box-sizing: content-box; padding: 0.25rem; border-radius: 0.5rem; background: var(--bg); }
 
     .xp-year {
       position: relative;
       left: -0.04em;
       margin-bottom: 1rem;
       font-size: clamp(6.5rem, 34vw, 10rem);
-      -webkit-text-stroke-width: 1.5px;
+      /* Metade do traço fica sob o preenchimento (paint-order): 4 px desenham 2 px visíveis. */
+      -webkit-text-stroke: 4px var(--sheet-stroke);
     }
     .xp-company { font-size: clamp(2.25rem, 11vw, 3.25rem); }
     .xp-period { margin-bottom: 1.75rem; }
@@ -249,16 +286,17 @@ const closeLabel = m.xp_close({}, { locale })
       min-height: 2.75rem;
       margin-top: auto;
       padding: 0 1.125rem;
-      border: 1px solid var(--line);
+      border: 1px solid var(--sheet-stroke);
       border-radius: 9999px;
       font: 500 0.9375rem/1 var(--font-sans);
-      color: var(--ink);
+      color: var(--sheet-ink);
       background: var(--sheet);
       cursor: pointer;
       touch-action: manipulation;
       transition: border-color 200ms ease;
     }
-    .xp-open:hover { border-color: var(--ink); }
+    .xp-open:hover { border-color: var(--sheet-ink); }
+    .xp-open:focus-visible { outline-color: var(--sheet-ink); }
   }
 
   .xp-drawer-meta { margin-bottom: 0.75rem; font-weight: 500; }

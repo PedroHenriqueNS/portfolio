@@ -1,16 +1,17 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
 
 const section = (page: Page) => page.locator('[data-section="skills"]')
 const isMobile = (page: Page) => page.viewportSize()!.width < 768
 /** A lista de verdade: fora das cópias do laço (que têm aria-hidden). */
 const realItems = (page: Page) => section(page).locator('ul:not([aria-hidden="true"]) > li')
+const rect = (l: Locator) => l.evaluate((el) => el.getBoundingClientRect().toJSON() as DOMRect)
 
 async function bring(page: Page, selector: string) {
   await page.evaluate(async (sel) => {
     await document.fonts.ready
     document.querySelector(sel)!.scrollIntoView({ block: 'center' })
   }, selector)
-  await page.waitForTimeout(400)
+  await expect(page.locator(selector).first()).toBeInViewport()
 }
 
 test('31 itens em três grupos, cada um com nome e nível acessível', async ({ page }) => {
@@ -24,16 +25,34 @@ test('31 itens em três grupos, cada um com nome e nível acessível', async ({ 
   }
 })
 
-test('as cópias do laço têm aria-hidden e não recebem foco', async ({ page }) => {
+test('as cópias do laço têm aria-hidden e ficam fora da ordem de tabulação', async ({ page }) => {
   await page.goto('/')
   await bring(page, '[data-section="skills"]')
   const copies = section(page).locator('[data-copy]')
   await expect.poll(() => copies.count()).toBeGreaterThan(0)
   for (const copy of await copies.all()) {
     await expect(copy).toHaveAttribute('aria-hidden', 'true')
-    expect(await copy.evaluate((el) => (el as HTMLElement).inert)).toBe(true)
     await expect(copy.locator('[id], [popover]')).toHaveCount(0)
+    for (const name of await copy.locator('.sk-name').all()) await expect(name).toHaveAttribute('tabindex', '-1')
   }
+})
+
+test('Tab passa por cada um dos 31 nomes uma vez', async ({ page }) => {
+  await page.goto('/')
+  await page.locator('[data-section="projects"] a[data-project]').last().focus()
+  const seen: string[] = []
+  for (let i = 0; i < 60; i++) {
+    await page.keyboard.press('Tab')
+    const at = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement
+      return { inSection: !!el.closest('[data-section="skills"]'), name: el.matches('.sk-name') ? el.innerText.trim() : null, copy: !!el.closest('[data-copy]') }
+    })
+    if (!at.inSection) break
+    expect(at.copy).toBe(false)
+    if (at.name) seen.push(at.name)
+  }
+  expect(seen).toHaveLength(31)
+  expect(new Set(seen).size).toBe(31)
 })
 
 test('o chip "como trabalho" existe', async ({ page }) => {
@@ -51,10 +70,49 @@ test('no desktop, foco num nome abre o tooltip com categoria e nível, e o nome 
   await expect(tip).toBeVisible()
   await expect(tip).toContainText('Banco de dados')
   await expect(tip.locator('[role="img"]')).toHaveAttribute('aria-label', 'nível 4 de 5')
-  await page.waitForTimeout(800)
-  const r = await name.evaluate((el) => el.getBoundingClientRect().toJSON() as DOMRect)
-  expect(r.left).toBeGreaterThanOrEqual(0)
-  expect(r.right).toBeLessThanOrEqual(1440)
+  await expect.poll(async () => {
+    const r = await rect(name)
+    return r.left >= 0 && r.right <= 1440
+  }).toBe(true)
+})
+
+test('no desktop, todo nome visível (original ou cópia) mostra o tooltip junto dele ao passar o cursor', async ({ page }) => {
+  test.skip(isMobile(page), 'só no desktop')
+  await page.goto('/')
+  const anchored = await page.evaluate(() => CSS.supports('position-area: top'))
+  let copies = 0
+  for (const g of ['featured', 'frontend', 'backend']) {
+    await bring(page, `[data-group="${g}"]`)
+    const band = section(page).locator(`[data-group="${g}"] .sk-band`)
+    const b = await rect(band)
+    // Cursor sobre a faixa: ela para, e as posições lidas a seguir valem.
+    await page.mouse.move(b.left + 4, b.top + b.height / 2)
+    await expect.poll(() => band.evaluate((el) => el.matches(':hover'))).toBe(true)
+    const names = band.locator('.sk-name')
+    const visible: Locator[] = []
+    for (const n of await names.all()) {
+      const r = await rect(n)
+      if (r.left >= 0 && r.right <= 1440 && r.top >= 0 && r.bottom <= 900) visible.push(n)
+    }
+    expect(visible.length).toBeGreaterThan(1)
+    copies += (await Promise.all(visible.map((n) => n.evaluate((el) => !!el.closest('[data-copy]'))))).filter(Boolean).length
+    for (const n of visible) {
+      const text = (await n.innerText()).trim()
+      const r = await rect(n)
+      await page.mouse.move(r.left + r.width / 2, r.top + r.height / 2)
+      const tip = page.locator('.tip-card:popover-open')
+      await expect(tip).toHaveCount(1)
+      await expect(tip).toContainText(text)
+      if (!anchored) continue
+      await expect.poll(async () => {
+        const t = await rect(tip)
+        const gapX = Math.max(0, r.left - t.right, t.left - r.right)
+        const gapY = Math.max(0, r.top - t.bottom, t.top - r.bottom)
+        return Math.max(gapX, gapY)
+      }, `tooltip de ${text}`).toBeLessThanOrEqual(24)
+    }
+  }
+  expect(copies, 'cópias entre os nomes visíveis').toBeGreaterThan(0)
 })
 
 test('no desktop, três faixas em sentidos opostos que andam sozinhas', async ({ page }) => {
@@ -89,9 +147,8 @@ test('no celular, uma faixa e uma grade de 4 colunas com ícone, nome e nível v
       expect(size).toBeGreaterThanOrEqual(11)
     }
   }
-  await page.waitForTimeout(1200)
-  const opacities = await section(page).locator('[data-group="backend"] li').evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity))
-  expect(new Set(opacities)).toEqual(new Set(['1']))
+  const items = section(page).locator('[data-group="backend"] li')
+  await expect.poll(async () => [...new Set(await items.evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity)))]).toEqual(['1'])
 })
 
 test('com a seção fora da tela, nenhuma faixa se move', async ({ page }) => {

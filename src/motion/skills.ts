@@ -29,16 +29,16 @@ export const skills: Scene = (root, c) => {
     const list = track.querySelector<HTMLElement>('.sk-list')!
     const dir = i % 2 ? 1 : -1
 
-    // A cópia é só desenho: sem ids, sem popovers, fora da árvore de acessibilidade e do foco.
+    // A cópia fica fora da árvore de acessibilidade (aria-hidden) e da tabulação (tabindex -1), mas responde ao
+    // cursor e ao toque: o nome copiado abre o tooltip do original (popovertarget aponta para o mesmo cartão).
     const copy = list.cloneNode(true) as HTMLElement
     copy.querySelectorAll('[popover]').forEach((el) => el.remove())
-    copy.querySelectorAll('[id], [popovertarget]').forEach((el) => {
-      el.removeAttribute('id')
-      el.removeAttribute('popovertarget')
-      el.removeAttribute('style')
+    copy.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'))
+    copy.querySelectorAll<HTMLElement>('.sk-name').forEach((el) => {
+      el.tabIndex = -1
+      el.style.removeProperty('anchor-name')
     })
     copy.setAttribute('aria-hidden', 'true')
-    copy.inert = true
     copy.dataset.copy = ''
 
     let period = 0
@@ -57,7 +57,10 @@ export const skills: Scene = (root, c) => {
 
     const wrap = (v: number) => (period ? gsap.utils.wrap(-period, 0, v) : 0)
     const setX = gsap.quickSetter(track, 'x', 'px') as (v: number) => void
-    let x = dir > 0 ? -period / 2 : 0
+    // Começa com a emenda (fim da lista, início da primeira cópia) no meio da tela: o laço se mostra desde já.
+    const start = () => wrap(innerWidth / 2 - period)
+    let x = start()
+    let moved = false
     let boost = 0
     let target: number | null = null
     setX(x)
@@ -75,6 +78,7 @@ export const skills: Scene = (root, c) => {
         return
       }
       target = null
+      moved = true
       x = wrap(x + dir * (DRIFT + boost) * s)
       setX(x)
     }
@@ -94,7 +98,7 @@ export const skills: Scene = (root, c) => {
       onUpdate: (self) => (boost = Math.max(boost, Math.min(MAX_BOOST, Math.abs(self.getVelocity()) * BOOST))),
       onRefresh: (self) => {
         measure()
-        x = wrap(x)
+        x = moved ? wrap(x) : start()
         setX(x)
         run(self.isActive)
       },
@@ -104,12 +108,13 @@ export const skills: Scene = (root, c) => {
     // Foco num nome: a faixa para (tick) e desliza até o nome ficar inteiro na janela.
     const focus = (e: FocusEvent) => {
       const name = (e.target as Element).closest?.('.sk-name')
-      if (!name) return
+      // Uma cópia só recebe foco pelo clique, e já está sob o cursor.
+      if (!name || name.closest('[data-copy]')) return
       const r = name.getBoundingClientRect()
       let shift = 0
       if (r.left < EDGE) shift = EDGE - r.left
       else if (r.right > innerWidth - EDGE) shift = innerWidth - EDGE - r.right
-      // Só a lista de verdade recebe foco: o destino fica em [-period, 0], sem dar a volta.
+      // Só a lista de verdade chega aqui: o destino fica em [-period, 0], sem dar a volta.
       if (shift) target = Math.min(0, Math.max(-period, x + shift))
     }
     band.addEventListener('focusin', focus)

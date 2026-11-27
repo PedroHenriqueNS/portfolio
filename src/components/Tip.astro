@@ -35,25 +35,56 @@ const tipId = `tip-${id}`
 <script>
   // Hover e foco abrem os gatilhos `data-tip-hover`; o clique (toque) continua com o popovertarget nativo.
   // No documento: sobrevive às trocas do ClientRouter e vale sem motion.
+  // Vários gatilhos podem abrir o mesmo cartão (as cópias de uma faixa em laço), e eles se movem por transform,
+  // que o anchor positioning não acompanha em todo navegador: o cartão é posto junto de quem o abriu, por script.
   const trigger = (t: EventTarget | null) => (t as Element | null)?.closest?.<HTMLButtonElement>('[data-tip-hover]') ?? null
   const card = (b: HTMLButtonElement) => b.popoverTargetElement as HTMLElement | null
+  const wide = matchMedia('(min-width: 768px)')
+  const GAP = 10
+  const EDGE = 8
+  let last: HTMLButtonElement | null = null
+  const place = () => {
+    const c = last && card(last)
+    if (!last || !c?.matches(':popover-open')) return
+    if (!wide.matches) {
+      // Abaixo de 768 px vale a gaveta do CSS.
+      for (const p of ['position-area', 'inset', 'margin', 'left', 'top']) c.style.removeProperty(p)
+      return
+    }
+    const r = last.getBoundingClientRect()
+    const above = r.top - c.offsetHeight - GAP
+    c.style.setProperty('position-area', 'none')
+    c.style.inset = 'auto'
+    c.style.margin = '0'
+    c.style.left = `${Math.max(EDGE, Math.min(r.left, innerWidth - c.offsetWidth - EDGE))}px`
+    c.style.top = `${above >= EDGE ? above : r.bottom + GAP}px`
+  }
   const open = (b: HTMLButtonElement) => {
     const c = card(b)
-    if (!c || c.matches(':popover-open')) return
-    c.showPopover()
-    // O clique que vem logo depois (mouse, Enter, toque que focou) não deve fechar o que acabou de abrir.
-    b.dataset.tipAuto = ''
+    last = b
+    if (!c) return
+    if (!c.matches(':popover-open')) {
+      c.showPopover()
+      // O clique que vem logo depois (mouse, Enter, toque que focou) não deve fechar o que acabou de abrir.
+      b.dataset.tipAuto = ''
+    }
+    place()
   }
   const close = (b: HTMLButtonElement) => {
     delete b.dataset.tipAuto
     const c = card(b)
-    if (c?.matches(':popover-open')) c.hidePopover()
+    if (c?.matches(':popover-open') && last === b) c.hidePopover()
   }
   const fine = matchMedia('(hover: hover) and (pointer: fine)')
   document.addEventListener('pointerover', (e) => {
     const b = trigger(e.target)
     if (b && e.pointerType === 'mouse' && fine.matches) open(b)
   })
+  // Aberto pelo popovertarget nativo (toque, Enter depois de fechar): o gatilho é o último tocado.
+  document.addEventListener('pointerdown', (e) => (last = trigger(e.target) ?? last))
+  document.addEventListener('toggle', (e) => (e as ToggleEvent).newState === 'open' && place(), true)
+  document.addEventListener('scroll', place, { passive: true })
+  addEventListener('resize', place)
   document.addEventListener('pointerout', (e) => {
     const b = trigger(e.target)
     if (b && e.pointerType === 'mouse' && !b.contains(e.relatedTarget as Node) && !b.matches(':focus-visible')) close(b)

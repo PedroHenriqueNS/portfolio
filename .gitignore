@@ -28,3 +28,8 @@ src/paraglide
 test-results
 playwright-report
 .astro
+
+# Estado de instalação do Yarn
+.yarn/install-state.gz
+**/.yarn/install-state.gz
+project.inlang/cache

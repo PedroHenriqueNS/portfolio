@@ -7,9 +7,10 @@
 :root {
   --bg: #EEF0F3;
   --ink: #0E1420;
-  /* apagado: #7F899B do esboço dá 3,2:1 sobre o fundo; #616B7D passa AA (4,7:1). */
-  --muted: #616B7D;
-  --accent: #2B4BFF;
+  /* apagado e acento: medidos contra o fundo de fato atrás do texto, onde a névoa tinge o gelo até ~#C3C9E9
+     (#616B7D e #2B4BFF caíam para 3,3:1 e 3,6:1 ali); estes passam AA (4,7:1) também sobre a névoa. */
+  --muted: #4C5362;
+  --accent: #243ED4;
   --accent-2: #5A75FF; /* fim do gradiente: 3,4:1 sobre o fundo (texto grande) */
   --on-accent: #FFFFFF;
   --line: #D3D8E0;
@@ -30,8 +31,9 @@
 html.dark {
   --bg: #060918;
   --ink: #EDEFFB;
-  --muted: #8A92BD;
-  --accent: #6E86FF;
+  /* Idem no escuro: a névoa clareia o marinho até ~#343951 atrás do texto (#8A92BD e #6E86FF davam 3,7:1 e 3,5:1). */
+  --muted: #A1A8CA;
+  --accent: #92A4FF;
   --accent-2: #A9B8FF;
   --on-accent: #060918;
   --line: #1E2548;

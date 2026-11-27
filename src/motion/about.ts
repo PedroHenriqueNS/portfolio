@@ -1,5 +1,6 @@
 import { gsap } from 'gsap'
-import type { Scene } from './scene'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onRevert, type Scene } from './scene'
 
 /**
  * A frase se preenche na ordem de leitura, de um fantasma (0,08) até 1. No desktop a seção fica presa por 1,3 tela;
@@ -24,6 +25,11 @@ export const about: Scene = (root, c) => {
         : { trigger: sentence, start: 'top 85%', end: 'bottom 45%', scrub: 0.3 },
     },
   )
+  // Até a frase apontar no pé da tela, as palavras ficam inteiras por cima do fantasma (que ninguém vê ainda):
+  // quem lê a página carregada no topo, como a auditoria de contraste, encontra texto legível.
+  sentence.classList.add('is-unseen')
+  ScrollTrigger.create({ trigger: sentence, start: 'top bottom', once: true, onEnter: () => sentence.classList.remove('is-unseen') })
+  onRevert(() => sentence.classList.remove('is-unseen'))
 
   // Formas flutuantes: cada uma sobe ou desce numa velocidade própria; no celular, a metade do percurso.
   const reach = c.desktop ? 1 : 0.5

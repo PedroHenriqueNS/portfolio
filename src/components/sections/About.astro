@@ -63,6 +63,8 @@ const EDU_ICON = { cs: 'graduation-cap', telecom: 'radio-tower', english: 'langu
     letter-spacing: -0.03em;
     text-wrap: balance;
   }
+  /* Posto pelo script até a frase entrar na tela (motion/about.ts): por cima da opacidade que o GSAP escreve. */
+  .about-sentence.is-unseen :global(.w) { opacity: 1 !important; }
   .num {
     font-weight: inherit;
     background: linear-gradient(90deg, var(--accent), var(--accent-2));

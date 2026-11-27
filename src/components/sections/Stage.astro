@@ -268,7 +268,8 @@ const open = m.stage_open({}, { locale })
     /* "Todos" sempre à mão: gruda no pé da tela por todo o palco, ao lado do "Ver projeto". */
     :global(html.motion) .stage-bar { position: sticky; bottom: 1.25rem; z-index: 6; height: 0; background: none; }
     :global(html.motion) .stage-bar-inner { position: absolute; right: var(--gutter); bottom: 0; padding: 0; }
-    :global(html.motion) .stage-all { background: rgb(0 0 0 / 0.28); }
+    /* Passa por cima das capturas (fundo branco): com 0,6 de preto, o branco do texto fica em 5,9:1 no pior caso. */
+    :global(html.motion) .stage-all { background: rgb(0 0 0 / 0.6); }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -3,8 +3,10 @@
 RewriteEngine On
 RewriteBase /
 
-# Sem isto, uma pasta (en/, es/, projetos/) faria o mod_dir redirecionar /en para /en/.
-# As URLs limpas são servidas pelas regras abaixo; /en/ é redirecionada por nós para /en.
+# O mod_dir do Apache roda depois do mod_rewrite e redireciona /en para /en/ sempre que a URL
+# aponta para uma pasta real (en/, es/), mesmo com en.html existindo. Sem esta diretiva, /en nunca
+# dá 200 (testado em httpd:2.4). A produção é LiteSpeed: confirme a diretiva lá com
+# BASE_URL=<host> yarn check:apache antes de um deploy de produção.
 DirectorySlash Off
 
 # só-produção: início
@@ -16,6 +18,15 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 # só-produção: fim
+
+# Página 404 por idioma, sem <If>. O ErrorDocument busca /404.html por redirect interno, as regras
+# rodam de novo e THE_REQUEST ainda guarda o pedido original: /en/... e /es/... trocam para a
+# página do idioma. Se o servidor não reexecutar as regras, todos veem a 404 em português.
+ErrorDocument 404 /404.html
+RewriteCond %{THE_REQUEST} ^\S+\s/en(/|\?|\s)
+RewriteRule ^404\.html$ /en/404.html [L]
+RewriteCond %{THE_REQUEST} ^\S+\s/es(/|\?|\s)
+RewriteRule ^404\.html$ /es/404.html [L]
 
 # Legado: /projeto-<slug>.html (arquivo plano do site antigo, já indexado) vai para a URL canônica.
 RewriteRule ^projeto-([a-z0-9-]+)\.html$ /projetos/$1 [R=301,L]
@@ -41,21 +52,12 @@ RewriteRule ^(.+)/$ /$1 [R=301,L]
 RewriteCond %{REQUEST_URI} !/404$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-RewriteRule ^(.+)$ /$1.html [L]
+RewriteRule ^(.+)$ %{DOCUMENT_ROOT}/$1.html [L]
 
 # O que sobrou e não é arquivo (nem pasta como /projetos ou /en/projects, que o Apache listaria
 # ou negaria com 403) é 404 honesto. Antes caía no index.html; agora responde a página 404.
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^.+$ - [R=404,L]
-
-# Página 404 por idioma: /en/... usa en/404.html, /es/... usa es/404.html, o resto a da raiz.
-ErrorDocument 404 /404.html
-<If "%{REQUEST_URI} =~ m#^/en(/|$)#">
-  ErrorDocument 404 /en/404.html
-</If>
-<If "%{REQUEST_URI} =~ m#^/es(/|$)#">
-  ErrorDocument 404 /es/404.html
-</If>
 
 # HTML e o currículo sempre revalidados: um deploy novo aparece na hora. _astro/* tem hash no nome.
 <IfModule mod_headers.c>

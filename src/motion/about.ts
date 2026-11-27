@@ -2,7 +2,7 @@ import { gsap } from 'gsap'
 import type { Scene } from './scene'
 
 /**
- * A frase se preenche na ordem de leitura. No desktop a seção fica presa por 1,3 tela;
+ * A frase se preenche na ordem de leitura, de um fantasma (0,08) até 1. No desktop a seção fica presa por 1,3 tela;
  * no celular não prende: o preenchimento acompanha a passagem do bloco pela tela.
  */
 export const about: Scene = (root, c) => {
@@ -10,11 +10,13 @@ export const about: Scene = (root, c) => {
   if (!section) return
   const sentence = section.querySelector<HTMLElement>('.about-sentence')!
 
+  // Frente nítida: cada palavra leva o dobro do intervalo entre palavras, então no máximo duas estão em transição.
   gsap.fromTo(
     section.querySelectorAll('.about-sentence .w'),
-    { opacity: 0.14 },
+    { opacity: 0.08 },
     {
       opacity: 1,
+      duration: 0.16,
       stagger: 0.08,
       ease: 'none',
       scrollTrigger: c.desktop

@@ -1,11 +1,11 @@
 ---
-summary: "App móvil para presupuestos de materiales de construcción de Sodimac por ID de producto, con API en Node.js que hace web scraping de los precios."
+summary: "App móvil para cotizar materiales de construcción de Sodimac por ID de producto, con una API en Node.js que obtiene los precios por web scraping."
 ---
 
-Una aplicación móvil para hacer presupuestos de materiales de construcción con productos disponibles en **Sodimac**.
+Una aplicación móvil para armar cotizaciones de materiales de construcción con productos disponibles en **Sodimac**.
 
-La aplicación hace solicitudes a una API que realiza el *web scraping* del sitio de Sodimac a partir del ID del producto, guardando los datos y actualizándolos conforme cambian en el sitio oficial.
+La aplicación hace solicitudes a una API que hace *web scraping* del sitio de Sodimac a partir del ID del producto, guardando los datos y actualizándolos cuando cambian en el sitio oficial.
 
-El proyecto está destinado a un vendedor de la empresa, que naturalmente busca los productos por ID; por eso toda la búsqueda se basa en el ID del producto.
+El proyecto está pensado para un empleado que ya busca los productos por ID; por eso toda la búsqueda se basa en el ID del producto.
 
-La aplicación se construye con **React Native** y el framework **Expo**.
+La aplicación está hecha en **React Native** con el framework **Expo**.

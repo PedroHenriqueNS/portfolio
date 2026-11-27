@@ -1,9 +1,9 @@
 ---
-summary: "Mi primera app móvil, de la universidad: bloc de notas con guardado automático, hecha con Angular e Ionic."
+summary: "Mi primera app móvil, de la universidad: un bloc de notas con guardado automático, hecho en Angular con Ionic."
 ---
 
-El primer proyecto móvil, hecho para terminar el semestre en la universidad.
+Mi primer proyecto móvil, hecho para cerrar el semestre en la universidad.
 
-El objetivo es un bloc de notas con guardado automático; de ahí el nombre, inspirado en *"Microsoft OneNote"* 😁😁
+El objetivo era un bloc de notas con guardado automático; de ahí el nombre, inspirado en *"Microsoft OneNote"* 😁😁
 
-La aplicación se construye con **Angular** a través del framework **Ionic**.
+La aplicación está hecha con **Angular** a través del framework **Ionic**.

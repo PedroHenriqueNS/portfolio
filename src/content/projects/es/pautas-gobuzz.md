@@ -1,11 +1,11 @@
 ---
-summary: "Gestor de pautas para redes sociales, con registro y estadísticas automáticos mediante Appwrite Functions. React, Vite, ShadCN y React Query."
+summary: "Planificador de contenidos para redes sociales, con registro y estadísticas automáticos mediante Appwrite Functions. React, Vite, ShadCN y React Query."
 ---
 
-Un gestor de pautas para publicaciones en redes sociales, en el que todo el proceso de control de pautas y de visualización de insights de los resultados está automatizado.
+Un planificador de contenidos para publicaciones en redes sociales, en el que todo el control de los contenidos y la consulta de métricas de resultados están automatizados.
 
-El registro de las pautas y la actualización de estadísticas las hacen automáticamente las Functions de **Appwrite**, que también se encarga de la base de datos y de la autenticación de usuarios.
+El registro de contenidos y la actualización de estadísticas se hacen automáticamente con las Functions de **Appwrite**, que también se encarga de la base de datos y de la autenticación de usuarios.
 
-La interfaz está estandarizada con los componentes personalizables de **ShadCN** y usa **React Query** para estandarizar, controlar y minimizar las llamadas a la API.
+La interfaz usa los componentes personalizables de **ShadCN** y **React Query** para estandarizar, controlar y reducir las llamadas a la API.
 
-Para optimizar la página se utilizó **Vite**.
+La página está optimizada con **Vite**.

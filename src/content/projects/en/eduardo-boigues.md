@@ -1,11 +1,11 @@
 ---
-summary: "Site for Eduardo Boigues's mayoral re-election campaign in Itaquaquecetuba (SP), 2024, with an ideas form sent to an API. React.js, Vite and Tailwind CSS."
+summary: "Site for Eduardo Boigues's 2024 mayoral re-election campaign in Itaquaquecetuba (SP), with an ideas form sent to an API. React.js, Vite and Tailwind CSS."
 ---
 
-A web page to introduce the candidate for mayor of Itaquaquecetuba, SP, running for re-election in 2024, and to encourage voters to contribute ideas for the next administration.
+A web page that introduces the mayor of Itaquaquecetuba, SP, in his 2024 re-election run, and invites voters to suggest ideas for the next term.
 
-The page was built with **React.js** and **Vite** and styled with **Tailwind CSS**.
+Built with **React.js** and **Vite**, styled with **Tailwind CSS**.
 
-The form is easy to fill in on any device and respects the more private information, which the user chooses whether to send.
+The form is easy to fill out on any device and respects privacy: for the more personal details, the user decides whether to send them.
 
-The ideas are sent to an **API**, which saves the information for later analysis.
+The ideas go to an **API**, which stores them for later analysis.

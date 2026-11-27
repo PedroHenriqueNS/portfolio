@@ -1,9 +1,9 @@
 ---
-summary: "Page for Flavia Morando, a mayoral candidate in São Bernardo do Campo (SP) in 2024. React.js, Vite and Tailwind CSS."
+summary: "Page for Flavia Morando, a 2024 mayoral candidate in São Bernardo do Campo (SP). React.js, Vite and Tailwind CSS."
 ---
 
-A web page to introduce the candidate for mayor of São Bernardo do Campo, SP, in 2024.
+A web page that introduces Flavia Morando, a candidate for mayor of São Bernardo do Campo, SP, in 2024.
 
-Built with **React.js** and **Vite** and styled with **Tailwind CSS**.
+Built with **React.js** and **Vite**, styled with **Tailwind CSS**.
 
-A simple design, based on artwork made by *designers* to highlight the candidate and her supporters.
+A simple design, based on artwork made by *designers*, that puts the candidate and her supporters front and center.

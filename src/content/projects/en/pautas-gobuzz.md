@@ -1,11 +1,11 @@
 ---
-summary: "Content planner for social media, with automatic logging and statistics through Appwrite Functions. React, Vite, ShadCN and React Query."
+summary: "Content planner for social media, with logging and stats automated through Appwrite Functions. React, Vite, ShadCN and React Query."
 ---
 
-A planner for social media posts, in which the whole process of tracking posts and viewing insights on the results is automated.
+A content planner for social media posts, where the whole process of tracking content and viewing performance insights is automated.
 
-Logging the posts and updating the statistics are done automatically by **Appwrite** Functions, which also handles the database and user authentication.
+Content is logged and stats are updated automatically by **Appwrite** Functions, which also handle the database and user authentication.
 
-The interface is standardized with **ShadCN** customizable components and uses **React Query** to standardize, control and minimize API calls.
+The interface is built on **ShadCN**'s customizable components and uses **React Query** to standardize, control and cut down API calls.
 
-**Vite** was used to optimize the page.
+The page is optimized with **Vite**.

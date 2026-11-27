@@ -1,7 +1,7 @@
 ---
-summary: "Sitio para mostrar proyectos de modelado 3D y novedades de las redes sociales del creador, hecho con React.js y contenido gestionado en Sanity."
+summary: "Sitio que muestra proyectos de modelado 3D y novedades de las redes sociales de su creador, hecho en React.js con contenido gestionado en Sanity."
 ---
 
-Un sitio para mostrar proyectos de modelado 3D y publicar novedades de las redes sociales del creador.
+Un sitio para mostrar proyectos de modelado 3D y publicar novedades de las redes sociales de su creador.
 
-La página está hecha con **React.js**, con back-end en **Sanity**.
+La página está hecha en **React.js**, con **Sanity** como back-end.

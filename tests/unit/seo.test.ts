@@ -17,6 +17,10 @@ describe('seo', () => {
     expect(list.itemListElement).toHaveLength(17)
     expect(list.itemListElement[0].item.url).toBe(`${SITE}/en/projects/linkeza`)
     expect(homeSeo('pt-br', projects).path).toBe('/')
+    // Mesmo @id em todos os idiomas, então a mesma url.
+    for (const l of ['pt-br', 'en', 'es'] as const) {
+      expect(graph(homeSeo(l, projects).jsonLd).find((n) => n['@type'] === 'Person')!.url).toBe(`${SITE}/`)
+    }
   })
 
   it('project', () => {

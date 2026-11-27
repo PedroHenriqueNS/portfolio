@@ -52,8 +52,8 @@ for (const path of ['/', '/en']) {
   })
 }
 
-test('ações do hero em uma linha', async ({ page }) => {
-  await page.goto('/')
+for (const path of ['/', '/en', '/es']) test(`${path}: ações do hero em uma linha`, async ({ page }) => {
+  await page.goto(path)
   const wraps = await page.locator('[data-section="hero"] a[data-action]').evaluateAll((els) =>
     els.map((el) => {
       const tops = new Set<number>()

@@ -1,9 +1,9 @@
 ---
-summary: "My first mobile app, from college: a notepad with automatic saving, built with Angular and Ionic."
+summary: "My first mobile app, from college: a notepad with autosave, built in Angular with Ionic."
 ---
 
-My first mobile project, made to finish the semester at university.
+My first mobile project, built to wrap up a semester in college.
 
-The goal is a notepad with automatic saving; hence the name, inspired by *"Microsoft OneNote"* 😁😁
+The goal was a notepad with autosave; hence the name, a nod to *"Microsoft OneNote"* 😁😁
 
-The application is built with **Angular** through the **Ionic** framework.
+The app is built with **Angular** using the **Ionic** framework.

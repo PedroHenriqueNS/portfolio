@@ -39,8 +39,10 @@ Atualizado em ${buildDate}. Fonte: ${SITE}/
 
 ## Outros idiomas
 
-- English: ${SITE}${homePath('en')}
-- Español: ${SITE}${homePath('es')}
+O mesmo conteúdo, adaptado, em inglês e em espanhol; cada projeto tem o mesmo slug nos três idiomas.
+
+- English: ${SITE}${homePath('en')} (projetos: ${SITE}${projectPath('en', '<slug>')})
+- Español: ${SITE}${homePath('es')} (proyectos: ${SITE}${projectPath('es', '<slug>')})
 
 ## Contato
 

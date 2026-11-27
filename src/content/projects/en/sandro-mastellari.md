@@ -1,9 +1,9 @@
 ---
-summary: "Page for Sandro Mastellari, a city council candidate in Santos (SP) in 2024. React.js, Vite and Tailwind CSS."
+summary: "Page for Sandro Mastellari, a 2024 city council candidate in Santos (SP). React.js, Vite and Tailwind CSS."
 ---
 
-A web page to introduce the city council candidate in Santos, SP, in 2024.
+A web page that introduces a candidate for city council in Santos, SP, in 2024.
 
-The page was built with **React.js** and **Vite** and styled with **Tailwind CSS**.
+Built with **React.js** and **Vite**, styled with **Tailwind CSS**.
 
-A simple design, made to highlight the candidate.
+A simple design, made to put the candidate front and center.

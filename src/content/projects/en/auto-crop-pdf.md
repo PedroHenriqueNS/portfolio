@@ -1,11 +1,11 @@
 ---
-summary: "Desktop app that crops PDFs automatically, made for Power BI reports: Electron and React on the front, a local Flask (Python) API on the back."
+summary: "Desktop app that crops PDFs automatically, built for Power BI reports: Electron and React on the front end, a local Flask (Python) API on the back end."
 ---
 
-A desktop application to crop PDFs automatically.
+A desktop app that crops PDFs automatically.
 
-It was built to crop **Power BI** reports, which leave large margins when exported to PDF.
+I built it for **Power BI** reports, which come out of the PDF export with wide margins.
 
-The application is built with **Electron** and **React.js** with **Vite**.
+The app runs on **Electron**, with **React.js** and **Vite**.
 
-To crop, the user selects several files, chooses the settings and sends them to a local API started by the app, built with **Flask** and **Python**.
+To crop, you pick several files, choose the settings and send them to a local API that the app starts, written in **Flask** with **Python**.

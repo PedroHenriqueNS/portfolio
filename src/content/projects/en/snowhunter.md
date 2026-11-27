@@ -1,7 +1,7 @@
 ---
-summary: "Site to showcase 3D modeling projects and the creator's social media updates, built with React.js and content managed in Sanity."
+summary: "Site that showcases 3D modeling projects and updates from the creator's social media, built in React.js with content managed in Sanity."
 ---
 
-A site to showcase 3D modeling projects and publish updates from the creator's social media.
+A site that showcases 3D modeling projects and posts updates from the creator's social media.
 
-The page is built with **React.js**, with a **Sanity** back end.
+The page is built in **React.js**, with **Sanity** as the back end.

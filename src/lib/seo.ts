@@ -46,7 +46,8 @@ const person = (locale: Locale) => ({
   '@id': PERSON_ID,
   name: NAME,
   alternateName: ['Pedro Henrique', 'PedroHenriqueNS'],
-  url: url(homePath(locale)),
+  // Uma pessoa, um @id, uma url: a raiz canônica em todos os idiomas (as páginas por idioma ficam no ProfilePage).
+  url: `${SITE}/`,
   image: `${SITE}/my_img_2.jpg`,
   jobTitle: m.hero_role({}, { locale }),
   description: m.seo_person_description({}, { locale }),
@@ -132,7 +133,7 @@ export function projectSeo(locale: Locale, p: SeoProject): Seo {
     jsonLd: {
       '@context': 'https://schema.org',
       '@graph': [
-        { ...creativeWork(locale, p), creator: { '@type': 'Person', '@id': PERSON_ID, name: NAME, url: url(homePath(locale)) } },
+        { ...creativeWork(locale, p), creator: { '@type': 'Person', '@id': PERSON_ID, name: NAME, url: `${SITE}/` } },
         {
           '@type': 'BreadcrumbList',
           itemListElement: [

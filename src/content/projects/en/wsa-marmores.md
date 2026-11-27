@@ -1,11 +1,11 @@
 ---
-summary: "Corporate site for WSA Mármores e Granitos: project gallery, stone catalog and contact with a map. React, Vite, Tailwind CSS and GSAP animations."
+summary: "Business site for WSA Mármores e Granitos: project gallery, stone catalog and contact with a map. React, Vite, Tailwind CSS and GSAP animations."
 ---
 
-Corporate site for a marble and granite shop, with a landing page, an about page, a project gallery by category, a stone catalog and a contact page with a **Google Maps** map.
+Business site for a marble and granite shop, with a landing page, an about page, a project gallery by category, a stone catalog and a contact page with a **Google Maps** map.
 
-Navigation uses **React Router** and the animations use **GSAP**, **Motion** and parallax effects, with a dedicated phone version.
+Navigation uses **React Router**, and the animations use **GSAP**, **Motion** and parallax effects, with a dedicated mobile version.
 
-Every quote request leads to **WhatsApp**, and the site includes SEO, **Google Analytics** and a privacy policy.
+Every quote request goes to **WhatsApp**, and the site has SEO, **Google Analytics** and a privacy policy.
 
-Built with **React.js**, **Vite**, **TypeScript**, **Tailwind CSS** and **ShadCN** components.
+Built with **React.js** and **Vite**, **TypeScript**, **Tailwind CSS** and **ShadCN** components.

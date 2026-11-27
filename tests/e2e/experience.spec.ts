@@ -165,6 +165,59 @@ test('o local da primeira entrada aparece com o ícone no trecho revelado', asyn
   }
 })
 
+const pinTop = (page: Page) =>
+  section(page).evaluate((el) => el.closest('.pin-spacer')!.getBoundingClientRect().top + scrollY)
+
+for (const [width, height] of [[1366, 768], [1280, 720], [1536, 730]]) {
+  test(`no desktop ${width}×${height}, cada entrada aberta cabe inteira na tela presa`, async ({ page }) => {
+    test.skip(isMobile(page), 'só no desktop')
+    await page.setViewportSize({ width, height })
+    await page.goto('/')
+    await expect(page.locator('.pin-spacer:has([data-section="experience"])')).toHaveCount(1)
+    const top = await pinTop(page)
+    const items = section(page).locator('.xp-item')
+    for (let i = 0; i < (await items.count()); i++) {
+      await page.evaluate((y) => scrollTo(0, y + 100), top)
+      const item = items.nth(i)
+      await item.locator('.xp-toggle').focus() // fora da janela, o foco leva a entrada ao centro do trilho
+      await page.keyboard.press('Enter')
+      await expect(item.locator('.xp-more')).toBeVisible()
+      await page.waitForTimeout(900) // scrub e transição de abertura
+      const m = await item.evaluate((el) => {
+        const header = document.querySelector('.site-header')!.getBoundingClientRect()
+        return {
+          stackBottom: el.querySelector('.xp-stack')!.getBoundingClientRect().bottom,
+          yearTop: el.querySelector('.xp-year')!.getBoundingClientRect().top,
+          ceiling: Math.max(0, header.bottom),
+          vh: innerHeight,
+        }
+      })
+      expect(m.stackBottom, `entrada ${i}: ${JSON.stringify(m)}`).toBeLessThanOrEqual(m.vh - 16)
+      expect(m.yearTop, `entrada ${i}: ${JSON.stringify(m)}`).toBeGreaterThanOrEqual(m.ceiling)
+    }
+  })
+}
+
+for (const [width, height] of [[1440, 900], [1280, 720]]) {
+  test(`no desktop ${width}×${height}, a última entrada fica inteira na tela no fim do pin`, async ({ page }) => {
+    test.skip(isMobile(page), 'só no desktop')
+    await page.setViewportSize({ width, height })
+    await page.goto('/')
+    const spacer = page.locator('.pin-spacer:has([data-section="experience"])')
+    await expect(spacer).toHaveCount(1)
+    const top = await pinTop(page)
+    const h = await spacer.evaluate((el) => (el as HTMLElement).offsetHeight)
+    await page.evaluate((y) => scrollTo(0, y), top + h - height - 1)
+    await page.waitForTimeout(900)
+    const r = await section(page).locator('.xp-item').last().evaluate((el) => {
+      const b = el.getBoundingClientRect()
+      return { left: b.left, right: b.right, vw: innerWidth }
+    })
+    expect(r.left, JSON.stringify(r)).toBeGreaterThanOrEqual(0)
+    expect(r.right, JSON.stringify(r)).toBeLessThanOrEqual(r.vw)
+  })
+}
+
 test.describe('sem JavaScript (local)', () => {
   test.use({ javaScriptEnabled: false })
   test('no celular, o local aparece na folha', async ({ page }) => {

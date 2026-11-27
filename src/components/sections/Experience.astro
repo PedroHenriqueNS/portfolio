@@ -260,6 +260,13 @@ const closeLabel = m.xp_close({}, { locale })
     }
     :global(html.motion) .xp-item { flex: none; width: min(80vw, 46rem); }
   }
+  /* Notebook baixo: o trilho fica centrado em 100vh, então a entrada aberta mais alta (a Dry Telecom, com dois cargos)
+     empurraria o ano gigante para baixo do cabeçalho. O ano e o espaço dele passam a seguir a altura da janela,
+     na mesma proporção de antes (22 : 13). Com 900 px ou mais de altura nada muda. */
+  @media (min-width: 768px) and (max-height: 899.98px) {
+    :global(html.motion) .xp-item { padding-top: clamp(70px, min(13vw, 17vh), 210px); }
+    :global(html.motion) .xp-year { font-size: clamp(120px, min(22vw, 28.75vh), 340px); }
+  }
 
   /* Celular: folhas; com motion, cada uma gruda no topo e a anterior recua (experience.ts). */
   @media (max-width: 767.98px) {

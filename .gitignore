@@ -29,6 +29,10 @@ test-results
 playwright-report
 .astro
 
+# Rascunhos locais (especificações, planos, roteiros) e configuração local do editor
+docs/superpowers/
+.claude/
+
 # Estado de instalação do Yarn
 .yarn/install-state.gz
 **/.yarn/install-state.gz

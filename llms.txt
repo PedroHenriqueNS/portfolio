@@ -2,7 +2,7 @@
 
 > Engenheiro de software full stack em Carapicuíba, SP (Grande São Paulo), com mais de 5 anos de experiência em TypeScript: React, Next.js, React Native, Node.js e NestJS, na AWS. Fundador do Linkeza. Português nativo, inglês avançado.
 
-Atualizado em 2026-11-27. Fonte: https://pedrohenriquens.com.br/
+Atualizado em 2026-11-28. Fonte: https://pedrohenriquens.com.br/
 
 ## Outros idiomas
 

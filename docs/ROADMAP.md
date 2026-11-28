@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Status (2026-11-27):** a reconstrução está pronta na branch `feat/astro-gsap-redesign`; o próximo passo é validar as regras de hospedagem no servidor de produção e publicar.
+> **Status (2026-11-28):** a reconstrução está publicada em produção e as regras de hospedagem passaram no servidor de produção; o próximo passo é a conferência em aparelhos reais.
 
 ## Fase 0 — Reconstrução em Astro com motion (done)
 
@@ -13,13 +13,13 @@
 
 **Concluído quando:** `yarn build` gera 57 páginas e passa o `check-dist`, `yarn test`, `yarn e2e` e `yarn check:apache` passam no HEAD da branch. Atingido em 2026-11-27.
 
-## Fase 1 — Validar no servidor de produção e publicar (planned)
+## Fase 1 — Validar no servidor de produção e publicar (done)
 
-- Publicar o `dist/` num host de teste no mesmo servidor LiteSpeed e rodar `BASE_URL=https://<host de teste> yarn check:apache` ([README](../README.md#antes-de-publicar)).
-- Se `DirectorySlash Off`, o `ErrorDocument` ou a 404 por idioma falharem lá, ajustar as regras antes do merge.
-- Merge na `main` (que publica) e o mesmo comando contra `https://pedrohenriquens.com.br` logo depois.
+- Merge na `main` em 2026-11-27 (pull request #6, commit `4653483`), que publicou o site.
+- Em 2026-11-28, `BASE_URL=https://pedrohenriquens.com.br yarn check:apache` a partir de um build do mesmo commit: 92 linhas, 0 falhas. O LiteSpeed respeita `DirectorySlash Off` e o `ErrorDocument`, e a 404 por idioma funciona.
+- Não há registro de uma rodada num host de teste antes do merge; a prova é a da produção.
 
-**Concluído quando:** o modo remoto do `check:apache` termina com zero falhas contra o host de teste e, depois do deploy, contra a produção.
+**Concluído quando:** o modo remoto do `check:apache` termina com zero falhas contra a produção depois do deploy. Atingido em 2026-11-28.
 
 ## Fase 2 — Conferência em aparelhos reais (planned)
 

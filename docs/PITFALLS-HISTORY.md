@@ -12,6 +12,8 @@ A história completa por trás de cada regra de [PITFALLS.md](./PITFALLS.md). Le
 
 **Correção:** o `scripts/check-apache.sh` ganhou o modo remoto (`BASE_URL=...`), que pula o Docker, roda a mesma tabela no host indicado só com GET e HEAD e acrescenta as linhas de HTTPS e www; quando `/en` ou `/es` respondem `301 /en/`, imprime `causa: o servidor ignorou DirectorySlash Off`. A regra geral voltou para a forma `%{DOCUMENT_ROOT}/$1.html -f`, a mesma que já roda em produção. O README ganhou "Antes de publicar" com o comando, a leitura de uma falha e como voltar atrás. Commits `c948254`, `f817f22`, `5a4917a`, `7ac7737`.
 
+**Depois:** em 2026-11-28, com o site publicado, o modo remoto passou contra a produção com 92 linhas e 0 falhas. O LiteSpeed respeita `DirectorySlash Off` e o `ErrorDocument`, e reexecuta as regras ao buscar a página de erro, que é o que a 404 por idioma precisa.
+
 ## DirectorySlash Off nunca sai do htaccess
 
 **Data:** 2026-11-27.

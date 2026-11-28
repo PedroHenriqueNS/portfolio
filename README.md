@@ -18,7 +18,7 @@ Node 22.23.4 ou mais novo (mínimo do Astro instalado). astro 7.4.13, tailwindcs
 
 O merge na `main` publica em produção: o push dispara `.github/workflows/deploy.yml`, que builda e copia o `dist/` para o Hostinger.
 
-A produção é LiteSpeed, e três coisas do `public/.htaccess` só foram provadas em Apache: `DirectorySlash Off`, o `ErrorDocument` e a 404 por idioma. Antes do merge, confira num host de teste no mesmo servidor:
+A produção é LiteSpeed, e as regras do `public/.htaccess` são testadas em Apache. As regras atuais valem nos dois: em 2026-11-28, logo depois da publicação, a tabela inteira passou contra a produção (92 linhas, 0 falhas). Uma regra nova só nasce provada em Apache; ao mudar o `.htaccess`, confira antes do merge num host de teste no mesmo servidor:
 
 ```sh
 yarn build && BASE_URL=https://<host de teste> yarn check:apache
@@ -28,7 +28,7 @@ Só faz GET e HEAD. A pasta do host de teste fica fora de `public_html/`; dentro
 
 - **Falha:** uma linha `causa: o servidor ignorou DirectorySlash Off` em `/en` ou `/es` quer dizer que as homes em inglês e espanhol entram em loop de redirect. Não publique.
 - **Logo depois do deploy:** o mesmo comando contra `https://pedrohenriquens.com.br`, a partir de um build local do mesmo commit.
-- **Voltar atrás:** reverta o commit de merge na `main` (`git revert -m 1 <merge>` e push). O site antigo volta para a raiz do repositório, o mesmo workflow o builda e o `rsync --delete` o republica por cima.
+- **Voltar atrás:** reverta o commit da mudança na `main` (`git revert <commit>` e push); o mesmo workflow builda e o `rsync --delete` republica por cima. Reverter `4653483`, o commit da reconstrução, devolve o site anterior à raiz do repositório.
 
 ## Adicionar um projeto
 

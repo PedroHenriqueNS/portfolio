@@ -6,7 +6,7 @@ Pegadinhas e restrições não óbvias, uma regra por entrada. As regras de cód
 
 ### Produção em LiteSpeed com regras testadas em Apache
 
-A produção é LiteSpeed atrás da CDN da Hostinger; o `yarn check:apache` prova as regras num Apache 2.4. `DirectorySlash Off`, o `ErrorDocument` e a 404 por idioma não estão provados no LiteSpeed: antes de publicar, rode `BASE_URL=https://<host de teste> yarn check:apache` num host de teste no mesmo servidor, e de novo contra a produção logo depois do deploy. [História](./PITFALLS-HISTORY.md#produção-em-litespeed-com-regras-testadas-em-apache)
+A produção é LiteSpeed atrás da CDN da Hostinger; o `yarn check:apache` prova as regras num Apache 2.4. As regras atuais valem nos dois: em 2026-11-28 a mesma tabela passou contra a produção. Uma regra nova só nasce provada em Apache: ao mudar o `public/.htaccess`, rode `BASE_URL=https://<host de teste> yarn check:apache` num host de teste no mesmo servidor antes de publicar, e de novo contra a produção logo depois do deploy. [História](./PITFALLS-HISTORY.md#produção-em-litespeed-com-regras-testadas-em-apache)
 
 ### DirectorySlash Off nunca sai do htaccess
 

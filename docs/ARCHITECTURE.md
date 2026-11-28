@@ -1,6 +1,6 @@
 # Arquitetura
 
-> **Status (2026-11-27):** construído: site estático em Astro com as 57 páginas nos três idiomas, motion GSAP das sete seções da home e da página de projeto, regras de hospedagem em `public/.htaccess`, checagens de build, testes de unidade e ponta a ponta, CI de pull request; desenhado, não construído: nada pendente no código; falta validar as regras no LiteSpeed de produção ([ROADMAP.md](./ROADMAP.md)).
+> **Status (2026-11-28):** construído e publicado: site estático em Astro com as 57 páginas nos três idiomas, motion GSAP das sete seções da home e da página de projeto, regras de hospedagem em `public/.htaccess`, checagens de build, testes de unidade e ponta a ponta, CI de pull request; desenhado, não construído: nada pendente no código. As regras de hospedagem passaram no LiteSpeed de produção em 2026-11-28 ([ROADMAP.md](./ROADMAP.md)).
 
 ## Visão geral
 
@@ -106,7 +106,7 @@ flowchart TD
 - A 404 é `ErrorDocument 404 /404.html`; o redirect interno é reescrito para `en/404.html` ou `es/404.html` conforme o pedido original em `%{THE_REQUEST}`.
 - `.html` e `.pdf` saem com `Cache-Control: no-cache`; `_astro/*` tem hash no nome. `.txt` sai como `text/plain; charset=utf-8`.
 - O bloco entre `# só-produção: início` e `# só-produção: fim` (HTTPS e www) é removido pelo `check-apache.sh` no teste local.
-- Tudo isso está provado em Apache 2.4; no LiteSpeed de produção, veja [PITFALLS.md](./PITFALLS.md#produção-em-litespeed-com-regras-testadas-em-apache).
+- Tudo isso está provado em Apache 2.4 e, desde 2026-11-28, no LiteSpeed de produção; para uma regra nova, veja [PITFALLS.md](./PITFALLS.md#produção-em-litespeed-com-regras-testadas-em-apache).
 
 ## Decisões de projeto
 
